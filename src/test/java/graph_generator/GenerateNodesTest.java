@@ -39,7 +39,7 @@ class GenerateNodesTest {
         YamlParser yamlParser = new YamlParser();
         ValueFaker valueFaker = new ValueFaker();
         GraphGenerator graphGenerator = new GraphGenerator(embeddedServer, yamlParser, valueFaker);
-        List<Node> nodes = graphGenerator.generateNodes(labelsFromStrings(expectedLabelsForEachNode), String.format("{%s:%s}", fullNamePropertyName, fullNameGenerator), howManyNodesToCreate);
+        List<Node> nodes = graphGenerator.generateNodes(labelsFromStrings(expectedLabelsForEachNode), String.format("{'%s':'%s'}", fullNamePropertyName, fullNameGenerator), howManyNodesToCreate);
         assertThat(nodes).hasSize(howManyNodesToCreate);
         Transaction transaction = graphGenerator.beginTransaction();
         nodes.forEach(node -> {
