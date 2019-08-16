@@ -1,10 +1,7 @@
 package graph_generator;
 
 import org.junit.jupiter.api.*;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Label;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.*;
 import testing.EmbeddedServerHelper;
 import utilities.ValueFaker;
 import utilities.YamlParser;
@@ -18,6 +15,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 class GraphGenerationTests {
     private GraphGenerator graphGenerator;
 
+    private final String fullNameGenerator = "fullName";
+    private final String fullNamePropertyName = "full_name";
+
+    private final String identifierPropertyName = "Identifier";
+    private final String identifierGenerator = "creditCardNumber";
+    private final String identifiesRelationship = "IDENTIFIES";
+
+    private final String randomNumberGenerator = "randomNumber";
+
+
     @BeforeAll
     void beforeAll() {
         GraphDatabaseService embeddedServer = EmbeddedServerHelper.getEmbeddedServer();
@@ -28,12 +35,12 @@ class GraphGenerationTests {
 
     @BeforeEach
     void setUp() {
-        EmbeddedServerHelper.clearGraph();
+//        EmbeddedServerHelper.clearGraph();
     }
 
     @AfterEach
     void tearDown() {
-        EmbeddedServerHelper.clearGraph();
+//        EmbeddedServerHelper.clearGraph();
     }
 
     private Label[] labelsFromStrings(String[] labelNames) {
@@ -52,8 +59,6 @@ class GraphGenerationTests {
     @Test
     void testGenerateNodes() {
         int howManyNodesToCreate = 10;
-        String fullNameGenerator = "fullName";
-        String fullNamePropertyName = "full_name";
         String[] expectedLabelsForEachNode = new String[]{"Mario", "Luigi"};
         List<Node> nodes = graphGenerator.generateNodes(labelsFromStrings(expectedLabelsForEachNode), String.format("{'%s':'%s'}", fullNamePropertyName, fullNameGenerator), howManyNodesToCreate);
         assertThat(nodes).hasSize(howManyNodesToCreate);
@@ -69,6 +74,10 @@ class GraphGenerationTests {
 
     @Test
     void testGenerateZipNodes() {
-
+        int howManyNodesToCreate = 10;
+        List<Node> people = graphGenerator.generateNodes(labelsFromStrings(new String[]{"Person"}), String.format("{'%s':'%s'}", fullNamePropertyName, fullNameGenerator), howManyNodesToCreate);
+        List<Node> identifiers = graphGenerator.generateNodes(labelsFromStrings(new String[]{"Identifier"}), String.format("{'%s':'%s'}", identifierPropertyName, identifierGenerator), howManyNodesToCreate);
+        List<Relationship> createdRelationships = graphGenerator.generateRelationshipsZipper(identifiers, people, identifiesRelationship, String.format("{'strength': '%s'}", randomNumberGenerator));
+        // TODO: Complete assertions
     }
 }

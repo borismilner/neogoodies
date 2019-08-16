@@ -14,11 +14,11 @@ public class GraphGenerator {
     private final ValueFaker valueFaker;
     private final Random random;
 
-    public Transaction beginTransaction() {
+    Transaction beginTransaction() {
         return database.beginTx();
     }
 
-    public GraphGenerator(GraphDatabaseService database, YamlParser parser, ValueFaker valueFaker) {
+    GraphGenerator(GraphDatabaseService database, YamlParser parser, ValueFaker valueFaker) {
         this.database = database;
         this.parser = parser;
         this.valueFaker = valueFaker;
@@ -88,18 +88,25 @@ public class GraphGenerator {
         List<Relationship> relationships = new ArrayList<>();
 
         List<Property> propertyList = getProperties(relationshipProperties);
-        for (Node fromNode : fromNodes) {
-            for (Node toNode : toNodes) {
-                createRelationship(relationshipType, relationships, propertyList, fromNode, toNode);
+        try (Transaction transaction = database.beginTx()) {
+            for (Node fromNode : fromNodes) {
+                for (Node toNode : toNodes) {
+                    createRelationship(relationshipType, relationships, propertyList, fromNode, toNode);
+                }
             }
+            transaction.success();
         }
         return relationships;
     }
 
     private void createRelationship(String relationshipType, List<Relationship> relationships, List<Property> propertyList, Node fromNode, Node toNode) {
-        Relationship relationship = fromNode.createRelationshipTo(toNode, RelationshipType.withName(relationshipType));
-        addRelationshipProperties(relationship, propertyList);
-        relationships.add(relationship);
+        try (Transaction transaction = database.beginTx()) {
+            Relationship relationship = fromNode.createRelationshipTo(toNode, RelationshipType.withName(relationshipType));
+            addRelationshipProperties(relationship, propertyList);
+            relationships.add(relationship);
+            transaction.success();
+        }
+
     }
 
     public GraphResult generateLinkedList(List<Node> nodesToLink, String relationshipType) {
