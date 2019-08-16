@@ -83,13 +83,13 @@ class GraphGenerationTests {
         assertThat(identifiers).hasSize(howManyNodesToCreate);
         assertThat(createdRelationships).hasSize(howManyNodesToCreate);
         Transaction transaction = graphGenerator.beginTransaction();
-        for (Relationship relationship : createdRelationships) {
+        createdRelationships.forEach(relationship -> {
             Node fromNode = relationship.getStartNode();
             Node toNode = relationship.getEndNode();
             int indexInIdentifiers = identifiers.indexOf(fromNode);
             int indexInPeople = people.indexOf(toNode);
             assertThat(indexInIdentifiers).isEqualTo(indexInPeople);
-        }
+        });
         transaction.success();
     }
 
