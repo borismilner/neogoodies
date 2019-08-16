@@ -10,12 +10,11 @@ import utilities.ValueFaker;
 import utilities.YamlParser;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class GenerateNodesTest {
+class GenerateNodesTest {
 
     private Label[] labelsFromStrings(String[] labelNames) {
         List<Label> nodeLabels = new ArrayList<>();
@@ -31,7 +30,7 @@ public class GenerateNodesTest {
     }
 
     @Test
-    public void testGenerateNodes() {
+    void testGenerateNodes() {
         int howManyNodesToCreate = 10;
         String fullNameGenerator = "fullName";
         String fullNamePropertyName = "full_name";
@@ -40,7 +39,7 @@ public class GenerateNodesTest {
         YamlParser yamlParser = new YamlParser();
         ValueFaker valueFaker = new ValueFaker();
         GraphGenerator graphGenerator = new GraphGenerator(embeddedServer, yamlParser, valueFaker);
-        List<Node> nodes = graphGenerator.generateNodes(labelsFromStrings(expectedLabelsForEachNode), String.format("{%s:%s}",fullNamePropertyName,fullNameGenerator), howManyNodesToCreate);
+        List<Node> nodes = graphGenerator.generateNodes(labelsFromStrings(expectedLabelsForEachNode), String.format("{%s:%s}", fullNamePropertyName, fullNameGenerator), howManyNodesToCreate);
         assertThat(nodes).hasSize(howManyNodesToCreate);
         Transaction transaction = graphGenerator.beginTransaction();
         nodes.forEach(node -> {
