@@ -1,12 +1,12 @@
 package testing;
 
-import com.google.gson.Gson;
-import neo_services.config.Constants;
-import neo_services.exceptions.InputValidationException;
-import neo_services.logging.LogHelper;
-import neo_services.utils.GeneralUtils;
+import configuration.Constants;
+import exceptions.InputValidationException;
+import logging.LogHelper;
 import org.apache.logging.log4j.Logger;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.neo4j.graphdb.*;
+import utilities.GeneralUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class GraphGenerator {
+class GraphFromJsonGenerator {
     private final GraphDatabaseService db;
     private final String jsonFilePath;
     private final Logger log;
@@ -32,7 +32,7 @@ class GraphGenerator {
 
     private final Map<String, Node> mapStringToNode;
 
-    GraphGenerator(GraphDatabaseService db, String jsonFilePath) {
+    GraphFromJsonGenerator(GraphDatabaseService db, String jsonFilePath) {
         this.db = db;
         this.jsonFilePath = jsonFilePath;
         this.log = LogHelper.getLogger();
@@ -169,7 +169,13 @@ class GraphGenerator {
         } catch (IOException e) {
             throw new InputValidationException(String.format("Could not read %s", jsonFilePath));
         }
-        GraphTemplate graphTemplate = new Gson().fromJson(jsonContent, GraphTemplate.class);
+        ObjectMapper mapper = new ObjectMapper();
+        GraphTemplate graphTemplate = null;
+        try {
+            graphTemplate = mapper.readValue(jsonContent, GraphTemplate.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         generateGraph(graphTemplate);
     }
 }

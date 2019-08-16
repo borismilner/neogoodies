@@ -39,8 +39,8 @@ public class EmbeddedServerHelper {
     }
 
     public static void generateGraphFromJsonTemplate(String jsonFilePath) {
-        GraphGenerator graphGenerator = new GraphGenerator(getEmbeddedServer(), jsonFilePath);
-        graphGenerator.generateGraph();
+        GraphFromJsonGenerator graphFromJsonGenerator = new GraphFromJsonGenerator(getEmbeddedServer(), jsonFilePath);
+        graphFromJsonGenerator.generateGraph();
     }
 
     public static void clearGraph() {
