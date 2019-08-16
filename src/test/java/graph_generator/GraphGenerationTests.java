@@ -1,5 +1,6 @@
 package graph_generator;
 
+import neo_results.GraphResult;
 import org.junit.jupiter.api.*;
 import org.neo4j.graphdb.*;
 import testing.EmbeddedServerHelper;
@@ -23,6 +24,8 @@ class GraphGenerationTests {
     private static final String IDENTIFIES_RELATIONSHIP = "IDENTIFIES";
 
     private static final String RANDOM_NUMBER_GENERATOR = "randomNumber";
+
+    private static final String FRIEND_OF_STRING = "FRIEND_OF";
 
 
     @BeforeAll
@@ -99,5 +102,14 @@ class GraphGenerationTests {
         assertThat(people).hasSize(howManyNodesToCreate);
         assertThat(identifiers).hasSize(howManyNodesToCreate);
         assertThat(createdRelationships).hasSize(howManyNodesToCreate * howManyNodesToCreate);
+    }
+
+    @Test
+    void testGenerateLinkedList() {
+        int howManyNodesToCreate = 10;
+        List<Node> people = graphGenerator.generateNodes(labelsFromStrings(new String[]{"Person"}), String.format("{'%s':'%s'}", FULL_NAME_PROPERTY_NAME, FULL_NAME_GENERATOR), howManyNodesToCreate);
+        GraphResult graphResult = graphGenerator.generateLinkedList(people, FRIEND_OF_STRING);
+        assertThat(graphResult.nodes).hasSize(howManyNodesToCreate);
+        assertThat(graphResult.relationships).hasSize(howManyNodesToCreate - 1);
     }
 }
