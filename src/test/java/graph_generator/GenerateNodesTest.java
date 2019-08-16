@@ -44,9 +44,9 @@ class GenerateNodesTest {
         Transaction transaction = graphGenerator.beginTransaction();
         nodes.forEach(node -> {
             for (String expectedLabelName : expectedLabelsForEachNode) {
-                assertThat(node.hasLabel(Label.label(expectedLabelName)));
+                assertThat(node.hasLabel(Label.label(expectedLabelName))).isTrue();
             }
-            assertThat(node.hasProperty(fullNamePropertyName));
+            assertThat(node.hasProperty(fullNamePropertyName)).isTrue();
         });
         transaction.success();
     }
