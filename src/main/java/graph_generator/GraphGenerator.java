@@ -13,7 +13,6 @@ public class GraphGenerator {
     private final GraphDatabaseService database;
     private final YamlParser parser;
     private final ValueFaker valueFaker;
-    private final Random random;
 
     Transaction beginTransaction() {
         return database.beginTx();
@@ -23,7 +22,6 @@ public class GraphGenerator {
         this.database = database;
         this.parser = parser;
         this.valueFaker = valueFaker;
-        this.random = valueFaker.getRandom();
     }
 
     public List<Object> generateValues(String generatorName, List<Object> parameters, Long howMany) {
