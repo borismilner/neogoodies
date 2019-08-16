@@ -41,7 +41,7 @@ public class GraphGenerator {
         return parser.parseProperties(propertiesString);
     }
 
-    public List<Node> generateNodes(Label[] labels, String propertiesString, long howMany) {
+    List<Node> generateNodes(Label[] labels, String propertiesString, long howMany) {
         List<Node> nodes = new ArrayList<>();
         try (Transaction transaction = database.beginTx()) {
             for (int i = 0; i < howMany; ++i) {
@@ -62,7 +62,7 @@ public class GraphGenerator {
         }
     }
 
-    public List<Relationship> generateRelationshipsZipper(List<Node> fromNodes, List<Node> toNodes, String relationshipType, String relationshipProperties) {
+    List<Relationship> generateRelationshipsZipper(List<Node> fromNodes, List<Node> toNodes, String relationshipType, String relationshipProperties) {
         if (fromNodes.size() != toNodes.size()) {
             throw new RuntimeException(String.format("Non compatible node-list sizes, from=%d while to=%d", fromNodes.size(), toNodes.size()));
         }
@@ -80,7 +80,7 @@ public class GraphGenerator {
         return relationships;
     }
 
-    public List<Relationship> generateRelationshipsFromAllToAll(List<Node> fromNodes, List<Node> toNodes, String relationshipType, String relationshipProperties) {
+    List<Relationship> generateRelationshipsFromAllToAll(List<Node> fromNodes, List<Node> toNodes, String relationshipType, String relationshipProperties) {
         if (fromNodes.isEmpty() || toNodes.isEmpty()) {
             throw new RuntimeException("Neither fromNodes nor toNodes can be empty!");
         }
@@ -109,7 +109,7 @@ public class GraphGenerator {
 
     }
 
-    public GraphResult generateLinkedList(List<Node> nodesToLink, String relationshipType) {
+    GraphResult generateLinkedList(List<Node> nodesToLink, String relationshipType) {
         List<Relationship> relationships = new ArrayList<>();
         int numOfRequiredLinks = nodesToLink.size() - 1;
         for (int i = 0; i < numOfRequiredLinks; i++) {
