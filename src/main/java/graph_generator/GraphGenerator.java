@@ -1,6 +1,6 @@
 package graph_generator;
 
-import graph_components.NodesAndEdges;
+import neo_results.GraphResult;
 import graph_components.Property;
 import org.neo4j.graphdb.*;
 import utilities.ValueFaker;
@@ -95,7 +95,7 @@ public class GraphGenerator {
         relationships.add(relationship);
     }
 
-    public NodesAndEdges generateLinkedList(List<Node> nodesToLink, String relationshipType) {
+    public GraphResult generateLinkedList(List<Node> nodesToLink, String relationshipType) {
         List<Relationship> relationships = new ArrayList<>();
         int numOfRequiredLinks = nodesToLink.size() - 1;
         for (int i = 0; i < numOfRequiredLinks; i++) {
@@ -103,6 +103,6 @@ public class GraphGenerator {
             Node toNode = nodesToLink.get(i + 1);
             relationships.add(fromNode.createRelationshipTo(toNode, RelationshipType.withName(relationshipType)));
         }
-        return new NodesAndEdges(nodesToLink, relationships);
+        return new GraphResult(nodesToLink, relationships);
     }
 }
