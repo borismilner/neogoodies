@@ -22,8 +22,6 @@ class GraphGenerationTests {
     private static final String IDENTIFIER_PROPERTY_NAME = "Identifier";
     private static final String IDENTIFIES_RELATIONSHIP = "IDENTIFIES";
 
-    private static final String RANDOM_NUMBER_GENERATOR = "randomNumber";
-
     private static final String FRIEND_OF_STRING = "FRIEND_OF";
     private static final String PERSON_STRING = "Person";
 
@@ -80,7 +78,7 @@ class GraphGenerationTests {
         int howManyNodesToCreate = 10;
         List<Node> people = graphGenerator.generateNodes(labelsFromStrings(new String[]{PERSON_STRING}), String.format("{'%s':'%s'}", FULL_NAME_PROPERTY_NAME, ValueFakerOptions.FULLNAME), howManyNodesToCreate);
         List<Node> identifiers = graphGenerator.generateNodes(labelsFromStrings(new String[]{IDENTIFIER_PROPERTY_NAME}), String.format("{'%s':'%s'}", IDENTIFIER_PROPERTY_NAME, ValueFakerOptions.CREDIT_CARD_NUMBER), howManyNodesToCreate);
-        List<Relationship> createdRelationships = graphGenerator.generateRelationshipsZipper(identifiers, people, IDENTIFIES_RELATIONSHIP, String.format("{'strength': '%s'}", RANDOM_NUMBER_GENERATOR));
+        List<Relationship> createdRelationships = graphGenerator.generateRelationshipsZipper(identifiers, people, IDENTIFIES_RELATIONSHIP, String.format("{'strength': '%s'}", ValueFakerOptions.RANDOM_NUMBER));
         assertThat(people).hasSize(howManyNodesToCreate);
         assertThat(identifiers).hasSize(howManyNodesToCreate);
         assertThat(createdRelationships).hasSize(howManyNodesToCreate);
@@ -100,7 +98,7 @@ class GraphGenerationTests {
         int howManyNodesToCreate = 10;
         List<Node> people = graphGenerator.generateNodes(labelsFromStrings(new String[]{"Person"}), String.format("{'%s':'%s'}", FULL_NAME_PROPERTY_NAME, ValueFakerOptions.FULLNAME), howManyNodesToCreate);
         List<Node> identifiers = graphGenerator.generateNodes(labelsFromStrings(new String[]{IDENTIFIER_PROPERTY_NAME}), String.format("{'%s':'%s'}", IDENTIFIER_PROPERTY_NAME, ValueFakerOptions.CREDIT_CARD_NUMBER), howManyNodesToCreate);
-        List<Relationship> createdRelationships = graphGenerator.generateRelationshipsFromAllToAll(identifiers, people, IDENTIFIES_RELATIONSHIP, String.format("{'strength': '%s'}", RANDOM_NUMBER_GENERATOR));
+        List<Relationship> createdRelationships = graphGenerator.generateRelationshipsFromAllToAll(identifiers, people, IDENTIFIES_RELATIONSHIP, String.format("{'strength': '%s'}", ValueFakerOptions.RANDOM_NUMBER));
         assertThat(people).hasSize(howManyNodesToCreate);
         assertThat(identifiers).hasSize(howManyNodesToCreate);
         assertThat(createdRelationships).hasSize(howManyNodesToCreate * howManyNodesToCreate);
