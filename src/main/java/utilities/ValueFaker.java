@@ -65,6 +65,10 @@ public class ValueFaker {
     private static final String NUMBER_BETWEEN = "numberBetween";
     private static final String RANDOM_NUMBER = "randomNumber";
 
+    public Random getRandom() {
+        return random;
+    }
+
     private long unixTime() {
         long now = System.currentTimeMillis();
         long diff = ThreadLocalRandom.current().nextLong(now);
@@ -172,7 +176,7 @@ public class ValueFaker {
 
         return values;
     }
-    
+
     public Object getValue(Property property) {
 
         switch (property.generatorName()) {
