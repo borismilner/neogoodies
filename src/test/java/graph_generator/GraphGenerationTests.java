@@ -77,7 +77,7 @@ class GraphGenerationTests {
     }
 
     @Test
-    void testGenerateZipNodes() {
+    void testGenerateZippedNodes() {
         int howManyNodesToCreate = 10;
         List<Node> people = graphGenerator.generateNodes(labelsFromStrings(new String[]{PERSON_STRING}), String.format("{'%s':'%s'}", FULL_NAME_PROPERTY_NAME, FULL_NAME_GENERATOR), howManyNodesToCreate);
         List<Node> identifiers = graphGenerator.generateNodes(labelsFromStrings(new String[]{IDENTIFIER_PROPERTY_NAME}), String.format("{'%s':'%s'}", IDENTIFIER_PROPERTY_NAME, IDENTIFIER_GENERATOR), howManyNodesToCreate);
