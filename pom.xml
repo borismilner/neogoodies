@@ -79,7 +79,9 @@
             <groupId>org.neo4j.test</groupId>
             <artifactId>neo4j-harness</artifactId>
             <version>3.5.6</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
+            <!-- Means it has to be installed or manually copied to the
+                 class path on the machine running the tests -->
         </dependency>
         <dependency>
             <groupId>org.neo4j.driver</groupId>
