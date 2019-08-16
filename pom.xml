@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.gmail.milner.boris</groupId>
-    <artifactId>neogen</artifactId>
+    <artifactId>neogoodies</artifactId>
     <version>0.1-BETA</version>
 
     <packaging>jar</packaging>
-    <name>NeoGen</name>
+    <name>NeoGoodies</name>
     <description>Useful utilities for working with Neo4j</description>
 
     <properties>
