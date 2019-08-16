@@ -75,6 +75,18 @@
             <artifactId>snakeyaml</artifactId>
             <version>1.24</version>
         </dependency>
+        <dependency>
+            <groupId>org.neo4j.test</groupId>
+            <artifactId>neo4j-harness</artifactId>
+            <version>3.5.6</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.neo4j.driver</groupId>
+            <artifactId>neo4j-java-driver</artifactId>
+            <version>1.7.5</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
