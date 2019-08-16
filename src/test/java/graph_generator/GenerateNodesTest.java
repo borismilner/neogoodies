@@ -34,7 +34,7 @@ class GenerateNodesTest {
         int howManyNodesToCreate = 10;
         String fullNameGenerator = "fullName";
         String fullNamePropertyName = "full_name";
-        String[] expectedLabelsForEachNode = new String[]{"Crazy", "Person"};
+        String[] expectedLabelsForEachNode = new String[]{"Mario", "Luigi"};
         GraphDatabaseService embeddedServer = EmbeddedServerHelper.getEmbeddedServer();
         YamlParser yamlParser = new YamlParser();
         ValueFaker valueFaker = new ValueFaker();
