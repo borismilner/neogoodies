@@ -15,7 +15,7 @@ out
 *.iws
 *.ipr
 *.iml
-.idea
+.idea/**
 .DS_Store
 .shell_history
 .mailmap
