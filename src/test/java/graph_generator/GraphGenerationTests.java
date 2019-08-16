@@ -78,6 +78,15 @@ class GraphGenerationTests {
         List<Node> people = graphGenerator.generateNodes(labelsFromStrings(new String[]{"Person"}), String.format("{'%s':'%s'}", fullNamePropertyName, fullNameGenerator), howManyNodesToCreate);
         List<Node> identifiers = graphGenerator.generateNodes(labelsFromStrings(new String[]{"Identifier"}), String.format("{'%s':'%s'}", identifierPropertyName, identifierGenerator), howManyNodesToCreate);
         List<Relationship> createdRelationships = graphGenerator.generateRelationshipsZipper(identifiers, people, identifiesRelationship, String.format("{'strength': '%s'}", randomNumberGenerator));
-        // TODO: Complete assertions
+        assertThat(people).hasSize(howManyNodesToCreate);
+        assertThat(identifiers).hasSize(howManyNodesToCreate);
+        assertThat(createdRelationships).hasSize(howManyNodesToCreate);
+        for (Relationship relationship : createdRelationships){
+            Node fromNode = relationship.getStartNode();
+            Node toNode = relationship.getEndNode();
+            int indexInIdentifiers = identifiers.indexOf(fromNode);
+            int indexInPeople = people.indexOf(toNode);
+            assertThat(indexInIdentifiers).isEqualTo(indexInPeople);
+        }
     }
 }
