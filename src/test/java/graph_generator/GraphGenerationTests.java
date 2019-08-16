@@ -18,12 +18,12 @@ class GraphGenerationTests {
     private GraphGenerator graphGenerator;
 
     private static final String FULL_NAME_PROPERTY_NAME = "full_name";
-
     private static final String IDENTIFIER_PROPERTY_NAME = "Identifier";
-    private static final String IDENTIFIES_RELATIONSHIP = "IDENTIFIES";
 
-    private static final String FRIEND_OF_STRING = "FRIEND_OF";
-    private static final String PERSON_STRING = "Person";
+    private static final String IDENTIFIES_RELATIONSHIP = "IDENTIFIES";
+    private static final String FRIEND_OF_RELATIONSHIP = "FRIEND_OF";
+
+    private static final String PERSON_LABEL_STRING = "Person";
 
 
     @BeforeAll
@@ -76,7 +76,7 @@ class GraphGenerationTests {
     @Test
     void testGenerateZippedNodes() {
         int howManyNodesToCreate = 10;
-        List<Node> people = graphGenerator.generateNodes(labelsFromStrings(new String[]{PERSON_STRING}), String.format("{'%s':'%s'}", FULL_NAME_PROPERTY_NAME, ValueFakerOptions.FULLNAME), howManyNodesToCreate);
+        List<Node> people = graphGenerator.generateNodes(labelsFromStrings(new String[]{PERSON_LABEL_STRING}), String.format("{'%s':'%s'}", FULL_NAME_PROPERTY_NAME, ValueFakerOptions.FULLNAME), howManyNodesToCreate);
         List<Node> identifiers = graphGenerator.generateNodes(labelsFromStrings(new String[]{IDENTIFIER_PROPERTY_NAME}), String.format("{'%s':'%s'}", IDENTIFIER_PROPERTY_NAME, ValueFakerOptions.CREDIT_CARD_NUMBER), howManyNodesToCreate);
         List<Relationship> createdRelationships = graphGenerator.generateRelationshipsZipper(identifiers, people, IDENTIFIES_RELATIONSHIP, String.format("{'strength': '%s'}", ValueFakerOptions.RANDOM_NUMBER));
         assertThat(people).hasSize(howManyNodesToCreate);
@@ -108,7 +108,7 @@ class GraphGenerationTests {
     void testGenerateLinkedList() {
         int howManyNodesToCreate = 10;
         List<Node> people = graphGenerator.generateNodes(labelsFromStrings(new String[]{"Person"}), String.format("{'%s':'%s'}", FULL_NAME_PROPERTY_NAME, ValueFakerOptions.FULLNAME), howManyNodesToCreate);
-        GraphResult graphResult = graphGenerator.generateLinkedList(people, FRIEND_OF_STRING);
+        GraphResult graphResult = graphGenerator.generateLinkedList(people, FRIEND_OF_RELATIONSHIP);
         assertThat(graphResult.nodes).hasSize(howManyNodesToCreate);
         assertThat(graphResult.relationships).hasSize(howManyNodesToCreate - 1);
     }
