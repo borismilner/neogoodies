@@ -15,10 +15,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class GraphGenerationTests {
     private GraphGenerator graphGenerator;
 
-    private static final  String FULL_NAME_GENERATOR = "fullName";
-    private static final  String FULL_NAME_PROPERTY_NAME = "full_name";
+    private static final String FULL_NAME_GENERATOR = "fullName";
+    private static final String FULL_NAME_PROPERTY_NAME = "full_name";
 
-    private static final  String IDENTIFIER_PROPERTY_NAME = "Identifier";
+    private static final String IDENTIFIER_PROPERTY_NAME = "Identifier";
     private static final String IDENTIFIER_GENERATOR = "creditCardNumber";
     private static final String IDENTIFIES_RELATIONSHIP = "IDENTIFIES";
 
@@ -81,12 +81,23 @@ class GraphGenerationTests {
         assertThat(people).hasSize(howManyNodesToCreate);
         assertThat(identifiers).hasSize(howManyNodesToCreate);
         assertThat(createdRelationships).hasSize(howManyNodesToCreate);
-        for (Relationship relationship : createdRelationships){
+        for (Relationship relationship : createdRelationships) {
             Node fromNode = relationship.getStartNode();
             Node toNode = relationship.getEndNode();
             int indexInIdentifiers = identifiers.indexOf(fromNode);
             int indexInPeople = people.indexOf(toNode);
             assertThat(indexInIdentifiers).isEqualTo(indexInPeople);
         }
+    }
+
+    @Test
+    void testGenerateRelationshipsFromAllToAll() {
+        int howManyNodesToCreate = 10;
+        List<Node> people = graphGenerator.generateNodes(labelsFromStrings(new String[]{"Person"}), String.format("{'%s':'%s'}", FULL_NAME_PROPERTY_NAME, FULL_NAME_GENERATOR), howManyNodesToCreate);
+        List<Node> identifiers = graphGenerator.generateNodes(labelsFromStrings(new String[]{IDENTIFIER_PROPERTY_NAME}), String.format("{'%s':'%s'}", IDENTIFIER_PROPERTY_NAME, IDENTIFIER_GENERATOR), howManyNodesToCreate);
+        List<Relationship> createdRelationships = graphGenerator.generateRelationshipsFromAllToAll(identifiers, people, IDENTIFIES_RELATIONSHIP, String.format("{'strength': '%s'}", RANDOM_NUMBER_GENERATOR));
+        assertThat(people).hasSize(howManyNodesToCreate);
+        assertThat(identifiers).hasSize(howManyNodesToCreate);
+        assertThat(createdRelationships).hasSize(howManyNodesToCreate * howManyNodesToCreate);
     }
 }
