@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Transaction;
 import testing.EmbeddedServerHelper;
 import utilities.ValueFaker;
 import utilities.YamlParser;
@@ -16,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class GenerateNodesTest {
 
-    private Label[] labelsFromStrings(List<String> labelNames) {
+    private Label[] labelsFromStrings(String[] labelNames) {
         List<Label> nodeLabels = new ArrayList<>();
         for (String labelName : labelNames) {
             Label newLabel = Label.label(labelName);
@@ -31,11 +32,23 @@ public class GenerateNodesTest {
 
     @Test
     public void testGenerateNodes() {
+        int howManyNodesToCreate = 10;
+        String fullNameGenerator = "fullName";
+        String fullNamePropertyName = "full_name";
+        String[] expectedLabelsForEachNode = new String[]{"Crazy", "Person"};
         GraphDatabaseService embeddedServer = EmbeddedServerHelper.getEmbeddedServer();
         YamlParser yamlParser = new YamlParser();
         ValueFaker valueFaker = new ValueFaker();
         GraphGenerator graphGenerator = new GraphGenerator(embeddedServer, yamlParser, valueFaker);
-        List<Node> nodes = graphGenerator.generateNodes(labelsFromStrings(Arrays.asList("Boris", "Aaaa")), "{name: fullName}", 10);
-        assertThat(nodes).hasSize(10);
+        List<Node> nodes = graphGenerator.generateNodes(labelsFromStrings(expectedLabelsForEachNode), String.format("{%s:%s}",fullNamePropertyName,fullNameGenerator), howManyNodesToCreate);
+        assertThat(nodes).hasSize(howManyNodesToCreate);
+        Transaction transaction = graphGenerator.beginTransaction();
+        nodes.forEach(node -> {
+            for (String expectedLabelName : expectedLabelsForEachNode) {
+                assertThat(node.hasLabel(Label.label(expectedLabelName)));
+            }
+            assertThat(node.hasProperty(fullNamePropertyName));
+        });
+        transaction.success();
     }
 }

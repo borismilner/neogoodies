@@ -14,6 +14,10 @@ public class GraphGenerator {
     private final ValueFaker valueFaker;
     private final Random random;
 
+    public Transaction beginTransaction() {
+        return database.beginTx();
+    }
+
     public GraphGenerator(GraphDatabaseService database, YamlParser parser, ValueFaker valueFaker) {
         this.database = database;
         this.parser = parser;
