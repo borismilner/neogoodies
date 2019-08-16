@@ -1,6 +1,6 @@
 package graph_generator;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
@@ -14,7 +14,27 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class GenerateNodesTest {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class GraphGenerationTests {
+    private GraphGenerator graphGenerator;
+
+    @BeforeAll
+    void beforeAll() {
+        GraphDatabaseService embeddedServer = EmbeddedServerHelper.getEmbeddedServer();
+        YamlParser yamlParser = new YamlParser();
+        ValueFaker valueFaker = new ValueFaker();
+        graphGenerator = new GraphGenerator(embeddedServer, yamlParser, valueFaker);
+    }
+
+    @BeforeEach
+    void setUp() {
+        EmbeddedServerHelper.clearGraph();
+    }
+
+    @AfterEach
+    void tearDown() {
+        EmbeddedServerHelper.clearGraph();
+    }
 
     private Label[] labelsFromStrings(String[] labelNames) {
         List<Label> nodeLabels = new ArrayList<>();
@@ -35,10 +55,6 @@ class GenerateNodesTest {
         String fullNameGenerator = "fullName";
         String fullNamePropertyName = "full_name";
         String[] expectedLabelsForEachNode = new String[]{"Mario", "Luigi"};
-        GraphDatabaseService embeddedServer = EmbeddedServerHelper.getEmbeddedServer();
-        YamlParser yamlParser = new YamlParser();
-        ValueFaker valueFaker = new ValueFaker();
-        GraphGenerator graphGenerator = new GraphGenerator(embeddedServer, yamlParser, valueFaker);
         List<Node> nodes = graphGenerator.generateNodes(labelsFromStrings(expectedLabelsForEachNode), String.format("{'%s':'%s'}", fullNamePropertyName, fullNameGenerator), howManyNodesToCreate);
         assertThat(nodes).hasSize(howManyNodesToCreate);
         Transaction transaction = graphGenerator.beginTransaction();
@@ -49,5 +65,10 @@ class GenerateNodesTest {
             assertThat(node.hasProperty(fullNamePropertyName)).isTrue();
         });
         transaction.success();
+    }
+
+    @Test
+    void testGenerateZipNodes() {
+
     }
 }
