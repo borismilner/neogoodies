@@ -4,7 +4,7 @@
   <groupId>com.gmail.milner.boris</groupId>
   <artifactId>neogoodies</artifactId>
   <name>NeoGoodies</name>
-  <version>0.1-BETA</version>
+  <version>0.6-BETA</version>
   <description>Useful utilities for working with Neo4j</description>
   <developers>
     <developer>

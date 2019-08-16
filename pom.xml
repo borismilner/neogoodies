@@ -6,7 +6,7 @@
 
     <groupId>com.gmail.milner.boris</groupId>
     <artifactId>neogoodies</artifactId>
-    <version>0.1-BETA</version>
+    <version>0.6-BETA</version>
 
     <packaging>jar</packaging>
     <name>NeoGoodies</name>
