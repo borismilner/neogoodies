@@ -1,5 +1,6 @@
 package graph_generator;
 
+import exceptions.InputValidationException;
 import neo_results.GraphResult;
 import graph_components.Property;
 import org.neo4j.graphdb.*;
@@ -64,7 +65,7 @@ public class GraphGenerator {
 
     List<Relationship> generateRelationshipsZipper(List<Node> fromNodes, List<Node> toNodes, String relationshipType, String relationshipProperties) {
         if (fromNodes.size() != toNodes.size()) {
-            throw new RuntimeException(String.format("Non compatible node-list sizes, from=%d while to=%d", fromNodes.size(), toNodes.size()));
+            throw new InputValidationException(String.format("Non compatible node-list sizes, from=%d while to=%d", fromNodes.size(), toNodes.size()));
         }
 
         List<Relationship> relationships = new ArrayList<>();
@@ -82,7 +83,7 @@ public class GraphGenerator {
 
     List<Relationship> generateRelationshipsFromAllToAll(List<Node> fromNodes, List<Node> toNodes, String relationshipType, String relationshipProperties) {
         if (fromNodes.isEmpty() || toNodes.isEmpty()) {
-            throw new RuntimeException("Neither fromNodes nor toNodes can be empty!");
+            throw new InputValidationException("Neither fromNodes nor toNodes can be empty!");
         }
 
         List<Relationship> relationships = new ArrayList<>();
