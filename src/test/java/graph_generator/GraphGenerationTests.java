@@ -26,6 +26,7 @@ class GraphGenerationTests {
     private static final String RANDOM_NUMBER_GENERATOR = "randomNumber";
 
     private static final String FRIEND_OF_STRING = "FRIEND_OF";
+    private static final String PERSON_STRING = "Person";
 
 
     @BeforeAll
@@ -78,7 +79,7 @@ class GraphGenerationTests {
     @Test
     void testGenerateZipNodes() {
         int howManyNodesToCreate = 10;
-        List<Node> people = graphGenerator.generateNodes(labelsFromStrings(new String[]{"Person"}), String.format("{'%s':'%s'}", FULL_NAME_PROPERTY_NAME, FULL_NAME_GENERATOR), howManyNodesToCreate);
+        List<Node> people = graphGenerator.generateNodes(labelsFromStrings(new String[]{PERSON_STRING}), String.format("{'%s':'%s'}", FULL_NAME_PROPERTY_NAME, FULL_NAME_GENERATOR), howManyNodesToCreate);
         List<Node> identifiers = graphGenerator.generateNodes(labelsFromStrings(new String[]{IDENTIFIER_PROPERTY_NAME}), String.format("{'%s':'%s'}", IDENTIFIER_PROPERTY_NAME, IDENTIFIER_GENERATOR), howManyNodesToCreate);
         List<Relationship> createdRelationships = graphGenerator.generateRelationshipsZipper(identifiers, people, IDENTIFIES_RELATIONSHIP, String.format("{'strength': '%s'}", RANDOM_NUMBER_GENERATOR));
         assertThat(people).hasSize(howManyNodesToCreate);
@@ -111,5 +112,19 @@ class GraphGenerationTests {
         GraphResult graphResult = graphGenerator.generateLinkedList(people, FRIEND_OF_STRING);
         assertThat(graphResult.nodes).hasSize(howManyNodesToCreate);
         assertThat(graphResult.relationships).hasSize(howManyNodesToCreate - 1);
+    }
+
+    @Test
+    void testGenerateValues() {
+        long howManyProperties = 10;
+        List<Object> parametersForGenerator = new ArrayList<>();
+        parametersForGenerator.add("1");
+        parametersForGenerator.add("10");
+        List<Object> numberBetween = graphGenerator.generateValues("numberBetween", parametersForGenerator, howManyProperties);
+        assertThat(numberBetween).hasSize((int) howManyProperties);
+        for (Object property : numberBetween) {
+            int value = (int) property;
+            assertThat(value).isBetween(Integer.valueOf((String) parametersForGenerator.get(0)), Integer.valueOf((String) parametersForGenerator.get(1)));
+        }
     }
 }

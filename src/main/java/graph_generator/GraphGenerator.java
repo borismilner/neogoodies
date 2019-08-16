@@ -24,7 +24,7 @@ public class GraphGenerator {
         this.valueFaker = valueFaker;
     }
 
-    public List<Object> generateValues(String generatorName, List<Object> parameters, Long howMany) {
+    List<Object> generateValues(String generatorName, List<Object> parameters, Long howMany) {
         Property property = new Property(generatorName, generatorName, parameters);
         List<Object> values = new ArrayList<>();
         for (int i = 0; i < howMany; i++) {
