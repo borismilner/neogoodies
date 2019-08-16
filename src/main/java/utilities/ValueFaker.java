@@ -16,10 +16,12 @@ public class ValueFaker {
 
     public ValueFaker() {
         random = new Random(42L);
+        faker = new Faker(random);
     }
 
     public ValueFaker(Long seedForRandom) {
         random = new Random(seedForRandom);
+        faker = new Faker(random);
     }
 
     // Names

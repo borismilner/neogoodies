@@ -17,14 +17,15 @@ public class EmbeddedServerHelper {
     private static final Logger log = LogHelper.getLogger();
     private static GraphDatabaseService graphDb;
 
-    private static GraphDatabaseService getEmbeddedServer() {
+    public static GraphDatabaseService getEmbeddedServer() {
         if (graphDb != null) {
             return graphDb;
         }
         embeddedDatabaseServer = TestServerBuilders
                 .newInProcessBuilder()
                 .withConfig("dbms.connector.bolt.enabled", "true")
-                .withConfig("dbms.connector.bolt.listen_address", ":7687") // TODO: Get port from configurations or as a parameter
+//                .withConfig("dbms.connector.bolt.listen_address", ":7687") // TODO: Get port from configurations or as a parameter
+                .withConfig("dbms.connector.bolt.listen_address", ":8888") // TODO: Get port from configurations or as a parameter
                 .withConfig("dbms.logs.query.enabled", "true")
                 .withConfig("dbms.track_query_cpu_time", "true")
                 .newServer();
