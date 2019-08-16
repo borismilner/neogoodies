@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static utilities.ValueFakerOptions.*;
+
 public class ValueFaker {
 
     private Faker faker;
@@ -23,49 +25,6 @@ public class ValueFaker {
         random = new Random(seedForRandom);
         faker = new Faker(random);
     }
-
-    // Names
-    private static final String FIRSTNAME = "firstName";
-    private static final String LASTNAME = "lastName";
-    private static final String FULLNAME = "fullName";
-
-    // Address
-    private static final String COUNTRY = "country";
-    private static final String CITY = "city";
-    private static final String STATE = "state";
-    private static final String STREET_ADDRESS = "streetAddress";
-    private static final String STREET_NAME = "streetName";
-    private static final String ZIP_CODE = "zipCode";
-    private static final String LATITUDE = "latitude";
-    private static final String LONGITUDE = "longitude";
-
-    // Business
-    private static final String CREDIT_CARD_NUMBER = "creditCardNumber";
-    private static final String CREDIT_CARD_TYPE = "creditCardType";
-
-    // Company
-    private static final String COMPANY_NAME = "companyName";
-
-    // Internet
-    private static final String AVATAR_URL = "avatarUrl";
-    private static final String EMAIL_ADDRESS = "email";
-    private static final String URL = "url";
-    private static final String IPV4 = "ipv4";
-
-    // Lorem
-    private static final String PARAGRAPH = "paragraph";
-    private static final String SENTENCE = "sentence";
-    private static final String WORD = "word";
-
-    // Phone
-    private static final String PHONE_NUMBER = "phoneNumber";
-
-    // Time
-    private static final String UNIX_TIME = "unixTime";
-
-    // Numbers
-    private static final String NUMBER_BETWEEN = "numberBetween";
-    private static final String RANDOM_NUMBER = "randomNumber";
 
     public Random getRandom() {
         return random;
@@ -84,12 +43,12 @@ public class ValueFaker {
     }
 
     private double longitude(Property property) {
-        if (property.parameters().size() != 2 && property.parameters().size() != 0) {
+        if (property.parameters().size() != 2 && !property.parameters().isEmpty()) {
             throw new IllegalArgumentException("Number of parameters for the latitude generate should be exactly 2 or none");
         }
 
-        int min = property.parameters().size() > 0 ? (Integer) property.parameters().get(0) : -180;
-        int max = property.parameters().size() > 0 ? (Integer) property.parameters().get(1) : 180;
+        int min = !property.parameters().isEmpty() ? (Integer) property.parameters().get(0) : -180;
+        int max = !property.parameters().isEmpty() ? (Integer) property.parameters().get(1) : 180;
 
         return latitude(min, max);
     }
@@ -99,12 +58,12 @@ public class ValueFaker {
     }
 
     private double latitude(Property property) {
-        if (property.parameters().size() != 2 && property.parameters().size() != 0) {
+        if (property.parameters().size() != 2 && !property.parameters().isEmpty()) {
             throw new IllegalArgumentException("Number of parameters for the latitude generate should be exactly 2 or none");
         }
 
-        int min = property.parameters().size() > 0 ? (Integer) property.parameters().get(0) : -90;
-        int max = property.parameters().size() > 0 ? (Integer) property.parameters().get(1) : 90;
+        int min = !property.parameters().isEmpty() ? (Integer) property.parameters().get(0) : -90;
+        int max = !property.parameters().isEmpty() ? (Integer) property.parameters().get(1) : 90;
 
         return latitude(min, max);
     }
@@ -149,7 +108,7 @@ public class ValueFaker {
      */
 
     private long randomLong(Property property) {
-        int numberOfDigits = property.parameters().size() > 0 ? (int) property.parameters().get(0) : random.nextInt(8) + 1;
+        int numberOfDigits = !property.parameters().isEmpty() ? (int) property.parameters().get(0) : random.nextInt(8) + 1;
         failZero(numberOfDigits);
         boolean strict = property.parameters().size() > 1 && (boolean) property.parameters().get(1);
 
