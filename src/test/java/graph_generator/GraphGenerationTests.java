@@ -15,14 +15,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 class GraphGenerationTests {
     private GraphGenerator graphGenerator;
 
-    private final String fullNameGenerator = "fullName";
-    private final String fullNamePropertyName = "full_name";
+    private static final  String FULL_NAME_GENERATOR = "fullName";
+    private static final  String FULL_NAME_PROPERTY_NAME = "full_name";
 
-    private final String identifierPropertyName = "Identifier";
-    private final String identifierGenerator = "creditCardNumber";
-    private final String identifiesRelationship = "IDENTIFIES";
+    private static final  String IDENTIFIER_PROPERTY_NAME = "Identifier";
+    private static final String IDENTIFIER_GENERATOR = "creditCardNumber";
+    private static final String IDENTIFIES_RELATIONSHIP = "IDENTIFIES";
 
-    private final String randomNumberGenerator = "randomNumber";
+    private static final String RANDOM_NUMBER_GENERATOR = "randomNumber";
 
 
     @BeforeAll
@@ -60,14 +60,14 @@ class GraphGenerationTests {
     void testGenerateNodes() {
         int howManyNodesToCreate = 10;
         String[] expectedLabelsForEachNode = new String[]{"Mario", "Luigi"};
-        List<Node> nodes = graphGenerator.generateNodes(labelsFromStrings(expectedLabelsForEachNode), String.format("{'%s':'%s'}", fullNamePropertyName, fullNameGenerator), howManyNodesToCreate);
+        List<Node> nodes = graphGenerator.generateNodes(labelsFromStrings(expectedLabelsForEachNode), String.format("{'%s':'%s'}", FULL_NAME_PROPERTY_NAME, FULL_NAME_GENERATOR), howManyNodesToCreate);
         assertThat(nodes).hasSize(howManyNodesToCreate);
         Transaction transaction = graphGenerator.beginTransaction();
         nodes.forEach(node -> {
             for (String expectedLabelName : expectedLabelsForEachNode) {
                 assertThat(node.hasLabel(Label.label(expectedLabelName))).isTrue();
             }
-            assertThat(node.hasProperty(fullNamePropertyName)).isTrue();
+            assertThat(node.hasProperty(FULL_NAME_PROPERTY_NAME)).isTrue();
         });
         transaction.success();
     }
@@ -75,9 +75,9 @@ class GraphGenerationTests {
     @Test
     void testGenerateZipNodes() {
         int howManyNodesToCreate = 10;
-        List<Node> people = graphGenerator.generateNodes(labelsFromStrings(new String[]{"Person"}), String.format("{'%s':'%s'}", fullNamePropertyName, fullNameGenerator), howManyNodesToCreate);
-        List<Node> identifiers = graphGenerator.generateNodes(labelsFromStrings(new String[]{"Identifier"}), String.format("{'%s':'%s'}", identifierPropertyName, identifierGenerator), howManyNodesToCreate);
-        List<Relationship> createdRelationships = graphGenerator.generateRelationshipsZipper(identifiers, people, identifiesRelationship, String.format("{'strength': '%s'}", randomNumberGenerator));
+        List<Node> people = graphGenerator.generateNodes(labelsFromStrings(new String[]{"Person"}), String.format("{'%s':'%s'}", FULL_NAME_PROPERTY_NAME, FULL_NAME_GENERATOR), howManyNodesToCreate);
+        List<Node> identifiers = graphGenerator.generateNodes(labelsFromStrings(new String[]{IDENTIFIER_PROPERTY_NAME}), String.format("{'%s':'%s'}", IDENTIFIER_PROPERTY_NAME, IDENTIFIER_GENERATOR), howManyNodesToCreate);
+        List<Relationship> createdRelationships = graphGenerator.generateRelationshipsZipper(identifiers, people, IDENTIFIES_RELATIONSHIP, String.format("{'strength': '%s'}", RANDOM_NUMBER_GENERATOR));
         assertThat(people).hasSize(howManyNodesToCreate);
         assertThat(identifiers).hasSize(howManyNodesToCreate);
         assertThat(createdRelationships).hasSize(howManyNodesToCreate);
