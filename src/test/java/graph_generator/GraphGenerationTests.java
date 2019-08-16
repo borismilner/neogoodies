@@ -35,12 +35,12 @@ class GraphGenerationTests {
 
     @BeforeEach
     void setUp() {
-//        EmbeddedServerHelper.clearGraph();
+        EmbeddedServerHelper.clearGraph();
     }
 
     @AfterEach
     void tearDown() {
-//        EmbeddedServerHelper.clearGraph();
+        EmbeddedServerHelper.clearGraph();
     }
 
     private Label[] labelsFromStrings(String[] labelNames) {
