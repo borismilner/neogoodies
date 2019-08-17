@@ -25,6 +25,7 @@ nodes:
         'license_plate': 'creditCardNumber',
         'country': 'country'
       }
+      additionalLabels: ['Identifier']
 
   - CarIdentifier:
       howMany: 20

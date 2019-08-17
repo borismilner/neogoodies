@@ -126,4 +126,9 @@ class GraphGenerationTests {
             assertThat(value).isBetween(Integer.valueOf((String) parametersForGenerator.get(0)), Integer.valueOf((String) parametersForGenerator.get(1)));
         }
     }
+
+    @Test
+    void testGenerateFromYamlFile() {
+        graphGenerator.generateFromYamlFile("graph_samples/sample_graph.yaml");
+    }
 }

@@ -92,12 +92,14 @@ class GraphFromJsonGenerator {
         node.setProperty(propertyName, propertyValue);
     }
 
-    private void generateGraph(GraphTemplate graphTemplate) {
-        log.info(String.format("Populating graph: %s", graphTemplate.graphName));
-        if (!graphTemplate.comments.trim().equals("")) {log.info(String.format("Comments: %s", graphTemplate.comments));}
-        log.info(String.format("Populating nodes of %d types.", graphTemplate.nodes.size()));
+    private void generateGraph(GraphJsonTemplate graphJsonTemplate) {
+        log.info(String.format("Populating graph: %s", graphJsonTemplate.graphName));
+        if (!graphJsonTemplate.comments.trim().equals("")) {
+            log.info(String.format("Comments: %s", graphJsonTemplate.comments));
+        }
+        log.info(String.format("Populating nodes of %d types.", graphJsonTemplate.nodes.size()));
         try (Transaction transaction = db.beginTx()) {
-            for (NodeStructure nodeStructure : graphTemplate.nodes) {
+            for (NodeStructure nodeStructure : graphJsonTemplate.nodes) {
                 for (int counter = 0; counter < nodeStructure.howMany; counter++) {
                     Node node = db.createNode(Label.label(nodeStructure.type));
                     node.setProperty(nodeStructure.idProperty, String.valueOf(counter));
@@ -115,7 +117,7 @@ class GraphFromJsonGenerator {
                 }
             }
 
-            for (String nodeProperty : graphTemplate.customProperties) {
+            for (String nodeProperty : graphJsonTemplate.customProperties) {
                 Matcher matcher = this.customPropertyPattern.matcher(nodeProperty);
                 if (!matcher.find()) {
                     throw new InputValidationException(String.format("%s must be of the FORMAT: Node:PropertyName@type[cardinality]", customPropertyPattern));
@@ -129,9 +131,9 @@ class GraphFromJsonGenerator {
 
             transaction.success();
         }
-        log.info(String.format("Populating %d relationships.", graphTemplate.edges.size()));
+        log.info(String.format("Populating %d relationships.", graphJsonTemplate.edges.size()));
         try (Transaction transaction = db.beginTx()) {
-            for (String relationship : graphTemplate.edges) {
+            for (String relationship : graphJsonTemplate.edges) {
                 Matcher matcher = relationshipPattern.matcher(relationship);
                 if (!matcher.find()) {
                     throw new InputValidationException(String.format("%s must be of the FORMAT: Node(#)-[RELATIONSHIP]->Node(#)", relationship));
@@ -170,12 +172,12 @@ class GraphFromJsonGenerator {
             throw new InputValidationException(String.format("Could not read %s", jsonFilePath));
         }
         ObjectMapper mapper = new ObjectMapper();
-        GraphTemplate graphTemplate = null;
+        GraphJsonTemplate graphJsonTemplate = null;
         try {
-            graphTemplate = mapper.readValue(jsonContent, GraphTemplate.class);
+            graphJsonTemplate = mapper.readValue(jsonContent, GraphJsonTemplate.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        generateGraph(graphTemplate);
+        generateGraph(graphJsonTemplate);
     }
 }

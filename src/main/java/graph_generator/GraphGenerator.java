@@ -3,10 +3,19 @@ package graph_generator;
 import exceptions.InputValidationException;
 import neo_results.GraphResult;
 import graph_components.Property;
+
 import org.neo4j.graphdb.*;
+
+import org.yaml.snakeyaml.Yaml;
+import testing.GraphYamlTemplate;
 import utilities.ValueFaker;
 import utilities.YamlParser;
 
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.*;
 
 public class GraphGenerator {
@@ -117,5 +126,17 @@ public class GraphGenerator {
             relationships.add(fromNode.createRelationshipTo(toNode, RelationshipType.withName(relationshipType)));
         }
         return new GraphResult(nodesToLink, relationships);
+    }
+
+    void generateFromYamlFile(String filePath) {
+        try {
+            InputStream ios = new FileInputStream(new File(filePath));
+            Yaml yaml = parser.getYaml();
+            GraphYamlTemplate graphYamlTemplate = yaml.loadAs(ios, GraphYamlTemplate.class);
+            System.out.println();
+        } catch (FileNotFoundException e) {
+            throw new InputValidationException(String.format("Failed reading %s", filePath));
+        }
+
     }
 }

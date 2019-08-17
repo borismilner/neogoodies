@@ -10,7 +10,7 @@ class NodeStructure {
     boolean createIdNode;
 }
 
-class GraphTemplate {
+class GraphJsonTemplate {
     String graphName;
     List<NodeStructure> nodes;
     List<String> edges;

@@ -37,4 +37,8 @@ public class YamlParser {
         throw new IllegalArgumentException("Invalid format");
     }
 
+    public Yaml getYaml() {
+        return yaml;
+    }
+
 }
