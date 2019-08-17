@@ -221,6 +221,8 @@ public class GraphGenerator {
                             }
                         }
                         break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + connectionMethod);
                 }
             }
         }
