@@ -5,33 +5,33 @@ nodes:
 
   - Person:
       howMany: 10
-      properties: {
+      properties: "{
         'name': 'firstName',
         'surname': 'lastName',
         'email': 'email'
-      }
+      }"
       additionalLabels: ['Man']
 
   - PersonIdentifier:
       howMany: 10
-      properties: {
+      properties: "{
         'id': 'randomNumber'
-      }
+      }"
       additionalLabels: ['Identifier']
 
   - Car:
       howMany: 20
-      properties: {
+      properties: "{
         'license_plate': 'creditCardNumber',
         'country': 'country'
-      }
+      }"
       additionalLabels: ['Identifier']
 
   - CarIdentifier:
       howMany: 20
-      properties: {
+      properties: "{
         'id': 'randomNumber'
-      }
+      }"
       additionalLabels: ['Identifier']
 
 relationships:

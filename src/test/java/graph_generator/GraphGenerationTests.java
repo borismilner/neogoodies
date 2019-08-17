@@ -11,6 +11,7 @@ import utilities.YamlParser;
 import java.util.ArrayList;
 import java.util.List;
 
+import static graph_generator.GraphGenerator.labelsFromStrings;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -42,19 +43,6 @@ class GraphGenerationTests {
     @AfterEach
     void tearDown() {
         EmbeddedServerHelper.clearGraph();
-    }
-
-    private Label[] labelsFromStrings(String[] labelNames) {
-        List<Label> nodeLabels = new ArrayList<>();
-        for (String labelName : labelNames) {
-            Label newLabel = Label.label(labelName);
-            nodeLabels.add(newLabel);
-        }
-        Label[] labels = new Label[nodeLabels.size()];
-        for (int i = 0; i < nodeLabels.size(); i++) {
-            labels[i] = nodeLabels.get(i);
-        }
-        return labels;
     }
 
     @Test

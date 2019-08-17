@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.neo4j.graphdb.*;
 import org.yaml.snakeyaml.Yaml;
 import testing.GraphYamlTemplate;
+import testing.NodeDetails;
 import utilities.ValueFaker;
 import utilities.YamlParser;
 
@@ -46,6 +47,19 @@ public class GraphGenerator {
             return new ArrayList<>();
         }
         return parser.parseProperties(propertiesString);
+    }
+
+    public static Label[] labelsFromStrings(String[] labelNames) {
+        List<Label> nodeLabels = new ArrayList<>();
+        for (String labelName : labelNames) {
+            Label newLabel = Label.label(labelName);
+            nodeLabels.add(newLabel);
+        }
+        Label[] labels = new Label[nodeLabels.size()];
+        for (int i = 0; i < nodeLabels.size(); i++) {
+            labels[i] = nodeLabels.get(i);
+        }
+        return labels;
     }
 
     List<Node> generateNodes(Label[] labels, String propertiesString, long howMany) {
@@ -144,5 +158,14 @@ public class GraphGenerator {
             log.info(String.format("Comments: %s", required.comments));
         }
 
+        for (Map<String, Map<String, Object>> nodesToCreate : required.nodes) {
+            nodesToCreate.entrySet().forEach(entry -> {
+                String storingKey = entry.getKey();
+                Map<String, Object> baseForNodeDetails = entry.getValue();
+                NodeDetails nodeDetails = new NodeDetails(baseForNodeDetails);
+                nodeDetails.additionalLabels.add(storingKey);
+                generateNodes(labelsFromStrings(nodeDetails.additionalLabels.toArray(new String[0])), nodeDetails.properties, nodeDetails.howMany);
+            });
+        }
     }
 }
