@@ -17,6 +17,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GraphGenerator {
     private final GraphDatabaseService database;
@@ -136,7 +138,10 @@ public class GraphGenerator {
         for (int i = 0; i < numOfRequiredLinks; i++) {
             Node fromNode = nodesToLink.get(i);
             Node toNode = nodesToLink.get(i + 1);
-            relationships.add(fromNode.createRelationshipTo(toNode, RelationshipType.withName(relationshipType)));
+            try (Transaction transaction = database.beginTx()) {
+                relationships.add(fromNode.createRelationshipTo(toNode, RelationshipType.withName(relationshipType)));
+                transaction.success();
+            }
         }
         return new GraphResult(nodesToLink, relationships);
     }
@@ -178,15 +183,43 @@ public class GraphGenerator {
         for (Map<String, Object> rel : required.relationships) {
             for (Map.Entry<String, Object> mapMethodToDetails : rel.entrySet()) {
                 String connectionMethod = mapMethodToDetails.getKey();
-                Map<String, String> value = (Map<String, String>) mapMethodToDetails.getValue();
-                List<Node> sourceNodes = mapComponents.get(value.get("source"));
-                List<Node> targetNodes = mapComponents.get(value.get("target"));
-                String relationshipName = value.get("relationship");
-                String properties = value.get("properties");
 
                 switch (connectionMethod) {
                     case "ZipNodes":
+                        Map<String, String> value = (Map<String, String>) mapMethodToDetails.getValue();
+                        List<Node> sourceNodes = mapComponents.get(value.get("source"));
+                        List<Node> targetNodes = mapComponents.get(value.get("target"));
+                        String relationshipName = value.get("relationship");
+                        String properties = value.get("properties");
                         generateRelationshipsZipper(sourceNodes, targetNodes, relationshipName, properties);
+                        break;
+                    case "Link":
+                        Pattern pattern = Pattern.compile("(.*?)<(\\d+)>");
+                        Map<String, Object> mapRelationNameToNodesAndProperties = (Map<String, Object>) mapMethodToDetails.getValue();
+                        for (Map.Entry<String, Object> entry : mapRelationNameToNodesAndProperties.entrySet()) {
+                            relationshipName = entry.getKey();
+                            Map<String, Object> nodesAndProperties = (Map<String, Object>) entry.getValue();
+                            List<List<String>> chains = (List<List<String>>) nodesAndProperties.get("nodes");
+                            Object relationProperties = nodesAndProperties.get("properties");
+                            for (List<String> chain : chains) {
+
+                                List<Node> nodesToLink = new ArrayList<>();
+                                for (String sepcificNode : chain) {
+                                    Matcher matcher = pattern.matcher(sepcificNode);
+                                    boolean foundMatch = matcher.find();
+                                    String key = matcher.group(1);
+                                    int index = Integer.parseInt(matcher.group(2));
+                                    Node node = mapComponents.get(key).get(index);
+                                    nodesToLink.add(node);
+                                }
+
+
+                                GraphResult graphResult = generateLinkedList(nodesToLink, relationshipName);
+                                for (Relationship r : graphResult.relationships) {
+                                    addRelationshipProperties(r, getProperties((String) relationProperties));
+                                }
+                            }
+                        }
                         break;
                 }
             }
