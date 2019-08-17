@@ -20,7 +20,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class GraphGenerator {
+class GraphGenerator {
     private final GraphDatabaseService database;
     private final YamlParser parser;
     private final ValueFaker valueFaker;
@@ -51,7 +51,7 @@ public class GraphGenerator {
         return parser.parseProperties(propertiesString);
     }
 
-    public static Label[] labelsFromStrings(String[] labelNames) {
+    static Label[] labelsFromStrings(String[] labelNames) {
         List<Label> nodeLabels = new ArrayList<>();
         for (String labelName : labelNames) {
             Label newLabel = Label.label(labelName);
@@ -164,10 +164,8 @@ public class GraphGenerator {
         }
 
         for (Map<String, Map<String, Object>> nodesToCreate : required.nodes) {
-            nodesToCreate.entrySet().forEach(entry -> {
-                String storingKey = entry.getKey();
+            nodesToCreate.forEach((storingKey, baseForNodeDetails) -> {
                 log.info(String.format("Generating node with primary label of: %s", storingKey));
-                Map<String, Object> baseForNodeDetails = entry.getValue();
                 NodeDetails nodeDetails = new NodeDetails(baseForNodeDetails);
                 nodeDetails.additionalLabels.add(storingKey);
                 List<Node> nodes = generateNodes(
