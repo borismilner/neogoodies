@@ -144,7 +144,7 @@ public class GraphGenerator {
     void generateFromYamlFile(String filePath) {
         Logger log = LogHelper.getLogger();
         GraphYamlTemplate required;
-        Map<String, List<Entity>> mapComponents = new HashMap<>();
+        Map<String, List<Node>> mapComponents = new HashMap<>();
         try {
             InputStream ios = new FileInputStream(new File(filePath));
             Yaml yaml = parser.getYaml();
@@ -165,8 +165,32 @@ public class GraphGenerator {
                 Map<String, Object> baseForNodeDetails = entry.getValue();
                 NodeDetails nodeDetails = new NodeDetails(baseForNodeDetails);
                 nodeDetails.additionalLabels.add(storingKey);
-                generateNodes(labelsFromStrings(nodeDetails.additionalLabels.toArray(new String[0])), nodeDetails.properties, nodeDetails.howMany);
+                List<Node> nodes = generateNodes(
+                        labelsFromStrings(nodeDetails.additionalLabels.toArray(new String[0])),
+                        nodeDetails.properties,
+                        nodeDetails.howMany
+                );
+
+                mapComponents.put(storingKey, nodes);
             });
+        }
+
+        for (Map<String, Object> rel : required.relationships) {
+            for (Map.Entry<String, Object> mapMethodToDetails : rel.entrySet()) {
+                String connectionMethod = mapMethodToDetails.getKey();
+                Map<String, String> value = (Map<String, String>) mapMethodToDetails.getValue();
+                List<Node> sourceNodes = mapComponents.get(value.get("source"));
+                List<Node> targetNodes = mapComponents.get(value.get("target"));
+                String relationshipName = value.get("relationship");
+                String properties = value.get("properties");
+
+                switch (connectionMethod) {
+                    case "ZipNodes":
+                        generateRelationshipsZipper(sourceNodes, targetNodes, relationshipName, properties);
+                        break;
+                }
+            }
         }
     }
 }
+

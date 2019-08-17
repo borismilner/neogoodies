@@ -40,11 +40,13 @@ relationships:
       source: 'PersonIdentifier'
       target: 'Person'
       relationship: 'IDENTIFIES'
+      properties: ''
 
   - ZipNodes:
       source: 'CarIdentifier'
       target: 'Car'
       relationship: 'IDENTIFIES'
+      properties: ''
 
   - Link:
       OWNES:
@@ -55,12 +57,12 @@ relationships:
           - ['Person<3>','CarIdentifier<2>']
           - ['Person<4>','CarIdentifier<2>']
           - ['Person<5>','CarIdentifier<2>']
-        properties:
+        properties: ''
 
       LOOKS_LIKE:
         nodes:
           - ['Car<0>', 'Car<1>', 'Car<2>', 'Car<3>', 'Car<4>', 'Car<5>']
-        properties:
+        properties: ''
 
       FRIEND_OF:
         nodes:
@@ -72,7 +74,7 @@ relationships:
           - ['Person<1>','PersonIdentifier<2>']
           - ['Person<2>','PersonIdentifier<3>']
           - ['Person<3>','PersonIdentifier<4>']
-        properties:
+        properties: ''
 
 customProperties:
   - Person<0>: {'phone_number': 'phoneNumber', 'ip': 'ipv4'}
