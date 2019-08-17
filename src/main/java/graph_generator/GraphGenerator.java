@@ -24,6 +24,7 @@ class GraphGenerator {
     private final GraphDatabaseService database;
     private final YamlParser parser;
     private final ValueFaker valueFaker;
+    private Map<String, List<Node>> mapComponents = new HashMap<>();
 
     Pattern nodePattern = Pattern.compile("(.*?)<(\\d+)>");
 
@@ -148,10 +149,22 @@ class GraphGenerator {
         return new GraphResult(nodesToLink, relationships);
     }
 
+    private Node parseSpecificNode(String specificNode) {
+        Matcher matcher = nodePattern.matcher(specificNode);
+        boolean foundMatch = matcher.find();
+        if (!foundMatch) {
+            throw new InputValidationException(String.format("Could not parse: %s", specificNode));
+        }
+        String key = matcher.group(1);
+        int index = Integer.parseInt(matcher.group(2));
+        Node theNode = mapComponents.get(key).get(index);
+        return theNode;
+    }
+
     void generateFromYamlFile(String filePath) {
         Logger log = LogHelper.getLogger();
         GraphYamlTemplate required;
-        Map<String, List<Node>> mapComponents = new HashMap<>();
+        mapComponents = new HashMap<>();
         try {
             InputStream ios = new FileInputStream(new File(filePath));
             Yaml yaml = parser.getYaml();
@@ -203,16 +216,8 @@ class GraphGenerator {
                             for (List<String> chain : chains) {
 
                                 List<Node> nodesToLink = new ArrayList<>();
-                                for (String sepcificNode : chain) {
-                                    Matcher matcher = nodePattern.matcher(sepcificNode);
-                                    boolean foundMatch = matcher.find();
-                                    if (!foundMatch) {
-                                        throw new InputValidationException(String.format("Could not parse: %s", sepcificNode));
-                                    }
-                                    String key = matcher.group(1);
-                                    int index = Integer.parseInt(matcher.group(2));
-                                    Node node = mapComponents.get(key).get(index);
-                                    nodesToLink.add(node);
+                                for (String specificNode : chain) {
+                                    nodesToLink.add(parseSpecificNode(specificNode));
                                 }
 
 
@@ -231,17 +236,11 @@ class GraphGenerator {
 
         for (Map<String, String> x : required.customProperties) {
             for (Map.Entry<String, String> entry : x.entrySet()) {
+
                 String specificNode = entry.getKey();
                 String propertiesString = entry.getValue();
-                Matcher matcher = nodePattern.matcher(specificNode);
-                boolean foundMatch = matcher.find();
-                if (!foundMatch) {
-                    throw new InputValidationException(String.format("Could not parse: %s", specificNode));
-                }
 
-                String key = matcher.group(1);
-                int index = Integer.parseInt(matcher.group(2));
-                Node node = mapComponents.get(key).get(index);
+                Node node = parseSpecificNode(specificNode);
 
                 try (Transaction transaction = database.beginTx()) {
                     for (Property property : getProperties(propertiesString)) {
