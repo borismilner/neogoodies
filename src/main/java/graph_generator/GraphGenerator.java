@@ -25,6 +25,8 @@ class GraphGenerator {
     private final YamlParser parser;
     private final ValueFaker valueFaker;
 
+    Pattern nodePattern = Pattern.compile("(.*?)<(\\d+)>");
+
     Transaction beginTransaction() {
         return database.beginTx();
     }
@@ -192,7 +194,6 @@ class GraphGenerator {
                         generateRelationshipsZipper(sourceNodes, targetNodes, relationshipName, properties);
                         break;
                     case "Link":
-                        Pattern pattern = Pattern.compile("(.*?)<(\\d+)>");
                         Map<String, Object> mapRelationNameToNodesAndProperties = (Map<String, Object>) mapMethodToDetails.getValue();
                         for (Map.Entry<String, Object> entry : mapRelationNameToNodesAndProperties.entrySet()) {
                             relationshipName = entry.getKey();
@@ -203,7 +204,7 @@ class GraphGenerator {
 
                                 List<Node> nodesToLink = new ArrayList<>();
                                 for (String sepcificNode : chain) {
-                                    Matcher matcher = pattern.matcher(sepcificNode);
+                                    Matcher matcher = nodePattern.matcher(sepcificNode);
                                     boolean foundMatch = matcher.find();
                                     if (!foundMatch) {
                                         throw new InputValidationException(String.format("Could not parse: %s", sepcificNode));
@@ -226,6 +227,30 @@ class GraphGenerator {
                         throw new IllegalStateException("Unexpected value: " + connectionMethod);
                 }
             }
+        }
+
+        for (Map<String, String> x : required.customProperties) {
+            for (Map.Entry<String, String> entry : x.entrySet()) {
+                String specificNode = entry.getKey();
+                String propertiesString = entry.getValue();
+                Matcher matcher = nodePattern.matcher(specificNode);
+                boolean foundMatch = matcher.find();
+                if (!foundMatch) {
+                    throw new InputValidationException(String.format("Could not parse: %s", specificNode));
+                }
+
+                String key = matcher.group(1);
+                int index = Integer.parseInt(matcher.group(2));
+                Node node = mapComponents.get(key).get(index);
+
+                try (Transaction transaction = database.beginTx()) {
+                    for (Property property : getProperties(propertiesString)) {
+                        node.setProperty(property.key(), valueFaker.getValue(property));
+                    }
+                    transaction.success();
+                }
+            }
+
         }
     }
 }
