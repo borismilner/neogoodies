@@ -72,3 +72,7 @@ relationships:
           - ['Person<2>','PersonIdentifier<3>']
           - ['Person<3>','PersonIdentifier<4>']
         properties:
+
+customProperties:
+  - Person<0>: {'phone_number': 'phoneNumber', 'ip': 'ipv4'}
+  - Person<1>: {'phone_number': 'phoneNumber', 'ip': 'ipv4'}
