@@ -26,7 +26,7 @@ class GraphGenerator {
     private final ValueFaker valueFaker;
     private Map<String, List<Node>> mapComponents = new HashMap<>();
 
-    Pattern nodePattern = Pattern.compile("(.*?)<(\\d+)>");
+    private Pattern nodePattern = Pattern.compile("(.*?)<(\\d+)>");
 
     Transaction beginTransaction() {
         return database.beginTx();
@@ -157,8 +157,7 @@ class GraphGenerator {
         }
         String key = matcher.group(1);
         int index = Integer.parseInt(matcher.group(2));
-        Node theNode = mapComponents.get(key).get(index);
-        return theNode;
+        return mapComponents.get(key).get(index);
     }
 
     void generateFromYamlFile(String filePath) {
