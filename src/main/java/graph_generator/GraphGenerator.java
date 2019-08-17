@@ -161,6 +161,7 @@ public class GraphGenerator {
         for (Map<String, Map<String, Object>> nodesToCreate : required.nodes) {
             nodesToCreate.entrySet().forEach(entry -> {
                 String storingKey = entry.getKey();
+                log.info(String.format("Generating node with primary label of: %s", storingKey));
                 Map<String, Object> baseForNodeDetails = entry.getValue();
                 NodeDetails nodeDetails = new NodeDetails(baseForNodeDetails);
                 nodeDetails.additionalLabels.add(storingKey);
