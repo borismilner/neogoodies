@@ -205,6 +205,9 @@ class GraphGenerator {
                                 for (String sepcificNode : chain) {
                                     Matcher matcher = pattern.matcher(sepcificNode);
                                     boolean foundMatch = matcher.find();
+                                    if (!foundMatch) {
+                                        throw new InputValidationException(String.format("Could not parse: %s", sepcificNode));
+                                    }
                                     String key = matcher.group(1);
                                     int index = Integer.parseInt(matcher.group(2));
                                     Node node = mapComponents.get(key).get(index);
