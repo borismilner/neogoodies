@@ -47,22 +47,28 @@ relationships:
 
   - Link:
       OWNES:
-        - ['Person<0>','CarIdentifier<0>']
-        - ['Person<1>','CarIdentifier<1>']
-        - ['Person<2>','CarIdentifier<2>']
-        - ['Person<3>','CarIdentifier<2>']
-        - ['Person<4>','CarIdentifier<2>']
-        - ['Person<5>','CarIdentifier<2>']
+        nodes:
+          - ['Person<0>','CarIdentifier<0>']
+          - ['Person<1>','CarIdentifier<1>']
+          - ['Person<2>','CarIdentifier<2>']
+          - ['Person<3>','CarIdentifier<2>']
+          - ['Person<4>','CarIdentifier<2>']
+          - ['Person<5>','CarIdentifier<2>']
+        properties:
 
       LOOKS_LIKE:
-        - ['Car<0>', 'Car<1>', 'Car<2>', 'Car<3>', 'Car<4>', 'Car<5>']
+        nodes:
+          - ['Car<0>', 'Car<1>', 'Car<2>', 'Car<3>', 'Car<4>', 'Car<5>']
+        properties:
 
       FRIEND_OF:
-        - ['Person<0>','PersonIdentifier<1>']
-        - ['Person<0>','PersonIdentifier<2>']
-        - ['Person<0>','PersonIdentifier<3>']
-        - ['Person<0>','PersonIdentifier<4>']
-        - ['Person<0>','PersonIdentifier<5>']
-        - ['Person<1>','PersonIdentifier<2>']
-        - ['Person<2>','PersonIdentifier<3>']
-        - ['Person<3>','PersonIdentifier<4>']
+        nodes:
+          - ['Person<0>','PersonIdentifier<1>']
+          - ['Person<0>','PersonIdentifier<2>']
+          - ['Person<0>','PersonIdentifier<3>']
+          - ['Person<0>','PersonIdentifier<4>']
+          - ['Person<0>','PersonIdentifier<5>']
+          - ['Person<1>','PersonIdentifier<2>']
+          - ['Person<2>','PersonIdentifier<3>']
+          - ['Person<3>','PersonIdentifier<4>']
+        properties:
