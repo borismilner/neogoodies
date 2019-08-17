@@ -10,11 +10,11 @@ class NodeDetails {
 }
 
 public class GraphYamlTemplate {
-    String name;
-    String comments;
-    List<Map<String, NodeDetails>> nodes;
-    List<Map<String, Object>> relationships;
-    List<Map<String, Map<String, String>>> customProperties;
+    public String name;
+    public String comments;
+    public List<Map<String, NodeDetails>> nodes;
+    public List<Map<String, Object>> relationships;
+    public List<Map<String, Map<String, String>>> customProperties;
 
 //    public GraphYamlTemplate(String name, String comments, List<Map<String, NodeDetails>> nodes, RelationsDetails relationships, List<Map<String, Map<String, String>>> customProperties) {
 //        this.name = name;

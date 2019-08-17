@@ -1,16 +1,15 @@
 package graph_generator;
 
 import exceptions.InputValidationException;
-import neo_results.GraphResult;
 import graph_components.Property;
-
+import logging.LogHelper;
+import neo_results.GraphResult;
+import org.apache.logging.log4j.Logger;
 import org.neo4j.graphdb.*;
-
 import org.yaml.snakeyaml.Yaml;
 import testing.GraphYamlTemplate;
 import utilities.ValueFaker;
 import utilities.YamlParser;
-
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -129,13 +128,20 @@ public class GraphGenerator {
     }
 
     void generateFromYamlFile(String filePath) {
+        Logger log = LogHelper.getLogger();
+        GraphYamlTemplate required;
+        Map<String, List<Entity>> mapComponents = new HashMap<>();
         try {
             InputStream ios = new FileInputStream(new File(filePath));
             Yaml yaml = parser.getYaml();
-            GraphYamlTemplate graphYamlTemplate = yaml.loadAs(ios, GraphYamlTemplate.class);
-            System.out.println();
+            required = yaml.loadAs(ios, GraphYamlTemplate.class);
         } catch (FileNotFoundException e) {
             throw new InputValidationException(String.format("Failed reading %s", filePath));
+        }
+
+        log.info(String.format("Generating graph: %s", required.name));
+        if (!required.comments.trim().equals("")) {
+            log.info(String.format("Comments: %s", required.comments));
         }
 
     }
