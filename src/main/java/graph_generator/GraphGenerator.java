@@ -233,22 +233,22 @@ class GraphGenerator {
             }
         }
 
-        for (Map<String, String> x : required.customProperties) {
-            for (Map.Entry<String, String> entry : x.entrySet()) {
+        try (Transaction transaction = database.beginTx()) {
+            for (Map<String, String> x : required.customProperties) {
+                for (Map.Entry<String, String> entry : x.entrySet()) {
 
-                String specificNode = entry.getKey();
-                String propertiesString = entry.getValue();
+                    String specificNode = entry.getKey();
+                    String propertiesString = entry.getValue();
 
-                Node node = parseSpecificNode(specificNode);
+                    Node node = parseSpecificNode(specificNode);
 
-                try (Transaction transaction = database.beginTx()) {
                     for (Property property : propertiesFromYamlString(propertiesString)) {
                         node.setProperty(property.key(), valueFaker.getValue(property));
                     }
-                    transaction.success();
                 }
-            }
 
+            }
+            transaction.success();
         }
     }
 }
