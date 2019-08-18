@@ -177,18 +177,17 @@ class GraphGenerator {
             log.info(String.format("Comments: %s", required.comments));
         }
 
-        for (Map<String, Map<String, Object>> nodesToCreate : required.nodes) {
-            nodesToCreate.forEach((storingKey, baseForNodeDetails) -> {
-                log.info(String.format("Generating node with primary label of: %s", storingKey));
-                NodeDetails nodeDetails = new NodeDetails(baseForNodeDetails);
-                nodeDetails.additionalLabels.add(storingKey);
-                List<Node> nodes = generateNodes(
-                        labelsFromStrings(nodeDetails.additionalLabels.toArray(new String[0])),
-                        nodeDetails.properties,
-                        nodeDetails.howMany
-                );
-                mapComponents.put(storingKey, nodes);
-            });
+        for (NodeDetails nodeDetails : required.nodes) {
+
+            log.info(String.format("Generating node with primary label of: %s", nodeDetails.mainLabel));
+            nodeDetails.additionalLabels.add(nodeDetails.mainLabel);
+            List<Node> nodes = generateNodes(
+                    labelsFromStrings(nodeDetails.additionalLabels.toArray(new String[0])),
+                    nodeDetails.properties,
+                    nodeDetails.howMany
+            );
+            mapComponents.put(nodeDetails.mainLabel, nodes);
+
         }
 
         for (Map<String, Object> rel : required.relationships) {

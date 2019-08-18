@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 public class NodeDetails {
+    public String mainLabel;
     public int howMany;
     public String properties;
     public List<String> additionalLabels;

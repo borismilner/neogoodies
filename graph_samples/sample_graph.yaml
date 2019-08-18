@@ -2,37 +2,36 @@
 name: Sample Graph
 comments: Nothing much, just a sample graph
 nodes:
-
-  - Person:
-      howMany: 10
-      properties: "{
+  - mainLabel: 'Person'
+    howMany: 10
+    properties: "{
         'name': 'firstName',
         'surname': 'lastName',
         'email': 'email'
       }"
-      additionalLabels: ['Man']
+    additionalLabels: ['Man']
 
-  - PersonIdentifier:
-      howMany: 10
-      properties: "{
+  - mainLabel: 'PersonIdentifier'
+    howMany: 10
+    properties: "{
         'id': 'randomNumber'
       }"
-      additionalLabels: ['Identifier']
+    additionalLabels: ['Identifier']
 
-  - Car:
-      howMany: 20
-      properties: "{
+  - mainLabel: 'Car'
+    howMany: 20
+    properties: "{
         'license_plate': 'creditCardNumber',
         'country': 'country'
       }"
-      additionalLabels: ['Identifier']
+    additionalLabels: ['Identifier']
 
-  - CarIdentifier:
-      howMany: 20
-      properties: "{
+  - mainLabel: 'CarIdentifier'
+    howMany: 20
+    properties: "{
         'id': 'randomNumber'
       }"
-      additionalLabels: ['Identifier']
+    additionalLabels: ['Identifier']
 
 relationships:
 
