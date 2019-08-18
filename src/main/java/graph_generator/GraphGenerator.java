@@ -188,7 +188,6 @@ class GraphGenerator {
                     nodeDetails.howMany
             );
             mapComponents.put(nodeDetails.mainLabel, nodes);
-
         }
 
         for (EdgeDetails edgeDetails : required.relationships) {
@@ -228,22 +227,19 @@ class GraphGenerator {
         }
 
         try (Transaction transaction = database.beginTx()) {
-            for (Map<String, String> x : required.customProperties) {
-                for (Map.Entry<String, String> entry : x.entrySet()) {
+            for (Map<String, String> customProperty : required.customProperties) {
+                for (Map.Entry<String, String> entry : customProperty.entrySet()) {
 
                     String specificNode = entry.getKey();
                     String propertiesString = entry.getValue();
-
                     Node node = parseSpecificNode(specificNode);
 
                     for (Property property : propertiesFromYamlString(propertiesString)) {
                         node.setProperty(property.key(), valueFaker.getValue(property));
                     }
                 }
-
             }
             transaction.success();
         }
     }
 }
-
