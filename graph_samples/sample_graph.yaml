@@ -35,45 +35,47 @@ nodes:
 
 relationships:
 
-  - ZipNodes:
-      source: 'PersonIdentifier'
-      target: 'Person'
-      relationship: 'IDENTIFIES'
-      properties: ''
+  - connectionMethod: 'ZipNodes'
+    source: 'PersonIdentifier'
+    target: 'Person'
+    relationshipType: 'IDENTIFIES'
+    properties: ''
 
-  - ZipNodes:
-      source: 'CarIdentifier'
-      target: 'Car'
-      relationship: 'IDENTIFIES'
-      properties: ''
+  - connectionMethod: 'ZipNodes'
+    source: 'CarIdentifier'
+    target: 'Car'
+    relationshipType: 'IDENTIFIES'
+    properties: ''
 
-  - Link:
-      OWNES:
-        nodes:
-          - ['Person<0>','CarIdentifier<0>']
-          - ['Person<1>','CarIdentifier<1>']
-          - ['Person<2>','CarIdentifier<2>']
-          - ['Person<3>','CarIdentifier<2>']
-          - ['Person<4>','CarIdentifier<2>']
-          - ['Person<5>','CarIdentifier<2>']
-        properties: ''
+  - connectionMethod: 'Link'
+    relationshipType: 'OWNES'
+    nodes:
+      - ['Person<0>','CarIdentifier<0>']
+      - ['Person<1>','CarIdentifier<1>']
+      - ['Person<2>','CarIdentifier<2>']
+      - ['Person<3>','CarIdentifier<2>']
+      - ['Person<4>','CarIdentifier<2>']
+      - ['Person<5>','CarIdentifier<2>']
+    properties: ''
 
-      LOOKS_LIKE:
-        nodes:
-          - ['Car<0>', 'Car<1>', 'Car<2>', 'Car<3>', 'Car<4>', 'Car<5>']
-        properties: ''
+  - connectionMethod: 'Link'
+    relationshipType: 'LOOKS_LIKE'
+    nodes:
+      - ['Car<0>', 'Car<1>', 'Car<2>', 'Car<3>', 'Car<4>', 'Car<5>']
+    properties: ''
 
-      FRIEND_OF:
-        nodes:
-          - ['Person<0>','PersonIdentifier<1>']
-          - ['Person<0>','PersonIdentifier<2>']
-          - ['Person<0>','PersonIdentifier<3>']
-          - ['Person<0>','PersonIdentifier<4>']
-          - ['Person<0>','PersonIdentifier<5>']
-          - ['Person<1>','PersonIdentifier<2>']
-          - ['Person<2>','PersonIdentifier<3>']
-          - ['Person<3>','PersonIdentifier<4>']
-        properties: ''
+  - connectionMethod: 'Link'
+    relationshipType: 'FRIEND_OF'
+    nodes:
+      - ['Person<0>','PersonIdentifier<1>']
+      - ['Person<0>','PersonIdentifier<2>']
+      - ['Person<0>','PersonIdentifier<3>']
+      - ['Person<0>','PersonIdentifier<4>']
+      - ['Person<0>','PersonIdentifier<5>']
+      - ['Person<1>','PersonIdentifier<2>']
+      - ['Person<2>','PersonIdentifier<3>']
+      - ['Person<3>','PersonIdentifier<4>']
+    properties: ''
 
 customProperties:
   - Person<0>: "{'phone_number': 'phoneNumber', 'ip': 'ipv4'}"

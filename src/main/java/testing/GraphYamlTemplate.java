@@ -7,6 +7,6 @@ public class GraphYamlTemplate {
     public String name;
     public String comments;
     public List<NodeDetails> nodes;
-    public List<Map<String, Object>> relationships;
+    public List<EdgeDetails> relationships;
     public List<Map<String, String>> customProperties;
 }

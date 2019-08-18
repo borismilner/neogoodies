@@ -7,6 +7,7 @@ import neo_results.GraphResult;
 import org.apache.logging.log4j.Logger;
 import org.neo4j.graphdb.*;
 import org.yaml.snakeyaml.Yaml;
+import testing.EdgeDetails;
 import testing.GraphYamlTemplate;
 import testing.NodeDetails;
 import utilities.ValueFaker;
@@ -190,43 +191,39 @@ class GraphGenerator {
 
         }
 
-        for (Map<String, Object> rel : required.relationships) {
-            for (Map.Entry<String, Object> mapMethodToDetails : rel.entrySet()) {
-                String connectionMethod = mapMethodToDetails.getKey();
+        for (EdgeDetails edgeDetails : required.relationships) {
 
-                switch (connectionMethod) {
-                    case "ZipNodes":
-                        Map<String, String> value = (Map<String, String>) mapMethodToDetails.getValue();
-                        List<Node> sourceNodes = mapComponents.get(value.get("source"));
-                        List<Node> targetNodes = mapComponents.get(value.get("target"));
-                        String relationshipName = value.get("relationship");
-                        String properties = value.get("properties");
-                        generateRelationshipsZipper(sourceNodes, targetNodes, relationshipName, properties);
-                        break;
-                    case "Link":
-                        Map<String, Object> mapRelationNameToNodesAndProperties = (Map<String, Object>) mapMethodToDetails.getValue();
-                        for (Map.Entry<String, Object> entry : mapRelationNameToNodesAndProperties.entrySet()) {
-                            relationshipName = entry.getKey();
-                            Map<String, Object> nodesAndProperties = (Map<String, Object>) entry.getValue();
-                            List<List<String>> chains = (List<List<String>>) nodesAndProperties.get("nodes");
-                            Object relationProperties = nodesAndProperties.get("properties");
-                            for (List<String> chain : chains) {
+            String connectionMethod = edgeDetails.connectionMethod;
 
-                                List<Node> nodesToLink = new ArrayList<>();
-                                for (String specificNode : chain) {
-                                    nodesToLink.add(parseSpecificNode(specificNode));
-                                }
+            switch (connectionMethod) {
+                case "ZipNodes":
+                    List<Node> sourceNodes = mapComponents.get(edgeDetails.source);
+                    List<Node> targetNodes = mapComponents.get(edgeDetails.target);
+                    String relationshipName = edgeDetails.relationshipType;
+                    String properties = edgeDetails.properties;
+                    generateRelationshipsZipper(sourceNodes, targetNodes, relationshipName, properties);
+                    break;
+                case "Link":
 
-                                GraphResult graphResult = generateLinkedList(nodesToLink, relationshipName);
-                                for (Relationship r : graphResult.relationships) {
-                                    addRelationshipProperties(r, propertiesFromYamlString((String) relationProperties));
-                                }
-                            }
+                    relationshipName = edgeDetails.relationshipType;
+                    List<ArrayList<String>> chains = edgeDetails.nodes;
+                    Object relationProperties = edgeDetails.properties;
+                    for (List<String> chain : chains) {
+
+                        List<Node> nodesToLink = new ArrayList<>();
+                        for (String specificNode : chain) {
+                            nodesToLink.add(parseSpecificNode(specificNode));
                         }
-                        break;
-                    default:
-                        throw new IllegalStateException("Unexpected value: " + connectionMethod);
-                }
+
+                        GraphResult graphResult = generateLinkedList(nodesToLink, relationshipName);
+                        for (Relationship r : graphResult.relationships) {
+                            addRelationshipProperties(r, propertiesFromYamlString((String) relationProperties));
+                        }
+                    }
+
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + connectionMethod);
             }
         }
 
