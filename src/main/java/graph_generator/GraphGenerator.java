@@ -68,18 +68,18 @@ class GraphGenerator {
     }
 
     List<Node> generateNodes(Label[] labels, String propertiesString, long howMany) {
-        List<Node> nodes = new ArrayList<>();
+        List<Node> nodesGenerated = new ArrayList<>();
         try (Transaction transaction = database.beginTx()) {
             for (int i = 0; i < howMany; ++i) {
                 Node node = database.createNode(labels);
                 for (Property property : propertiesFromYamlString(propertiesString)) {
                     node.setProperty(property.key(), valueFaker.getValue(property));
                 }
-                nodes.add(node);
+                nodesGenerated.add(node);
             }
             transaction.success();
         }
-        return nodes;
+        return nodesGenerated;
     }
 
     private void addRelationshipProperties(Relationship relationship, List<Property> properties) {
