@@ -187,7 +187,6 @@ class GraphGenerator {
                         nodeDetails.properties,
                         nodeDetails.howMany
                 );
-
                 mapComponents.put(storingKey, nodes);
             });
         }
