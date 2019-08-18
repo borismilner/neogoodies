@@ -47,7 +47,7 @@ class GraphGenerator {
         return values;
     }
 
-    private List<Property> getProperties(String propertiesString) {
+    private List<Property> yamlStringToProperties(String propertiesString) {
         if (propertiesString.equals("''") || propertiesString.equals("'{}'") || propertiesString.equals("") || propertiesString.equals("{}")) {
             return new ArrayList<>();
         }
@@ -72,7 +72,7 @@ class GraphGenerator {
         try (Transaction transaction = database.beginTx()) {
             for (int i = 0; i < howMany; ++i) {
                 Node node = database.createNode(labels);
-                for (Property property : getProperties(propertiesString)) {
+                for (Property property : yamlStringToProperties(propertiesString)) {
                     node.setProperty(property.key(), valueFaker.getValue(property));
                 }
                 nodes.add(node);
@@ -97,7 +97,7 @@ class GraphGenerator {
 
         Iterator<Node> fromNodesIterator = fromNodes.iterator();
         Iterator<Node> toNodesIterator = toNodes.iterator();
-        List<Property> propertyList = getProperties(relationshipProperties);
+        List<Property> propertyList = yamlStringToProperties(relationshipProperties);
         while (fromNodesIterator.hasNext()) {
             Node fromNode = fromNodesIterator.next();
             Node toNode = toNodesIterator.next();
@@ -113,7 +113,7 @@ class GraphGenerator {
 
         List<Relationship> relationships = new ArrayList<>();
 
-        List<Property> propertyList = getProperties(relationshipProperties);
+        List<Property> propertyList = yamlStringToProperties(relationshipProperties);
         try (Transaction transaction = database.beginTx()) {
             for (Node fromNode : fromNodes) {
                 for (Node toNode : toNodes) {
@@ -222,7 +222,7 @@ class GraphGenerator {
 
                                 GraphResult graphResult = generateLinkedList(nodesToLink, relationshipName);
                                 for (Relationship r : graphResult.relationships) {
-                                    addRelationshipProperties(r, getProperties((String) relationProperties));
+                                    addRelationshipProperties(r, yamlStringToProperties((String) relationProperties));
                                 }
                             }
                         }
@@ -242,7 +242,7 @@ class GraphGenerator {
                 Node node = parseSpecificNode(specificNode);
 
                 try (Transaction transaction = database.beginTx()) {
-                    for (Property property : getProperties(propertiesString)) {
+                    for (Property property : yamlStringToProperties(propertiesString)) {
                         node.setProperty(property.key(), valueFaker.getValue(property));
                     }
                     transaction.success();
