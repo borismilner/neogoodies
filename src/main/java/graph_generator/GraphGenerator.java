@@ -28,14 +28,14 @@ class GraphGenerator {
 
     private Pattern nodePattern = Pattern.compile("(.*?)<(\\d+)>");
 
-    Transaction beginTransaction() {
-        return database.beginTx();
-    }
-
     GraphGenerator(GraphDatabaseService database, YamlParser parser, ValueFaker valueFaker) {
         this.database = database;
         this.parser = parser;
         this.valueFaker = valueFaker;
+    }
+
+    Transaction beginTransaction() {
+        return database.beginTx();
     }
 
     List<Object> generateValues(String generatorName, List<Object> parameters, Long howMany) {
