@@ -138,13 +138,13 @@ class GraphGenerator {
     GraphResult generateLinkedList(List<Node> nodesToLink, String relationshipType) {
         List<Relationship> relationships = new ArrayList<>();
         int numOfRequiredLinks = nodesToLink.size() - 1;
-        for (int i = 0; i < numOfRequiredLinks; i++) {
-            Node fromNode = nodesToLink.get(i);
-            Node toNode = nodesToLink.get(i + 1);
-            try (Transaction transaction = database.beginTx()) {
+        try (Transaction transaction = database.beginTx()) {
+            for (int i = 0; i < numOfRequiredLinks; i++) {
+                Node fromNode = nodesToLink.get(i);
+                Node toNode = nodesToLink.get(i + 1);
                 relationships.add(fromNode.createRelationshipTo(toNode, RelationshipType.withName(relationshipType)));
-                transaction.success();
             }
+            transaction.success();
         }
         return new GraphResult(nodesToLink, relationships);
     }
