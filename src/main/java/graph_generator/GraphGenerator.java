@@ -55,6 +55,10 @@ class GraphGenerator {
         return parser.parseProperties(propertiesString);
     }
 
+    private String mapToYamlString(Map<String, String> propertiesMap) {
+        return parser.getYaml().dump(propertiesMap);
+    }
+
     static Label[] labelsFromStrings(String[] labelNames) {
         List<Label> nodeLabels = new ArrayList<>();
         for (String labelName : labelNames) {
@@ -184,7 +188,7 @@ class GraphGenerator {
             nodeDetails.additionalLabels.add(nodeDetails.mainLabel);
             List<Node> nodes = generateNodes(
                     labelsFromStrings(nodeDetails.additionalLabels.toArray(new String[0])),
-                    nodeDetails.properties,
+                    mapToYamlString(nodeDetails.properties),
                     nodeDetails.howMany
             );
             mapComponents.put(nodeDetails.mainLabel, nodes);
