@@ -169,7 +169,7 @@ class GraphGenerator {
             Yaml yaml = parser.getYaml();
             required = yaml.loadAs(ios, GraphYamlTemplate.class);
         } catch (FileNotFoundException e) {
-            throw new InputValidationException(String.format("Failed reading %s", filePath));
+            throw new InputValidationException(String.format("File not found: %s", filePath));
         }
 
         log.info(String.format("Generating graph: %s", required.name));
