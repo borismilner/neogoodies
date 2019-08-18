@@ -26,7 +26,7 @@ class GraphGenerator {
     private final ValueFaker valueFaker;
     private Map<String, List<Node>> mapComponents = new HashMap<>();
 
-    private Pattern nodePattern = Pattern.compile("(.*?)<(\\d+)>");
+    private Pattern nodePattern = Pattern.compile("(.*?)<(\\d+)>"); // e.g. Person<3>
 
     GraphGenerator(GraphDatabaseService database, YamlParser parser, ValueFaker valueFaker) {
         this.database = database;
