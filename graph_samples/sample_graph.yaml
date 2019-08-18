@@ -78,5 +78,13 @@ relationships:
     properties: {}
 
 customProperties:
-  - Person<0>: "{'phone_number': 'phoneNumber', 'ip': 'ipv4'}"
-  - Person<1>: "{'phone_number': 'phoneNumber', 'ip': 'ipv4'}"
+
+  - node: 'Person<0>'
+    properties:
+      phone_number: 'phoneNumber'
+      ip: 'ipv4'
+
+  - node: 'Person<1>'
+    properties:
+      phone_number: 'phoneNumber'
+      ip: 'ipv4'

@@ -10,6 +10,7 @@ import org.yaml.snakeyaml.Yaml;
 import testing.EdgeDetails;
 import testing.GraphYamlTemplate;
 import testing.NodeDetails;
+import testing.NodePropertiesDetails;
 import utilities.ValueFaker;
 import utilities.YamlParser;
 
@@ -231,17 +232,17 @@ class GraphGenerator {
         }
 
         try (Transaction transaction = database.beginTx()) {
-            for (Map<String, String> customProperty : required.customProperties) {
-                for (Map.Entry<String, String> entry : customProperty.entrySet()) {
+            for (NodePropertiesDetails customProperty : required.customProperties) {
 
-                    String specificNode = entry.getKey();
-                    String propertiesString = entry.getValue();
+
+                String specificNode = customProperty.node;
+                String propertiesString = mapToYamlString(customProperty.properties);
                     Node node = parseSpecificNode(specificNode);
 
                     for (Property property : propertiesFromYamlString(propertiesString)) {
                         node.setProperty(property.key(), valueFaker.getValue(property));
                     }
-                }
+
             }
             transaction.success();
         }
