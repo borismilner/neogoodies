@@ -217,7 +217,6 @@ class GraphGenerator {
                                     nodesToLink.add(parseSpecificNode(specificNode));
                                 }
 
-
                                 GraphResult graphResult = generateLinkedList(nodesToLink, relationshipName);
                                 for (Relationship r : graphResult.relationships) {
                                     addRelationshipProperties(r, propertiesFromYamlString((String) relationProperties));
