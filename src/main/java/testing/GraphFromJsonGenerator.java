@@ -59,7 +59,7 @@ class GraphFromJsonGenerator {
 
         Object propertyValue;
 
-        switch (propertyType) { // TODO: Use faker
+        switch (propertyType) {
             case "string":
                 if (propertyCardinality == 0) {
                     propertyValue = String.format(FORMAT, nodeLabel, getSerial());
