@@ -2,7 +2,9 @@ package graph_generator;
 
 import exceptions.InputValidationException;
 import graph_components.Property;
+import logging.LogHelper;
 import neo_results.GraphResult;
+import org.apache.logging.log4j.Logger;
 import org.neo4j.graphdb.*;
 import org.yaml.snakeyaml.Yaml;
 import testing.EdgeDetails;
@@ -19,8 +21,6 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-//import org.apache.logging.log4j.Logger;
 
 public class GraphGenerator {
     private final GraphDatabaseService database;
@@ -167,7 +167,7 @@ public class GraphGenerator {
     }
 
     void generateFromYamlFile(String filePath) {
-//        Logger log = LogHelper.getLogger();
+        Logger log = LogHelper.getLogger();
         GraphYamlTemplate required;
         mapComponents = new HashMap<>();
         try {
@@ -178,14 +178,14 @@ public class GraphGenerator {
             throw new InputValidationException(String.format("File not found: %s", filePath));
         }
 
-//        log.info(String.format("Generating graph: %s", required.name));
+        log.info(String.format("Generating graph: %s", required.name));
         if (!required.comments.trim().equals("")) {
-//            log.info(String.format("Comments: %s", required.comments));
+            log.info(String.format("Comments: %s", required.comments));
         }
 
         for (NodeDetails nodeDetails : required.nodes) {
 
-//            log.info(String.format("Generating node with primary label of: %s", nodeDetails.mainLabel));
+            log.info(String.format("Generating node with primary label of: %s", nodeDetails.mainLabel));
             nodeDetails.additionalLabels.add(nodeDetails.mainLabel);
             List<Node> nodes = generateNodes(
                     labelsFromStrings(nodeDetails.additionalLabels.toArray(new String[0])),
