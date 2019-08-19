@@ -176,6 +176,7 @@ class GraphFromJsonGenerator {
         try {
             graphJsonTemplate = mapper.readValue(jsonContent, GraphJsonTemplate.class);
         } catch (IOException e) {
+            log.error(e.getMessage());
             e.printStackTrace();
         }
         generateGraph(graphJsonTemplate);
