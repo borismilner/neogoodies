@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.stream.Stream;
 
 public class GenerateNodesProcedure extends PluginProcedure {
+    @SuppressWarnings("WeakerAccess")
     @Context
     public Log log;
 
