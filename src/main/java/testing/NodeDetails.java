@@ -9,7 +9,5 @@ public class NodeDetails {
     public Map<String, String> properties;
     public List<String> additionalLabels;
 
-    public NodeDetails() {
-
-    }
+    public NodeDetails() {}
 }
