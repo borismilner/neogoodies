@@ -2,9 +2,7 @@ package graph_generator;
 
 import exceptions.InputValidationException;
 import graph_components.Property;
-import logging.LogHelper;
 import neo_results.GraphResult;
-import org.apache.logging.log4j.Logger;
 import org.neo4j.graphdb.*;
 import org.yaml.snakeyaml.Yaml;
 import testing.EdgeDetails;
@@ -22,7 +20,9 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class GraphGenerator {
+//import org.apache.logging.log4j.Logger;
+
+public class GraphGenerator {
     private final GraphDatabaseService database;
     private final YamlParser parser;
     private final ValueFaker valueFaker;
@@ -30,7 +30,7 @@ class GraphGenerator {
 
     private Pattern nodePattern = Pattern.compile("(.*?)<(\\d+)>"); // e.g. Person<3>
 
-    GraphGenerator(GraphDatabaseService database, YamlParser parser, ValueFaker valueFaker) {
+    public GraphGenerator(GraphDatabaseService database, YamlParser parser, ValueFaker valueFaker) {
         this.database = database;
         this.parser = parser;
         this.valueFaker = valueFaker;
@@ -60,7 +60,7 @@ class GraphGenerator {
         return parser.getYaml().dump(propertiesMap);
     }
 
-    static Label[] labelsFromStrings(String[] labelNames) {
+    public static Label[] labelsFromStrings(String[] labelNames) {
         List<Label> nodeLabels = new ArrayList<>();
         for (String labelName : labelNames) {
             Label newLabel = Label.label(labelName);
@@ -73,7 +73,7 @@ class GraphGenerator {
         return labels;
     }
 
-    List<Node> generateNodes(Label[] labels, String propertiesString, long howMany) {
+    public List<Node> generateNodes(Label[] labels, String propertiesString, long howMany) {
         List<Node> nodesGenerated = new ArrayList<>();
         try (Transaction transaction = database.beginTx()) {
             for (int i = 0; i < howMany; ++i) {
@@ -167,7 +167,7 @@ class GraphGenerator {
     }
 
     void generateFromYamlFile(String filePath) {
-        Logger log = LogHelper.getLogger();
+//        Logger log = LogHelper.getLogger();
         GraphYamlTemplate required;
         mapComponents = new HashMap<>();
         try {
@@ -178,14 +178,14 @@ class GraphGenerator {
             throw new InputValidationException(String.format("File not found: %s", filePath));
         }
 
-        log.info(String.format("Generating graph: %s", required.name));
+//        log.info(String.format("Generating graph: %s", required.name));
         if (!required.comments.trim().equals("")) {
-            log.info(String.format("Comments: %s", required.comments));
+//            log.info(String.format("Comments: %s", required.comments));
         }
 
         for (NodeDetails nodeDetails : required.nodes) {
 
-            log.info(String.format("Generating node with primary label of: %s", nodeDetails.mainLabel));
+//            log.info(String.format("Generating node with primary label of: %s", nodeDetails.mainLabel));
             nodeDetails.additionalLabels.add(nodeDetails.mainLabel);
             List<Node> nodes = generateNodes(
                     labelsFromStrings(nodeDetails.additionalLabels.toArray(new String[0])),
@@ -237,11 +237,11 @@ class GraphGenerator {
 
                 String specificNode = customProperty.node;
                 String propertiesString = mapToYamlString(customProperty.properties);
-                    Node node = parseSpecificNode(specificNode);
+                Node node = parseSpecificNode(specificNode);
 
-                    for (Property property : propertiesFromYamlString(propertiesString)) {
-                        node.setProperty(property.key(), valueFaker.getValue(property));
-                    }
+                for (Property property : propertiesFromYamlString(propertiesString)) {
+                    node.setProperty(property.key(), valueFaker.getValue(property));
+                }
 
             }
             transaction.success();

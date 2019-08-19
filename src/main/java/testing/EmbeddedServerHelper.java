@@ -24,6 +24,7 @@ public class EmbeddedServerHelper {
         embeddedDatabaseServer = TestServerBuilders
                 .newInProcessBuilder()
                 .withConfig("dbms.connector.bolt.enabled", "true")
+//                .withConfig("dbms.connector.bolt.listen_address", ":7687") // TODO: Get port from configurations or as a parameter
                 .withConfig("dbms.connector.bolt.listen_address", ":8888") // TODO: Get port from configurations or as a parameter
                 .withConfig("dbms.logs.query.enabled", "true")
                 .withConfig("dbms.track_query_cpu_time", "true")
