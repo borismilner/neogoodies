@@ -10,13 +10,9 @@ public class PluginProcedure {
     @Context
     public GraphDatabaseService database;
 
-    private static GraphGenerator graphGenerator;
-
-    protected GraphGenerator getGraphGenerator() {
+    GraphGenerator getGraphGenerator() {
         YamlParser yamlParser = new YamlParser();
         ValueFaker valueFaker = new ValueFaker();
-        graphGenerator = new GraphGenerator(database, yamlParser, valueFaker);
-
-        return graphGenerator;
+        return new GraphGenerator(database, yamlParser, valueFaker);
     }
 }
