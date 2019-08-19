@@ -6,7 +6,9 @@ import org.neo4j.procedure.Context;
 import utilities.ValueFaker;
 import utilities.YamlParser;
 
+@SuppressWarnings("WeakerAccess")
 public class PluginProcedure {
+    @SuppressWarnings("WeakerAccess")
     @Context
     public GraphDatabaseService database;
 
