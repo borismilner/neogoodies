@@ -141,7 +141,7 @@ public class GraphGenerator {
 
     }
 
-    GraphResult generateLinkedList(List<Node> nodesToLink, String relationshipType) {
+    public GraphResult generateLinkedList(List<Node> nodesToLink, String relationshipType) {
         List<Relationship> relationships = new ArrayList<>();
         int numOfRequiredLinks = nodesToLink.size() - 1;
         try (Transaction transaction = database.beginTx()) {
