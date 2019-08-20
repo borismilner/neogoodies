@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
+@SuppressWarnings("unused")
 public class GenerateNodesProcedure extends PluginProcedure {
     @SuppressWarnings("WeakerAccess")
     @Context
@@ -23,9 +24,9 @@ public class GenerateNodesProcedure extends PluginProcedure {
                                                 @Name("propertiesYamlString") String propertiesYamlString) {
         String[] labels = (String[]) ((ArrayList) labelsStringArray).toArray(new String[0]);
         log.info(String.format("Generating %d nodes with labels %s and properties %s",
-                howMany.intValue(),
-                Arrays.toString(labels),
-                propertiesYamlString));
+                               howMany.intValue(),
+                               Arrays.toString(labels),
+                               propertiesYamlString));
         GraphGenerator graphGenerator = getGraphGenerator();
         return Stream.of(new NodeListResult(graphGenerator.generateNodes(
                 GraphGenerator.labelsFromStrings(labels),

@@ -11,6 +11,7 @@ import org.neo4j.procedure.Procedure;
 import java.util.List;
 import java.util.stream.Stream;
 
+@SuppressWarnings("unused")
 public class GenerateValuesProcedure extends PluginProcedure {
     @SuppressWarnings("WeakerAccess")
     @Context
