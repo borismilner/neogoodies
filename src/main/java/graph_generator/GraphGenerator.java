@@ -166,7 +166,7 @@ public class GraphGenerator {
         return mapComponents.get(key).get(index);
     }
 
-    void generateFromYamlFile(String filePath) {
+    public void generateFromYamlFile(String filePath) {
         Logger log = LogHelper.getLogger();
         GraphYamlTemplate required;
         mapComponents = new HashMap<>();

@@ -20,7 +20,7 @@ public class GenerateLinkedListProcedure extends PluginProcedure {
     @Context
     public Log log;
 
-    @Procedure(value = "generate.nodes", mode = Mode.WRITE)
+    @Procedure(value = "generate.linkedList", mode = Mode.WRITE)
     public Stream<GraphResult> generateNodes(@Name("howMany") Long howMany,
                                              @Name("labels") Object labelsStringArray,
                                              @Name("nodePropertiesString") String nodePropertiesString,
