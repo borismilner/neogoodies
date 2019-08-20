@@ -40,7 +40,7 @@ public class GraphGenerator {
         return database.beginTx();
     }
 
-    List<Object> generateValues(String generatorName, List<Object> parameters, Long howMany) {
+    public List<Object> generateValues(String generatorName, List<Object> parameters, Long howMany) {
         Property property = new Property(generatorName, generatorName, parameters);
         List<Object> values = new ArrayList<>();
         for (int i = 0; i < howMany; i++) {
@@ -174,7 +174,8 @@ public class GraphGenerator {
             InputStream ios = new FileInputStream(new File(filePath));
             Yaml yaml = parser.getYaml();
             required = yaml.loadAs(ios, GraphYamlTemplate.class);
-        } catch (FileNotFoundException e) {
+        }
+        catch (FileNotFoundException e) {
             throw new InputValidationException(String.format("File not found: %s", filePath));
         }
 
@@ -191,7 +192,7 @@ public class GraphGenerator {
                     labelsFromStrings(nodeDetails.additionalLabels.toArray(new String[0])),
                     mapToYamlString(nodeDetails.properties),
                     nodeDetails.howMany
-            );
+                                            );
             mapComponents.put(nodeDetails.mainLabel, nodes);
         }
 
