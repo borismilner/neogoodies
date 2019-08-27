@@ -3,9 +3,9 @@ package testing;
 import configuration.Constants;
 import exceptions.InputValidationException;
 import logging.LogHelper;
-import org.apache.logging.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.neo4j.graphdb.*;
+import org.slf4j.Logger;
 import utilities.GeneralUtils;
 
 import java.io.File;
@@ -63,7 +63,8 @@ class GraphFromJsonGenerator {
             case "string":
                 if (propertyCardinality == 0) {
                     propertyValue = String.format(FORMAT, nodeLabel, getSerial());
-                } else {
+                }
+                else {
                     List<String> stringList = new ArrayList<>(propertyCardinality);
                     for (int i = 0; i < propertyCardinality; i++) {
                         stringList.add(String.format(FORMAT, nodeLabel, (getSerial() + 1) * 10 * (i + 1)));
@@ -76,7 +77,8 @@ class GraphFromJsonGenerator {
             case "integer":
                 if (propertyCardinality == 0) {
                     propertyValue = getSerial();
-                } else {
+                }
+                else {
                     List<Integer> intList = new ArrayList<>(propertyCardinality);
                     for (int i = 0; i < propertyCardinality; i++) {
                         intList.add((getSerial() + 1) * 10 * (i + 1));
@@ -168,14 +170,16 @@ class GraphFromJsonGenerator {
             byte[] bytes = Files.readAllBytes(Paths.get(jsonFilePath));
             jsonContent = new String(bytes, StandardCharsets.UTF_8);
             jsonContent = GeneralUtils.removeComments(jsonContent);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new InputValidationException(String.format("Could not read %s", jsonFilePath));
         }
         ObjectMapper mapper = new ObjectMapper();
         GraphJsonTemplate graphJsonTemplate = null;
         try {
             graphJsonTemplate = mapper.readValue(jsonContent, GraphJsonTemplate.class);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             log.error(e.getMessage());
             e.printStackTrace();
         }

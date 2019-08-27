@@ -2,7 +2,6 @@ package logging;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.appender.ConsoleAppender;
@@ -10,6 +9,8 @@ import org.apache.logging.log4j.core.config.AppenderRef;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.apache.logging.log4j.core.layout.PatternLayout;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URI;
@@ -57,7 +58,7 @@ public class LogHelper {
         config.addLogger(loggerName, loggerConfig);
         ctx.updateLoggers();
 
-        logger = LogManager.getLogger(loggerName);
+        logger = LoggerFactory.getLogger(loggerName);
     }
 
     private LogHelper() {

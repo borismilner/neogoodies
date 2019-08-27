@@ -1,13 +1,13 @@
 package testing;
 
 import logging.LogHelper;
-import org.apache.logging.log4j.Logger;
 import org.neo4j.driver.v1.Driver;
 import org.neo4j.driver.v1.GraphDatabase;
 import org.neo4j.driver.v1.Session;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.harness.ServerControls;
 import org.neo4j.harness.TestServerBuilders;
+import org.slf4j.Logger;
 
 import java.net.URI;
 
