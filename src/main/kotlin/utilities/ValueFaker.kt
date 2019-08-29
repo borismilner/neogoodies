@@ -64,7 +64,7 @@ class ValueFaker(seedForRandom: Long = 42) {
 
     fun getValue(property: Property): Any {
         val generator: FakeGenerator
-        val requiredGeneratorName = property.generatorName()
+        val requiredGeneratorName = property.generatorName
         try {
             generator = FakeGenerator.valueOf(requiredGeneratorName)
         } catch (exception: IllegalArgumentException) {
@@ -75,8 +75,8 @@ class ValueFaker(seedForRandom: Long = 42) {
             FakeGenerator.LASTNAME -> return faker.name().lastName()
             FakeGenerator.FULLNAME -> return faker.name().fullName()
             FakeGenerator.NUMBER_BETWEEN -> {
-                val min = (property.parameters()[0] as String).toInt()
-                val max = (property.parameters()[1] as String).toInt()
+                val min = (property.parameters!![0] as String).toInt()
+                val max = (property.parameters[1] as String).toInt()
                 return faker.number().numberBetween(min, max)
             }
             FakeGenerator.COUNTRY -> return faker.country().name()

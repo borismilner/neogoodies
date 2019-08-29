@@ -7,10 +7,10 @@ import neo_results.GraphResult;
 import org.neo4j.graphdb.*;
 import org.slf4j.Logger;
 import org.yaml.snakeyaml.Yaml;
-import testing.EdgeDetails;
-import testing.GraphYamlTemplate;
-import testing.NodeDetails;
-import testing.NodePropertiesDetails;
+import structures.EdgeDetails;
+import structures.GraphYamlTemplate;
+import structures.NodeDetails;
+import structures.NodePropertiesDetails;
 import utilities.ValueFaker;
 import utilities.YamlParser;
 
@@ -79,7 +79,7 @@ public class GraphGenerator {
             for (int i = 0; i < howMany; ++i) {
                 Node node = database.createNode(labels);
                 for (Property property : propertiesFromYamlString(propertiesString)) {
-                    node.setProperty(property.key(), valueFaker.getValue(property));
+                    node.setProperty(property.getKey(), valueFaker.getValue(property));
                 }
                 nodesGenerated.add(node);
             }
@@ -90,7 +90,7 @@ public class GraphGenerator {
 
     private void addRelationshipProperties(Relationship relationship, List<Property> properties) {
         for (Property property : properties) {
-            relationship.setProperty(property.key(), valueFaker.getValue(property));
+            relationship.setProperty(property.getKey(), valueFaker.getValue(property));
         }
     }
 
@@ -179,40 +179,40 @@ public class GraphGenerator {
             throw new InputValidationException(String.format("File not found: %s", filePath));
         }
 
-        log.info(String.format("Generating graph: %s", required.name));
-        if (!required.comments.trim().equals("")) {
-            log.info(String.format("Comments: %s", required.comments));
+        log.info(String.format("Generating graph: %s", required.getName()));
+        if (!required.getComments().trim().equals("")) {
+            log.info(String.format("Comments: %s", required.getComments()));
         }
 
-        for (NodeDetails nodeDetails : required.nodes) {
+        for (NodeDetails nodeDetails : required.getNodes()) {
 
-            log.info(String.format("Generating node with primary label of: %s", nodeDetails.mainLabel));
-            nodeDetails.additionalLabels.add(nodeDetails.mainLabel);
+            log.info(String.format("Generating node with primary label of: %s", nodeDetails.getMainLabel()));
+            nodeDetails.getAdditionalLabels().add(nodeDetails.getMainLabel());
             List<Node> nodes = generateNodes(
-                    labelsFromStrings(nodeDetails.additionalLabels.toArray(new String[0])),
-                    mapToYamlString(nodeDetails.properties),
-                    nodeDetails.howMany
+                    labelsFromStrings(nodeDetails.getAdditionalLabels().toArray(new String[0])),
+                    mapToYamlString(nodeDetails.getProperties()),
+                    nodeDetails.getHowMany()
                                             );
-            mapComponents.put(nodeDetails.mainLabel, nodes);
+            mapComponents.put(nodeDetails.getMainLabel(), nodes);
         }
 
-        for (EdgeDetails edgeDetails : required.relationships) {
+        for (EdgeDetails edgeDetails : required.getRelationships()) {
 
-            String connectionMethod = edgeDetails.connectionMethod;
+            String connectionMethod = edgeDetails.getConnectionMethod();
 
             switch (connectionMethod) {
                 case "ZipNodes":
-                    List<Node> sourceNodes = mapComponents.get(edgeDetails.source);
-                    List<Node> targetNodes = mapComponents.get(edgeDetails.target);
-                    String relationshipName = edgeDetails.relationshipType;
-                    String properties = edgeDetails.properties;
+                    List<Node> sourceNodes = mapComponents.get(edgeDetails.getSource());
+                    List<Node> targetNodes = mapComponents.get(edgeDetails.getTarget());
+                    String relationshipName = edgeDetails.getRelationshipType();
+                    String properties = edgeDetails.getProperties();
                     generateRelationshipsZipper(sourceNodes, targetNodes, relationshipName, properties);
                     break;
                 case "Link":
 
-                    relationshipName = edgeDetails.relationshipType;
-                    List<ArrayList<String>> chains = edgeDetails.nodes;
-                    Object relationProperties = edgeDetails.properties;
+                    relationshipName = edgeDetails.getRelationshipType();
+                    List<ArrayList<String>> chains = edgeDetails.getNodes();
+                    Object relationProperties = edgeDetails.getProperties();
                     for (List<String> chain : chains) {
 
                         List<Node> nodesToLink = new ArrayList<>();
@@ -233,15 +233,15 @@ public class GraphGenerator {
         }
 
         try (Transaction transaction = database.beginTx()) {
-            for (NodePropertiesDetails customProperty : required.customProperties) {
+            for (NodePropertiesDetails customProperty : required.getCustomProperties()) {
 
 
-                String specificNode = customProperty.node;
-                String propertiesString = mapToYamlString(customProperty.properties);
+                String specificNode = customProperty.getNode();
+                String propertiesString = mapToYamlString(customProperty.getProperties());
                 Node node = parseSpecificNode(specificNode);
 
                 for (Property property : propertiesFromYamlString(propertiesString)) {
-                    node.setProperty(property.key(), valueFaker.getValue(property));
+                    node.setProperty(property.getKey(), valueFaker.getValue(property));
                 }
 
             }

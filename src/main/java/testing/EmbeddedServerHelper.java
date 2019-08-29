@@ -38,10 +38,6 @@ public class EmbeddedServerHelper {
         return embeddedDatabaseServer.boltURI();
     }
 
-    public static void generateGraphFromJsonTemplate(String jsonFilePath) {
-        GraphFromJsonGenerator graphFromJsonGenerator = new GraphFromJsonGenerator(getEmbeddedServer(), jsonFilePath);
-        graphFromJsonGenerator.generateGraph();
-    }
 
     public static void clearGraph() {
 
