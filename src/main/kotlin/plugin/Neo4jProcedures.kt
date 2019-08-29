@@ -133,3 +133,17 @@ class GenerateZipperProcedure : PluginProcedure() {
         return Stream.of(graphResult)
     }
 }
+
+class GenerateFromYamlFileProcedure : PluginProcedure() {
+    @JvmField
+    @Context
+    var log: Log? = null
+
+    @Procedure(value = "generate.fromYamlFile", mode = Mode.WRITE)
+    fun generateNodes(@Name("yamlFilePath") yamlFilePath: String): Stream<ValueListResult> {
+        log!!.info(String.format("Generating a graph from a YAML template if file: %s", yamlFilePath))
+        val graphGenerator = graphGenerator
+        graphGenerator.generateFromYamlFile(yamlFilePath)
+        return Stream.of(ValueListResult(listOf("Done")))
+    }
+}
