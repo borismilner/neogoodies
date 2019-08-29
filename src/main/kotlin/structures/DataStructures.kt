@@ -21,3 +21,11 @@ data class NodePropertiesDetails(
         var node: String? = null,
         var properties: HashMap<String, String>? = null
 )
+
+data class GraphYamlTemplate(
+        var name: String? = null,
+        var comments: String? = null,
+        var nodes: List<NodeDetails>? = null,
+        var relationships: List<EdgeDetails>? = null,
+        var customProperties: List<NodePropertiesDetails>? = null
+)

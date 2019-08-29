@@ -8,9 +8,9 @@ import org.neo4j.graphdb.*;
 import org.slf4j.Logger;
 import org.yaml.snakeyaml.Yaml;
 import structures.EdgeDetails;
+import structures.GraphYamlTemplate;
 import structures.NodeDetails;
 import structures.NodePropertiesDetails;
-import testing.GraphYamlTemplate;
 import utilities.ValueFaker;
 import utilities.YamlParser;
 
@@ -179,12 +179,12 @@ public class GraphGenerator {
             throw new InputValidationException(String.format("File not found: %s", filePath));
         }
 
-        log.info(String.format("Generating graph: %s", required.name));
-        if (!required.comments.trim().equals("")) {
-            log.info(String.format("Comments: %s", required.comments));
+        log.info(String.format("Generating graph: %s", required.getName()));
+        if (!required.getComments().trim().equals("")) {
+            log.info(String.format("Comments: %s", required.getComments()));
         }
 
-        for (NodeDetails nodeDetails : required.nodes) {
+        for (NodeDetails nodeDetails : required.getNodes()) {
 
             log.info(String.format("Generating node with primary label of: %s", nodeDetails.getMainLabel()));
             nodeDetails.getAdditionalLabels().add(nodeDetails.getMainLabel());
@@ -196,7 +196,7 @@ public class GraphGenerator {
             mapComponents.put(nodeDetails.getMainLabel(), nodes);
         }
 
-        for (EdgeDetails edgeDetails : required.relationships) {
+        for (EdgeDetails edgeDetails : required.getRelationships()) {
 
             String connectionMethod = edgeDetails.getConnectionMethod();
 
@@ -233,7 +233,7 @@ public class GraphGenerator {
         }
 
         try (Transaction transaction = database.beginTx()) {
-            for (NodePropertiesDetails customProperty : required.customProperties) {
+            for (NodePropertiesDetails customProperty : required.getCustomProperties()) {
 
 
                 String specificNode = customProperty.getNode();
