@@ -140,7 +140,7 @@ class GenerateFromYamlFileProcedure : PluginProcedure() {
 
     @Procedure(value = "generate.fromYamlFile", mode = Mode.WRITE)
     fun generateNodes(@Name("yamlFilePath") yamlFilePath: String): Stream<ValueListResult> {
-        log!!.info(String.format("Generating a graph from a YAML template if file: %s", yamlFilePath))
+        log!!.info("Generating a graph from a YAML template if file: $yamlFilePath")
         val graphGenerator = graphGenerator
         graphGenerator.generateFromYamlFile(yamlFilePath)
         return Stream.of(ValueListResult(listOf("Done")))
