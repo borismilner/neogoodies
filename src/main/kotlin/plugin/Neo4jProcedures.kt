@@ -4,6 +4,7 @@ package plugin
 
 import graph_generator.GraphGenerator
 import org.neo4j.graphdb.GraphDatabaseService
+import org.neo4j.graphdb.Label
 import org.neo4j.logging.Log
 import org.neo4j.procedure.Context
 import org.neo4j.procedure.Mode
@@ -96,6 +97,39 @@ class GenerateLinkedListProcedure : PluginProcedure() {
         val graphGenerator = graphGenerator
         val nodesForLinkedList = graphGenerator.generateNodes(GraphGenerator.labelsFromStrings(labels), nodePropertiesString, howMany)
         val graphResult = graphGenerator.generateLinkedList(nodesForLinkedList, relationshipType)
+        return Stream.of(graphResult)
+    }
+}
+
+class GenerateZipperProcedure : PluginProcedure() {
+    @JvmField
+    @Context
+    var log: Log? = null
+
+    @Procedure(value = "generate.zipper", mode = Mode.WRITE)
+    fun generateNodes(@Name("howMany") howMany: Long,
+                      @Name("sourceLabel") sourceLabelName: String,
+                      @Name("sourcePropertiesString") sourcePropertiesString: String,
+                      @Name("targetLabel") targetLabelName: String,
+                      @Name("targetPropertiesString") targetPropertiesString: String,
+                      @Name("relationshipType") relationshipType: String,
+                      @Name("relationshipProperties") relationshipProperties: String): Stream<GraphResult> {
+
+        log!!.info(String.format("Generating zipper structure of %d nodes in each side, source=%s, target=%s, relationship=%s, rel_properties:%s",
+                howMany.toInt(),
+                sourceLabelName,
+                targetLabelName,
+                relationshipType,
+                relationshipProperties))
+
+        val graphGenerator = graphGenerator
+        val sourceLabel = Label.label(sourceLabelName)
+        val targetLabel = Label.label(targetLabelName)
+        val sourceNodes = graphGenerator.generateNodes(arrayOf(sourceLabel), sourcePropertiesString, howMany.toInt().toLong())
+        val targetNodes = graphGenerator.generateNodes(arrayOf(targetLabel), targetPropertiesString, howMany.toInt().toLong())
+        val relationships = graphGenerator.generateRelationshipsZipper(sourceNodes, targetNodes, relationshipType, relationshipProperties)
+        sourceNodes.addAll(targetNodes)
+        val graphResult = GraphResult(sourceNodes, relationships)
         return Stream.of(graphResult)
     }
 }
