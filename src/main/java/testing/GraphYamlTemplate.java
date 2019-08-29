@@ -2,6 +2,7 @@ package testing;
 
 import structures.EdgeDetails;
 import structures.NodeDetails;
+import structures.NodePropertiesDetails;
 
 import java.util.List;
 

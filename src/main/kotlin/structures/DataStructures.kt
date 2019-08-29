@@ -16,3 +16,8 @@ data class NodeDetails(
         var properties: Map<String, String>? = null,
         var additionalLabels: List<String>? = null
 )
+
+data class NodePropertiesDetails(
+        var node: String? = null,
+        var properties: HashMap<String, String>? = null
+)

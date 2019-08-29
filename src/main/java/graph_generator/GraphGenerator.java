@@ -9,8 +9,8 @@ import org.slf4j.Logger;
 import org.yaml.snakeyaml.Yaml;
 import structures.EdgeDetails;
 import structures.NodeDetails;
+import structures.NodePropertiesDetails;
 import testing.GraphYamlTemplate;
-import testing.NodePropertiesDetails;
 import utilities.ValueFaker;
 import utilities.YamlParser;
 
@@ -236,8 +236,8 @@ public class GraphGenerator {
             for (NodePropertiesDetails customProperty : required.customProperties) {
 
 
-                String specificNode = customProperty.node;
-                String propertiesString = mapToYamlString(customProperty.properties);
+                String specificNode = customProperty.getNode();
+                String propertiesString = mapToYamlString(customProperty.getProperties());
                 Node node = parseSpecificNode(specificNode);
 
                 for (Property property : propertiesFromYamlString(propertiesString)) {
