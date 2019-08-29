@@ -68,11 +68,8 @@ class GenerateValuesProcedure : PluginProcedure() {
     fun generateNodes(@Name("howMany") howMany: Long,
                       @Name("generatorName") generatorName: String,
                       @Name("parameters") parameters: Any): Stream<ValueListResult> {
-        log!!.info(String.format("Generating %d values using generator %s with properties %s",
-                howMany.toInt(),
-                generatorName,
-                parameters)
-        )
+        log!!.info("Generating ${howMany.toInt()} values using generator $generatorName with properties $parameters")
+
         val graphGenerator = graphGenerator
         return Stream.of(ValueListResult(graphGenerator.generateValues(
                 generatorName,
