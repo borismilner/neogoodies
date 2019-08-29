@@ -28,7 +28,7 @@ class YamlParser {
         val key = prop.keys.iterator().next()
 
         if (prop[key] is List<*>) {
-            return Property(propertyKey, key, prop[key] as MutableList<Any>?)
+            return Property(propertyKey, key, prop[key] as List<Any>)
         }
 
         throw IllegalArgumentException("Invalid format")

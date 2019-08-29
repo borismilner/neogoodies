@@ -79,7 +79,7 @@ public class GraphGenerator {
             for (int i = 0; i < howMany; ++i) {
                 Node node = database.createNode(labels);
                 for (Property property : propertiesFromYamlString(propertiesString)) {
-                    node.setProperty(property.key(), valueFaker.getValue(property));
+                    node.setProperty(property.getKey(), valueFaker.getValue(property));
                 }
                 nodesGenerated.add(node);
             }
@@ -90,7 +90,7 @@ public class GraphGenerator {
 
     private void addRelationshipProperties(Relationship relationship, List<Property> properties) {
         for (Property property : properties) {
-            relationship.setProperty(property.key(), valueFaker.getValue(property));
+            relationship.setProperty(property.getKey(), valueFaker.getValue(property));
         }
     }
 
@@ -241,7 +241,7 @@ public class GraphGenerator {
                 Node node = parseSpecificNode(specificNode);
 
                 for (Property property : propertiesFromYamlString(propertiesString)) {
-                    node.setProperty(property.key(), valueFaker.getValue(property));
+                    node.setProperty(property.getKey(), valueFaker.getValue(property));
                 }
 
             }
