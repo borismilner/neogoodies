@@ -16,13 +16,13 @@ import java.util.*
 class GraphGeneratorTests {
     private var graphGenerator: GraphGenerator? = null
 
-    private val FULL_NAME_PROPERTY_NAME = "full_name"
-    private val IDENTIFIER_PROPERTY_NAME = "Identifier"
+    private val fullNamePropertyName = "full_name"
+    private val identifierPropertyName = "Identifier"
 
-    private val IDENTIFIES_RELATIONSHIP = "IDENTIFIES"
-    private val FRIEND_OF_RELATIONSHIP = "FRIEND_OF"
+    private val identifiesRelationship = "IDENTIFIES"
+    private val friendOfRelationship = "FRIEND_OF"
 
-    private val PERSON_LABEL_STRING = "Person"
+    private val personLabelString = "Person"
 
 
     @BeforeAll
@@ -47,14 +47,18 @@ class GraphGeneratorTests {
     fun testGenerateNodes() {
         val howManyNodesToCreate = 10
         val expectedLabelsForEachNode = arrayOf("Mario", "Luigi")
-        val nodes = graphGenerator!!.generateNodes(GraphGenerator.labelsFromStrings(expectedLabelsForEachNode), String.format("{'%s':'%s'}", FULL_NAME_PROPERTY_NAME, FakeGenerator.FULLNAME), howManyNodesToCreate.toLong())
+        val nodes = graphGenerator!!.generateNodes(
+                GraphGenerator.labelsFromStrings(expectedLabelsForEachNode),
+                "{'$fullNamePropertyName':'${FakeGenerator.FULLNAME}'}",
+                howManyNodesToCreate.toLong()
+        )
         assertThat<Node>(nodes).hasSize(howManyNodesToCreate)
         val transaction = graphGenerator!!.database.beginTx()
         nodes.forEach { node ->
             for (expectedLabelName in expectedLabelsForEachNode) {
                 assertThat(node.hasLabel(Label.label(expectedLabelName))).isTrue()
             }
-            assertThat(node.hasProperty(FULL_NAME_PROPERTY_NAME)).isTrue()
+            assertThat(node.hasProperty(fullNamePropertyName)).isTrue()
         }
         transaction.success()
     }
@@ -62,9 +66,9 @@ class GraphGeneratorTests {
     @Test
     fun testGenerateZippedNodes() {
         val howManyNodesToCreate = 10
-        val people = graphGenerator!!.generateNodes(GraphGenerator.labelsFromStrings(arrayOf(PERSON_LABEL_STRING)), String.format("{'%s':'%s'}", FULL_NAME_PROPERTY_NAME, FakeGenerator.FULLNAME), howManyNodesToCreate.toLong())
-        val identifiers = graphGenerator!!.generateNodes(GraphGenerator.labelsFromStrings(arrayOf(IDENTIFIER_PROPERTY_NAME)), String.format("{'%s':'%s'}", IDENTIFIER_PROPERTY_NAME, FakeGenerator.CREDIT_CARD_NUMBER), howManyNodesToCreate.toLong())
-        val createdRelationships = graphGenerator!!.generateRelationshipsZipper(identifiers, people, IDENTIFIES_RELATIONSHIP, String.format("{'strength': '%s'}", FakeGenerator.RANDOM_NUMBER))
+        val people = graphGenerator!!.generateNodes(GraphGenerator.labelsFromStrings(arrayOf(personLabelString)), String.format("{'%s':'%s'}", fullNamePropertyName, FakeGenerator.FULLNAME), howManyNodesToCreate.toLong())
+        val identifiers = graphGenerator!!.generateNodes(GraphGenerator.labelsFromStrings(arrayOf(identifierPropertyName)), String.format("{'%s':'%s'}", identifierPropertyName, FakeGenerator.CREDIT_CARD_NUMBER), howManyNodesToCreate.toLong())
+        val createdRelationships = graphGenerator!!.generateRelationshipsZipper(identifiers, people, identifiesRelationship, String.format("{'strength': '%s'}", FakeGenerator.RANDOM_NUMBER))
         assertThat<Node>(people).hasSize(howManyNodesToCreate)
         assertThat<Node>(identifiers).hasSize(howManyNodesToCreate)
         assertThat<Relationship>(createdRelationships).hasSize(howManyNodesToCreate)
@@ -82,9 +86,9 @@ class GraphGeneratorTests {
     @Test
     fun testGenerateRelationshipsFromAllToAll() {
         val howManyNodesToCreate = 10
-        val people = graphGenerator!!.generateNodes(GraphGenerator.labelsFromStrings(arrayOf("Person")), String.format("{'%s':'%s'}", FULL_NAME_PROPERTY_NAME, FakeGenerator.FULLNAME), howManyNodesToCreate.toLong())
-        val identifiers = graphGenerator!!.generateNodes(GraphGenerator.labelsFromStrings(arrayOf(IDENTIFIER_PROPERTY_NAME)), String.format("{'%s':'%s'}", IDENTIFIER_PROPERTY_NAME, FakeGenerator.CREDIT_CARD_NUMBER), howManyNodesToCreate.toLong())
-        val createdRelationships = graphGenerator!!.generateRelationshipsFromAllToAll(identifiers, people, IDENTIFIES_RELATIONSHIP, String.format("{'strength': '%s'}", FakeGenerator.RANDOM_NUMBER))
+        val people = graphGenerator!!.generateNodes(GraphGenerator.labelsFromStrings(arrayOf("Person")), String.format("{'%s':'%s'}", fullNamePropertyName, FakeGenerator.FULLNAME), howManyNodesToCreate.toLong())
+        val identifiers = graphGenerator!!.generateNodes(GraphGenerator.labelsFromStrings(arrayOf(identifierPropertyName)), String.format("{'%s':'%s'}", identifierPropertyName, FakeGenerator.CREDIT_CARD_NUMBER), howManyNodesToCreate.toLong())
+        val createdRelationships = graphGenerator!!.generateRelationshipsFromAllToAll(identifiers, people, identifiesRelationship, String.format("{'strength': '%s'}", FakeGenerator.RANDOM_NUMBER))
         assertThat<Node>(people).hasSize(howManyNodesToCreate)
         assertThat<Node>(identifiers).hasSize(howManyNodesToCreate)
         assertThat<Relationship>(createdRelationships).hasSize(howManyNodesToCreate * howManyNodesToCreate)
@@ -93,8 +97,8 @@ class GraphGeneratorTests {
     @Test
     fun testGenerateLinkedList() {
         val howManyNodesToCreate = 10
-        val people = graphGenerator!!.generateNodes(GraphGenerator.labelsFromStrings(arrayOf("Person")), String.format("{'%s':'%s'}", FULL_NAME_PROPERTY_NAME, FakeGenerator.FULLNAME), howManyNodesToCreate.toLong())
-        val (nodes, relationships) = graphGenerator!!.generateLinkedList(people, FRIEND_OF_RELATIONSHIP)
+        val people = graphGenerator!!.generateNodes(GraphGenerator.labelsFromStrings(arrayOf("Person")), String.format("{'%s':'%s'}", fullNamePropertyName, FakeGenerator.FULLNAME), howManyNodesToCreate.toLong())
+        val (nodes, relationships) = graphGenerator!!.generateLinkedList(people, friendOfRelationship)
         assertThat<Node>(nodes).hasSize(howManyNodesToCreate)
         assertThat<Relationship>(relationships).hasSize(howManyNodesToCreate - 1)
     }
