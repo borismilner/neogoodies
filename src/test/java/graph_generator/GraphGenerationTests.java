@@ -4,8 +4,8 @@ import neo_results.GraphResult;
 import org.junit.jupiter.api.*;
 import org.neo4j.graphdb.*;
 import testing.EmbeddedServerHelper;
+import utilities.FakeGenerator;
 import utilities.ValueFaker;
-import utilities.ValueFakerOptions;
 import utilities.YamlParser;
 
 import java.util.ArrayList;
@@ -49,7 +49,7 @@ class GraphGenerationTests {
     void testGenerateNodes() {
         int howManyNodesToCreate = 10;
         String[] expectedLabelsForEachNode = new String[]{"Mario", "Luigi"};
-        List<Node> nodes = graphGenerator.generateNodes(labelsFromStrings(expectedLabelsForEachNode), String.format("{'%s':'%s'}", FULL_NAME_PROPERTY_NAME, ValueFakerOptions.FULLNAME), howManyNodesToCreate);
+        List<Node> nodes = graphGenerator.generateNodes(labelsFromStrings(expectedLabelsForEachNode), String.format("{'%s':'%s'}", FULL_NAME_PROPERTY_NAME, FakeGenerator.FULLNAME), howManyNodesToCreate);
         assertThat(nodes).hasSize(howManyNodesToCreate);
         Transaction transaction = graphGenerator.beginTransaction();
         nodes.forEach(node -> {
@@ -64,9 +64,9 @@ class GraphGenerationTests {
     @Test
     void testGenerateZippedNodes() {
         int howManyNodesToCreate = 10;
-        List<Node> people = graphGenerator.generateNodes(labelsFromStrings(new String[]{PERSON_LABEL_STRING}), String.format("{'%s':'%s'}", FULL_NAME_PROPERTY_NAME, ValueFakerOptions.FULLNAME), howManyNodesToCreate);
-        List<Node> identifiers = graphGenerator.generateNodes(labelsFromStrings(new String[]{IDENTIFIER_PROPERTY_NAME}), String.format("{'%s':'%s'}", IDENTIFIER_PROPERTY_NAME, ValueFakerOptions.CREDIT_CARD_NUMBER), howManyNodesToCreate);
-        List<Relationship> createdRelationships = graphGenerator.generateRelationshipsZipper(identifiers, people, IDENTIFIES_RELATIONSHIP, String.format("{'strength': '%s'}", ValueFakerOptions.RANDOM_NUMBER));
+        List<Node> people = graphGenerator.generateNodes(labelsFromStrings(new String[]{PERSON_LABEL_STRING}), String.format("{'%s':'%s'}", FULL_NAME_PROPERTY_NAME, FakeGenerator.FULLNAME), howManyNodesToCreate);
+        List<Node> identifiers = graphGenerator.generateNodes(labelsFromStrings(new String[]{IDENTIFIER_PROPERTY_NAME}), String.format("{'%s':'%s'}", IDENTIFIER_PROPERTY_NAME, FakeGenerator.CREDIT_CARD_NUMBER), howManyNodesToCreate);
+        List<Relationship> createdRelationships = graphGenerator.generateRelationshipsZipper(identifiers, people, IDENTIFIES_RELATIONSHIP, String.format("{'strength': '%s'}", FakeGenerator.RANDOM_NUMBER));
         assertThat(people).hasSize(howManyNodesToCreate);
         assertThat(identifiers).hasSize(howManyNodesToCreate);
         assertThat(createdRelationships).hasSize(howManyNodesToCreate);
@@ -84,9 +84,9 @@ class GraphGenerationTests {
     @Test
     void testGenerateRelationshipsFromAllToAll() {
         int howManyNodesToCreate = 10;
-        List<Node> people = graphGenerator.generateNodes(labelsFromStrings(new String[]{"Person"}), String.format("{'%s':'%s'}", FULL_NAME_PROPERTY_NAME, ValueFakerOptions.FULLNAME), howManyNodesToCreate);
-        List<Node> identifiers = graphGenerator.generateNodes(labelsFromStrings(new String[]{IDENTIFIER_PROPERTY_NAME}), String.format("{'%s':'%s'}", IDENTIFIER_PROPERTY_NAME, ValueFakerOptions.CREDIT_CARD_NUMBER), howManyNodesToCreate);
-        List<Relationship> createdRelationships = graphGenerator.generateRelationshipsFromAllToAll(identifiers, people, IDENTIFIES_RELATIONSHIP, String.format("{'strength': '%s'}", ValueFakerOptions.RANDOM_NUMBER));
+        List<Node> people = graphGenerator.generateNodes(labelsFromStrings(new String[]{"Person"}), String.format("{'%s':'%s'}", FULL_NAME_PROPERTY_NAME, FakeGenerator.FULLNAME), howManyNodesToCreate);
+        List<Node> identifiers = graphGenerator.generateNodes(labelsFromStrings(new String[]{IDENTIFIER_PROPERTY_NAME}), String.format("{'%s':'%s'}", IDENTIFIER_PROPERTY_NAME, FakeGenerator.CREDIT_CARD_NUMBER), howManyNodesToCreate);
+        List<Relationship> createdRelationships = graphGenerator.generateRelationshipsFromAllToAll(identifiers, people, IDENTIFIES_RELATIONSHIP, String.format("{'strength': '%s'}", FakeGenerator.RANDOM_NUMBER));
         assertThat(people).hasSize(howManyNodesToCreate);
         assertThat(identifiers).hasSize(howManyNodesToCreate);
         assertThat(createdRelationships).hasSize(howManyNodesToCreate * howManyNodesToCreate);
@@ -95,7 +95,7 @@ class GraphGenerationTests {
     @Test
     void testGenerateLinkedList() {
         int howManyNodesToCreate = 10;
-        List<Node> people = graphGenerator.generateNodes(labelsFromStrings(new String[]{"Person"}), String.format("{'%s':'%s'}", FULL_NAME_PROPERTY_NAME, ValueFakerOptions.FULLNAME), howManyNodesToCreate);
+        List<Node> people = graphGenerator.generateNodes(labelsFromStrings(new String[]{"Person"}), String.format("{'%s':'%s'}", FULL_NAME_PROPERTY_NAME, FakeGenerator.FULLNAME), howManyNodesToCreate);
         GraphResult graphResult = graphGenerator.generateLinkedList(people, FRIEND_OF_RELATIONSHIP);
         assertThat(graphResult.nodes).hasSize(howManyNodesToCreate);
         assertThat(graphResult.relationships).hasSize(howManyNodesToCreate - 1);
@@ -107,7 +107,7 @@ class GraphGenerationTests {
         List<Object> parametersForGenerator = new ArrayList<>();
         parametersForGenerator.add("1");
         parametersForGenerator.add("10");
-        List<Object> numberBetween = graphGenerator.generateValues("numberBetween", parametersForGenerator, howManyProperties);
+        List<Object> numberBetween = graphGenerator.generateValues(FakeGenerator.NUMBER_BETWEEN.name(), parametersForGenerator, howManyProperties);
         assertThat(numberBetween).hasSize((int) howManyProperties);
         for (Object property : numberBetween) {
             int value = (int) property;

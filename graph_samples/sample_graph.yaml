@@ -5,31 +5,31 @@ nodes:
   - mainLabel: 'Person'
     howMany: 10
     properties:
-      name: 'firstName'
-      surname: 'lastName'
-      email: 'email'
+      name: 'FIRSTNAME'
+      surname: 'LASTNAME'
+      email: 'EMAIL_ADDRESS'
 
     additionalLabels: ['Man']
 
   - mainLabel: 'PersonIdentifier'
     howMany: 10
     properties:
-      id: 'randomNumber'
+      id: 'RANDOM_NUMBER'
 
     additionalLabels: ['Identifier']
 
   - mainLabel: 'Car'
     howMany: 20
     properties:
-      license_plate: 'creditCardNumber'
-      country: 'country'
+      license_plate: 'CREDIT_CARD_NUMBER'
+      country: 'COUNTRY'
 
     additionalLabels: ['Identifier']
 
   - mainLabel: 'CarIdentifier'
     howMany: 20
     properties:
-      'id': 'randomNumber'
+      'id': 'RANDOM_NUMBER'
 
     additionalLabels: ['Identifier']
 
@@ -81,10 +81,10 @@ customProperties:
 
   - node: 'Person<0>'
     properties:
-      phone_number: 'phoneNumber'
-      ip: 'ipv4'
+      phone_number: 'PHONE_NUMBER'
+      ip: 'IPV4'
 
   - node: 'Person<1>'
     properties:
-      phone_number: 'phoneNumber'
-      ip: 'ipv4'
+      phone_number: 'PHONE_NUMBER'
+      ip: 'IPV4'
