@@ -14,7 +14,7 @@ import java.net.URI;
 public class EmbeddedServerHelper {
 
     private static ServerControls embeddedDatabaseServer;
-    private static final Logger log = LogHelper.getLogger();
+    private static final Logger log = LogHelper.INSTANCE.getLogger();
     private static GraphDatabaseService graphDb;
 
     public static GraphDatabaseService getEmbeddedServer() {
