@@ -8,6 +8,7 @@ import org.neo4j.procedure.Mode
 import org.neo4j.procedure.Name
 import org.neo4j.procedure.Procedure
 import structures.NodeListResult
+import structures.ValueListResult
 import utilities.ValueFaker
 import utilities.YamlParser
 import java.util.*
@@ -52,5 +53,27 @@ class GenerateNodesProcedure : PluginProcedure() {
                         )
                 )
         )
+    }
+}
+
+class GenerateValuesProcedure : PluginProcedure() {
+    @JvmField
+    @Context
+    var log: Log? = null
+
+    @Procedure(value = "generate.values", mode = Mode.READ)
+    fun generateNodes(@Name("howMany") howMany: Long,
+                      @Name("generatorName") generatorName: String,
+                      @Name("parameters") parameters: Any): Stream<ValueListResult> {
+        log!!.info(String.format("Generating %d values using generator %s with properties %s",
+                howMany.toInt(),
+                generatorName,
+                parameters)
+        )
+        val graphGenerator = graphGenerator
+        return Stream.of(ValueListResult(graphGenerator.generateValues(
+                generatorName,
+                parameters as List<Any>, // TODO: Check and assign empty list when an empty string
+                howMany)))
     }
 }
