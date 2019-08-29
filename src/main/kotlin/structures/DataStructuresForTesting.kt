@@ -14,7 +14,7 @@ data class NodeDetails(
         var mainLabel: String? = null,
         var howMany: Int = 0,
         var properties: Map<String, String>? = null,
-        var additionalLabels: List<String>? = null
+        var additionalLabels: MutableList<String>? = null
 )
 
 data class NodePropertiesDetails(

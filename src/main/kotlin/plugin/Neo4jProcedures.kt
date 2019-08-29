@@ -2,7 +2,6 @@
 
 package plugin
 
-import graph_generator.GraphGenerator
 import org.neo4j.graphdb.GraphDatabaseService
 import org.neo4j.graphdb.Label
 import org.neo4j.logging.Log
@@ -13,6 +12,7 @@ import org.neo4j.procedure.Procedure
 import structures.GraphResult
 import structures.NodeListResult
 import structures.ValueListResult
+import tools.GraphGenerator
 import utilities.ValueFaker
 import utilities.YamlParser
 import java.util.*
@@ -42,7 +42,7 @@ class GenerateNodesProcedure : PluginProcedure() {
     fun generateNodes(@Name("howMany") howMany: Long,
                       @Name("labels") labelsStringArray: Any,
                       @Name("propertiesYamlString") propertiesYamlString: String): Stream<NodeListResult> {
-        val labels = (labelsStringArray as ArrayList<String>).toTypedArray()
+        val labels = labelsStringArray as Array<String>
         log!!.info(String.format("Generating %d nodes with labels %s and properties %s",
                 howMany.toInt(),
                 labels.contentToString(),
