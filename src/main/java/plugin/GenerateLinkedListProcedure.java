@@ -1,13 +1,13 @@
 package plugin;
 
 import graph_generator.GraphGenerator;
-import neo_results.GraphResult;
 import org.neo4j.graphdb.Node;
 import org.neo4j.logging.Log;
 import org.neo4j.procedure.Context;
 import org.neo4j.procedure.Mode;
 import org.neo4j.procedure.Name;
 import org.neo4j.procedure.Procedure;
+import structures.GraphResult;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,7 +1,6 @@
 package plugin;
 
 import graph_generator.GraphGenerator;
-import neo_results.GraphResult;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -10,6 +9,7 @@ import org.neo4j.procedure.Context;
 import org.neo4j.procedure.Mode;
 import org.neo4j.procedure.Name;
 import org.neo4j.procedure.Procedure;
+import structures.GraphResult;
 
 import java.util.List;
 import java.util.stream.Stream;

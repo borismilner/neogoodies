@@ -3,14 +3,10 @@ package graph_generator;
 import exceptions.InputValidationException;
 import graph_components.Property;
 import logging.LogHelper;
-import neo_results.GraphResult;
 import org.neo4j.graphdb.*;
 import org.slf4j.Logger;
 import org.yaml.snakeyaml.Yaml;
-import structures.EdgeDetails;
-import structures.GraphYamlTemplate;
-import structures.NodeDetails;
-import structures.NodePropertiesDetails;
+import structures.*;
 import utilities.ValueFaker;
 import utilities.YamlParser;
 
@@ -221,7 +217,7 @@ public class GraphGenerator {
                         }
 
                         GraphResult graphResult = generateLinkedList(nodesToLink, relationshipName);
-                        for (Relationship r : graphResult.relationships) {
+                        for (Relationship r : graphResult.getRelationships()) {
                             addRelationshipProperties(r, propertiesFromYamlString((String) relationProperties));
                         }
                     }
