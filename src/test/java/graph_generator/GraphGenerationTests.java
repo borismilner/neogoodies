@@ -97,8 +97,8 @@ class GraphGenerationTests {
         int howManyNodesToCreate = 10;
         List<Node> people = graphGenerator.generateNodes(labelsFromStrings(new String[]{"Person"}), String.format("{'%s':'%s'}", FULL_NAME_PROPERTY_NAME, FakeGenerator.FULLNAME), howManyNodesToCreate);
         GraphResult graphResult = graphGenerator.generateLinkedList(people, FRIEND_OF_RELATIONSHIP);
-        assertThat(graphResult.getNodes()).hasSize(howManyNodesToCreate);
-        assertThat(graphResult.getRelationships()).hasSize(howManyNodesToCreate - 1);
+        assertThat(graphResult.nodes).hasSize(howManyNodesToCreate);
+        assertThat(graphResult.relationships).hasSize(howManyNodesToCreate - 1);
     }
 
     @Test

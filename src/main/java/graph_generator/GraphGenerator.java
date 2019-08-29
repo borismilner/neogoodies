@@ -217,7 +217,7 @@ public class GraphGenerator {
                         }
 
                         GraphResult graphResult = generateLinkedList(nodesToLink, relationshipName);
-                        for (Relationship r : graphResult.getRelationships()) {
+                        for (Relationship r : graphResult.relationships) {
                             addRelationshipProperties(r, propertiesFromYamlString((String) relationProperties));
                         }
                     }

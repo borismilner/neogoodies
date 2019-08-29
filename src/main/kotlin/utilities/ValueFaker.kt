@@ -3,6 +3,7 @@ package utilities
 import com.github.javafaker.Faker
 import exceptions.InputValidationException
 import graph_components.Property
+import kotlin.random.Random
 
 enum class FakeGenerator(val generatorName: String) {
     // Names
@@ -61,6 +62,7 @@ enum class FakeGenerator(val generatorName: String) {
 class ValueFaker(seedForRandom: Long = 42) {
 
     private val faker = Faker(java.util.Random(seedForRandom))
+    private val random = Random(seedForRandom)
 
     fun getValue(property: Property): Any {
         val generator: FakeGenerator
@@ -79,7 +81,7 @@ class ValueFaker(seedForRandom: Long = 42) {
                 val max = (property.parameters[1] as String).toInt()
                 return faker.number().numberBetween(min, max)
             }
-            FakeGenerator.COUNTRY -> return faker.country().name()
+            FakeGenerator.COUNTRY -> return faker.address().country()
             FakeGenerator.CITY -> return faker.address().city()
             FakeGenerator.STATE -> return faker.address().state()
             FakeGenerator.STREET_ADDRESS -> return faker.address().streetAddress()
@@ -93,7 +95,9 @@ class ValueFaker(seedForRandom: Long = 42) {
             FakeGenerator.AVATAR_URL -> return faker.internet().avatar()
             FakeGenerator.EMAIL_ADDRESS -> return faker.internet().emailAddress()
             FakeGenerator.URL -> return faker.internet().emailAddress()
-            FakeGenerator.IPV4 -> return faker.internet().ipV4Address()
+            FakeGenerator.IPV4 -> { // Some strange problem of methodNotFound with the faker implementation
+                return "${random.nextInt(from = 0, until = 255)}".repeat(n = 4)
+            }
             FakeGenerator.PARAGRAPH -> return faker.lorem().paragraph()
             FakeGenerator.SENTENCE -> return faker.lorem().sentence()
             FakeGenerator.WORD -> return faker.lorem().word()
