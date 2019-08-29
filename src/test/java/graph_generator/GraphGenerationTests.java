@@ -1,8 +1,8 @@
 package graph_generator;
 
-import neo_results.GraphResult;
 import org.junit.jupiter.api.*;
 import org.neo4j.graphdb.*;
+import structures.GraphResult;
 import testing.EmbeddedServerHelper;
 import utilities.FakeGenerator;
 import utilities.ValueFaker;
@@ -97,8 +97,8 @@ class GraphGenerationTests {
         int howManyNodesToCreate = 10;
         List<Node> people = graphGenerator.generateNodes(labelsFromStrings(new String[]{"Person"}), String.format("{'%s':'%s'}", FULL_NAME_PROPERTY_NAME, FakeGenerator.FULLNAME), howManyNodesToCreate);
         GraphResult graphResult = graphGenerator.generateLinkedList(people, FRIEND_OF_RELATIONSHIP);
-        assertThat(graphResult.nodes).hasSize(howManyNodesToCreate);
-        assertThat(graphResult.relationships).hasSize(howManyNodesToCreate - 1);
+        assertThat(graphResult.getNodes()).hasSize(howManyNodesToCreate);
+        assertThat(graphResult.getRelationships()).hasSize(howManyNodesToCreate - 1);
     }
 
     @Test

@@ -1,12 +1,12 @@
 package plugin;
 
 import graph_generator.GraphGenerator;
-import neo_results.ValueListResult;
 import org.neo4j.logging.Log;
 import org.neo4j.procedure.Context;
 import org.neo4j.procedure.Mode;
 import org.neo4j.procedure.Name;
 import org.neo4j.procedure.Procedure;
+import structures.ValueListResult;
 
 import java.util.Collections;
 import java.util.stream.Stream;
