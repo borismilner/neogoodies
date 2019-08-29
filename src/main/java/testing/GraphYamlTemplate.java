@@ -1,5 +1,8 @@
 package testing;
 
+import structures.EdgeDetails;
+import structures.NodeDetails;
+
 import java.util.List;
 
 public class GraphYamlTemplate {

@@ -7,9 +7,9 @@ import neo_results.GraphResult;
 import org.neo4j.graphdb.*;
 import org.slf4j.Logger;
 import org.yaml.snakeyaml.Yaml;
-import testing.EdgeDetails;
+import structures.EdgeDetails;
+import structures.NodeDetails;
 import testing.GraphYamlTemplate;
-import testing.NodeDetails;
 import testing.NodePropertiesDetails;
 import utilities.ValueFaker;
 import utilities.YamlParser;
@@ -186,33 +186,33 @@ public class GraphGenerator {
 
         for (NodeDetails nodeDetails : required.nodes) {
 
-            log.info(String.format("Generating node with primary label of: %s", nodeDetails.mainLabel));
-            nodeDetails.additionalLabels.add(nodeDetails.mainLabel);
+            log.info(String.format("Generating node with primary label of: %s", nodeDetails.getMainLabel()));
+            nodeDetails.getAdditionalLabels().add(nodeDetails.getMainLabel());
             List<Node> nodes = generateNodes(
-                    labelsFromStrings(nodeDetails.additionalLabels.toArray(new String[0])),
-                    mapToYamlString(nodeDetails.properties),
-                    nodeDetails.howMany
+                    labelsFromStrings(nodeDetails.getAdditionalLabels().toArray(new String[0])),
+                    mapToYamlString(nodeDetails.getProperties()),
+                    nodeDetails.getHowMany()
                                             );
-            mapComponents.put(nodeDetails.mainLabel, nodes);
+            mapComponents.put(nodeDetails.getMainLabel(), nodes);
         }
 
         for (EdgeDetails edgeDetails : required.relationships) {
 
-            String connectionMethod = edgeDetails.connectionMethod;
+            String connectionMethod = edgeDetails.getConnectionMethod();
 
             switch (connectionMethod) {
                 case "ZipNodes":
-                    List<Node> sourceNodes = mapComponents.get(edgeDetails.source);
-                    List<Node> targetNodes = mapComponents.get(edgeDetails.target);
-                    String relationshipName = edgeDetails.relationshipType;
-                    String properties = edgeDetails.properties;
+                    List<Node> sourceNodes = mapComponents.get(edgeDetails.getSource());
+                    List<Node> targetNodes = mapComponents.get(edgeDetails.getTarget());
+                    String relationshipName = edgeDetails.getRelationshipType();
+                    String properties = edgeDetails.getProperties();
                     generateRelationshipsZipper(sourceNodes, targetNodes, relationshipName, properties);
                     break;
                 case "Link":
 
-                    relationshipName = edgeDetails.relationshipType;
-                    List<ArrayList<String>> chains = edgeDetails.nodes;
-                    Object relationProperties = edgeDetails.properties;
+                    relationshipName = edgeDetails.getRelationshipType();
+                    List<ArrayList<String>> chains = edgeDetails.getNodes();
+                    Object relationProperties = edgeDetails.getProperties();
                     for (List<String> chain : chains) {
 
                         List<Node> nodesToLink = new ArrayList<>();
