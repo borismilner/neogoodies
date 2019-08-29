@@ -63,7 +63,7 @@ class GraphGenerator(val database: GraphDatabaseService,
         return parser.yaml.dump(propertiesMap)
     }
 
-    fun generateNodes(labels: Array<Label>, propertiesString: String, howMany: Long): MutableList<Node> {
+    fun generateNodes(labels: Array<Label>, propertiesString: String, howMany: Long): List<Node> {
         val nodesGenerated = ArrayList<Node>()
         database.beginTx().use { transaction ->
             for (i in 0 until howMany) {

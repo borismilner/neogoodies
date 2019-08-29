@@ -128,8 +128,7 @@ class GenerateZipperProcedure : PluginProcedure() {
         val sourceNodes = graphGenerator.generateNodes(arrayOf(sourceLabel), sourcePropertiesString, howMany.toInt().toLong())
         val targetNodes = graphGenerator.generateNodes(arrayOf(targetLabel), targetPropertiesString, howMany.toInt().toLong())
         val relationships = graphGenerator.generateRelationshipsZipper(sourceNodes, targetNodes, relationshipType, relationshipProperties)
-        sourceNodes.addAll(targetNodes)
-        val graphResult = GraphResult(sourceNodes, relationships)
+        val graphResult = GraphResult(sourceNodes + targetNodes, relationships)
         return Stream.of(graphResult)
     }
 }
