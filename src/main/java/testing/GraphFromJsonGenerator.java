@@ -6,7 +6,6 @@ import logging.LogHelper;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.neo4j.graphdb.*;
 import org.slf4j.Logger;
-import utilities.GeneralUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static utilities.GeneralUtilitiesKt.removeComments;
 
 class GraphFromJsonGenerator {
     private final GraphDatabaseService db;
@@ -169,7 +170,7 @@ class GraphFromJsonGenerator {
         try {
             byte[] bytes = Files.readAllBytes(Paths.get(jsonFilePath));
             jsonContent = new String(bytes, StandardCharsets.UTF_8);
-            jsonContent = GeneralUtils.removeComments(jsonContent);
+            jsonContent = removeComments(jsonContent);
         }
         catch (IOException e) {
             throw new InputValidationException(String.format("Could not read %s", jsonFilePath));
