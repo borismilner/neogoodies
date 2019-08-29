@@ -14,7 +14,7 @@ import java.util.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GraphGeneratorTests {
-    private var graphGenerator: GraphGenerator? = null
+    private lateinit var graphGenerator: GraphGenerator
 
     private val fullNamePropertyName = "full_name"
     private val identifierPropertyName = "Identifier"
@@ -47,13 +47,13 @@ class GraphGeneratorTests {
     fun testGenerateNodes() {
         val howManyNodesToCreate = 10
         val expectedLabelsForEachNode = arrayOf("Mario", "Luigi")
-        val nodes = graphGenerator!!.generateNodes(
+        val nodes = graphGenerator.generateNodes(
                 GraphGenerator.labelsFromStrings(expectedLabelsForEachNode),
                 "{'$fullNamePropertyName':'${FakeGenerator.FULLNAME}'}",
                 howManyNodesToCreate.toLong()
         )
         assertThat<Node>(nodes).hasSize(howManyNodesToCreate)
-        val transaction = graphGenerator!!.database.beginTx()
+        val transaction = graphGenerator.database.beginTx()
         nodes.forEach { node ->
             for (expectedLabelName in expectedLabelsForEachNode) {
                 assertThat(node.hasLabel(Label.label(expectedLabelName))).isTrue()
@@ -66,13 +66,13 @@ class GraphGeneratorTests {
     @Test
     fun testGenerateZippedNodes() {
         val howManyNodesToCreate = 10
-        val people = graphGenerator!!.generateNodes(GraphGenerator.labelsFromStrings(arrayOf(personLabelString)), "{'$fullNamePropertyName':'${FakeGenerator.FULLNAME}'}", howManyNodesToCreate.toLong())
-        val identifiers = graphGenerator!!.generateNodes(GraphGenerator.labelsFromStrings(arrayOf(identifierPropertyName)), "{'$identifierPropertyName':'${FakeGenerator.CREDIT_CARD_NUMBER}'}", howManyNodesToCreate.toLong())
-        val createdRelationships = graphGenerator!!.generateRelationshipsZipper(identifiers, people, identifiesRelationship, "{'strength': '${FakeGenerator.RANDOM_NUMBER}'}")
+        val people = graphGenerator.generateNodes(GraphGenerator.labelsFromStrings(arrayOf(personLabelString)), "{'$fullNamePropertyName':'${FakeGenerator.FULLNAME}'}", howManyNodesToCreate.toLong())
+        val identifiers = graphGenerator.generateNodes(GraphGenerator.labelsFromStrings(arrayOf(identifierPropertyName)), "{'$identifierPropertyName':'${FakeGenerator.CREDIT_CARD_NUMBER}'}", howManyNodesToCreate.toLong())
+        val createdRelationships = graphGenerator.generateRelationshipsZipper(identifiers, people, identifiesRelationship, "{'strength': '${FakeGenerator.RANDOM_NUMBER}'}")
         assertThat<Node>(people).hasSize(howManyNodesToCreate)
         assertThat<Node>(identifiers).hasSize(howManyNodesToCreate)
         assertThat<Relationship>(createdRelationships).hasSize(howManyNodesToCreate)
-        val transaction = graphGenerator!!.database.beginTx()
+        val transaction = graphGenerator.database.beginTx()
         createdRelationships.forEach { relationship ->
             val fromNode = relationship.startNode
             val toNode = relationship.endNode
@@ -86,9 +86,9 @@ class GraphGeneratorTests {
     @Test
     fun testGenerateRelationshipsFromAllToAll() {
         val howManyNodesToCreate = 10
-        val people = graphGenerator!!.generateNodes(GraphGenerator.labelsFromStrings(arrayOf("Person")), "{'$fullNamePropertyName':'${FakeGenerator.FULLNAME}'}", howManyNodesToCreate.toLong())
-        val identifiers = graphGenerator!!.generateNodes(GraphGenerator.labelsFromStrings(arrayOf(identifierPropertyName)), "{'$identifierPropertyName':'${FakeGenerator.CREDIT_CARD_NUMBER}'}", howManyNodesToCreate.toLong())
-        val createdRelationships = graphGenerator!!.generateRelationshipsFromAllToAll(identifiers, people, identifiesRelationship, "{'strength': '${FakeGenerator.RANDOM_NUMBER}'}")
+        val people = graphGenerator.generateNodes(GraphGenerator.labelsFromStrings(arrayOf("Person")), "{'$fullNamePropertyName':'${FakeGenerator.FULLNAME}'}", howManyNodesToCreate.toLong())
+        val identifiers = graphGenerator.generateNodes(GraphGenerator.labelsFromStrings(arrayOf(identifierPropertyName)), "{'$identifierPropertyName':'${FakeGenerator.CREDIT_CARD_NUMBER}'}", howManyNodesToCreate.toLong())
+        val createdRelationships = graphGenerator.generateRelationshipsFromAllToAll(identifiers, people, identifiesRelationship, "{'strength': '${FakeGenerator.RANDOM_NUMBER}'}")
         assertThat<Node>(people).hasSize(howManyNodesToCreate)
         assertThat<Node>(identifiers).hasSize(howManyNodesToCreate)
         assertThat<Relationship>(createdRelationships).hasSize(howManyNodesToCreate * howManyNodesToCreate)
@@ -97,8 +97,8 @@ class GraphGeneratorTests {
     @Test
     fun testGenerateLinkedList() {
         val howManyNodesToCreate = 10
-        val people = graphGenerator!!.generateNodes(GraphGenerator.labelsFromStrings(arrayOf("Person")), String.format("{'%s':'%s'}", fullNamePropertyName, FakeGenerator.FULLNAME), howManyNodesToCreate.toLong())
-        val (nodes, relationships) = graphGenerator!!.generateLinkedList(people, friendOfRelationship)
+        val people = graphGenerator.generateNodes(GraphGenerator.labelsFromStrings(arrayOf("Person")), String.format("{'%s':'%s'}", fullNamePropertyName, FakeGenerator.FULLNAME), howManyNodesToCreate.toLong())
+        val (nodes, relationships) = graphGenerator.generateLinkedList(people, friendOfRelationship)
         assertThat<Node>(nodes).hasSize(howManyNodesToCreate)
         assertThat<Relationship>(relationships).hasSize(howManyNodesToCreate - 1)
     }
@@ -109,7 +109,7 @@ class GraphGeneratorTests {
         val parametersForGenerator = ArrayList<Any>()
         parametersForGenerator.add("1")
         parametersForGenerator.add("10")
-        val numberBetween = graphGenerator!!.generateValues(FakeGenerator.NUMBER_BETWEEN.name, parametersForGenerator, howManyProperties)
+        val numberBetween = graphGenerator.generateValues(FakeGenerator.NUMBER_BETWEEN.name, parametersForGenerator, howManyProperties)
         assertThat(numberBetween).hasSize(howManyProperties.toInt())
         for (property in numberBetween) {
             val value = property as Int
@@ -119,6 +119,6 @@ class GraphGeneratorTests {
 
     @Test
     fun testGenerateFromYamlFile() {
-        graphGenerator!!.generateFromYamlFile("graph_samples/sample_graph.yaml")
+        graphGenerator.generateFromYamlFile("graph_samples/sample_graph.yaml")
     }
 }
