@@ -163,7 +163,7 @@ public class GraphGenerator {
     }
 
     public void generateFromYamlFile(String filePath) {
-        Logger log = LogHelper.getLogger();
+        Logger log = LogHelper.INSTANCE.getLogger();
         GraphYamlTemplate required;
         mapComponents = new HashMap<>();
         try {

@@ -3,7 +3,7 @@ package graph_generator;
 import org.junit.jupiter.api.*;
 import org.neo4j.graphdb.*;
 import structures.GraphResult;
-import testing.EmbeddedServerHelper;
+import utilities.EmbeddedServerHelper;
 import utilities.FakeGenerator;
 import utilities.ValueFaker;
 import utilities.YamlParser;
@@ -29,7 +29,7 @@ class GraphGenerationTests {
 
     @BeforeAll
     void beforeAll() {
-        GraphDatabaseService embeddedServer = EmbeddedServerHelper.getEmbeddedServer();
+        GraphDatabaseService embeddedServer = EmbeddedServerHelper.INSTANCE.getGraphDb();
         YamlParser yamlParser = new YamlParser();
         ValueFaker valueFaker = new ValueFaker();
         graphGenerator = new GraphGenerator(embeddedServer, yamlParser, valueFaker);
@@ -37,12 +37,12 @@ class GraphGenerationTests {
 
     @BeforeEach
     void setUp() {
-        EmbeddedServerHelper.clearGraph();
+        EmbeddedServerHelper.INSTANCE.clearGraph();
     }
 
     @AfterEach
     void tearDown() {
-        EmbeddedServerHelper.clearGraph();
+        EmbeddedServerHelper.INSTANCE.clearGraph();
     }
 
     @Test
