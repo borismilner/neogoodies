@@ -3,7 +3,7 @@
 Useful utilities for working with Neo4j.
 
 
-<span style="text-decoration:underline">Samples for testing plugin calls</span>
+### Samples for testing plugin calls
 call generate.nodes(5, ["Officer", "Gentleman"],"")
 call generate.linkedList(10, ["Person"], "{}", "Likes")
 call generate.values(10, "FULLNAME",[])
