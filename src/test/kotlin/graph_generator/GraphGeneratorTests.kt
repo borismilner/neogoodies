@@ -24,13 +24,13 @@ class GraphGeneratorTests {
 
     private val personLabelString = "Person"
 
+    private val howManyNodesToCreate = 10
+
 
     @BeforeAll
     fun beforeAll() {
         val embeddedServer = EmbeddedServerHelper.graphDb
-        val yamlParser = YamlParser()
-        val valueFaker = ValueFaker()
-        graphGenerator = GraphGenerator(embeddedServer, yamlParser, valueFaker)
+        graphGenerator = GraphGenerator(embeddedServer, YamlParser(), ValueFaker())
     }
 
     @BeforeEach
@@ -45,7 +45,6 @@ class GraphGeneratorTests {
 
     @Test
     fun testGenerateNodes() {
-        val howManyNodesToCreate = 10
         val expectedLabelsForEachNode = arrayOf("Mario", "Luigi")
         val nodes = graphGenerator.generateNodes(
                 GraphGenerator.labelsFromStrings(expectedLabelsForEachNode),
@@ -65,7 +64,6 @@ class GraphGeneratorTests {
 
     @Test
     fun testGenerateZippedNodes() {
-        val howManyNodesToCreate = 10
         val people = graphGenerator.generateNodes(GraphGenerator.labelsFromStrings(arrayOf(personLabelString)), "{'$fullNamePropertyName':'${FakeGenerator.FULLNAME}'}", howManyNodesToCreate.toLong())
         val identifiers = graphGenerator.generateNodes(GraphGenerator.labelsFromStrings(arrayOf(identifierPropertyName)), "{'$identifierPropertyName':'${FakeGenerator.CREDIT_CARD_NUMBER}'}", howManyNodesToCreate.toLong())
         val createdRelationships = graphGenerator.generateRelationshipsZipper(identifiers, people, identifiesRelationship, "{'strength': '${FakeGenerator.RANDOM_NUMBER}'}")
@@ -85,7 +83,6 @@ class GraphGeneratorTests {
 
     @Test
     fun testGenerateRelationshipsFromAllToAll() {
-        val howManyNodesToCreate = 10
         val people = graphGenerator.generateNodes(GraphGenerator.labelsFromStrings(arrayOf("Person")), "{'$fullNamePropertyName':'${FakeGenerator.FULLNAME}'}", howManyNodesToCreate.toLong())
         val identifiers = graphGenerator.generateNodes(GraphGenerator.labelsFromStrings(arrayOf(identifierPropertyName)), "{'$identifierPropertyName':'${FakeGenerator.CREDIT_CARD_NUMBER}'}", howManyNodesToCreate.toLong())
         val createdRelationships = graphGenerator.generateRelationshipsFromAllToAll(identifiers, people, identifiesRelationship, "{'strength': '${FakeGenerator.RANDOM_NUMBER}'}")
@@ -96,7 +93,6 @@ class GraphGeneratorTests {
 
     @Test
     fun testGenerateLinkedList() {
-        val howManyNodesToCreate = 10
         val people = graphGenerator.generateNodes(GraphGenerator.labelsFromStrings(arrayOf("Person")), String.format("{'%s':'%s'}", fullNamePropertyName, FakeGenerator.FULLNAME), howManyNodesToCreate.toLong())
         val (nodes, relationships) = graphGenerator.generateLinkedList(people, friendOfRelationship)
         assertThat<Node>(nodes).hasSize(howManyNodesToCreate)
@@ -105,12 +101,12 @@ class GraphGeneratorTests {
 
     @Test
     fun testGenerateValues() {
-        val howManyProperties: Long = 10
+        val howManyProperties: Int = howManyNodesToCreate
         val parametersForGenerator = ArrayList<Any>()
         parametersForGenerator.add("1")
         parametersForGenerator.add("10")
-        val numberBetween = graphGenerator.generateValues(FakeGenerator.NUMBER_BETWEEN.name, parametersForGenerator, howManyProperties)
-        assertThat(numberBetween).hasSize(howManyProperties.toInt())
+        val numberBetween = graphGenerator.generateValues(FakeGenerator.NUMBER_BETWEEN.name, parametersForGenerator, howManyProperties.toLong())
+        assertThat(numberBetween).hasSize(howManyProperties)
         for (property in numberBetween) {
             val value = property as Int
             assertThat(value).isBetween(Integer.valueOf(parametersForGenerator[0] as String), Integer.valueOf(parametersForGenerator[1] as String))
