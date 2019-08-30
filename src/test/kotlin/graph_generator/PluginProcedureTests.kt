@@ -1,9 +1,11 @@
 package graph_generator
 
+import logging.LogHelper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.*
 import org.neo4j.graphdb.Label
 import org.neo4j.graphdb.Node
+import org.slf4j.Logger
 import plugin.*
 import tools.GraphGenerator
 import utilities.EmbeddedServerHelper
@@ -18,6 +20,7 @@ import java.util.function.Consumer
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PluginProcedureTests {
 
+    private val log: Logger = LogHelper.logger
     private val howManyToCreate = 10
     private val labelsForEachNode = arrayListOf("Officer", "Gentleman")
     private val propertiesForEachNode = mapOf(
@@ -51,8 +54,11 @@ class PluginProcedureTests {
 
     @BeforeAll
     fun beforeAll() {
+        log.debug("Retrieving GraphDatabaseService from EmbeddedServerHelper")
         val embeddedServer = EmbeddedServerHelper.graphDb
+        log.debug("Initializing GraphGenerator")
         graphGenerator = GraphGenerator(embeddedServer, YamlParser(), ValueFaker())
+        log.debug("Registering plugin procedures to be tested")
         registerProcedure(
                 embeddedServer,
                 GenerateNodesProcedure::class.java,
