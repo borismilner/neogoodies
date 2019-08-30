@@ -9,18 +9,21 @@ import org.neo4j.harness.TestServerBuilders
 import java.net.URI
 
 object EmbeddedServerHelper {
-    private val embeddedDatabaseServer: ServerControls = TestServerBuilders
-            .newInProcessBuilder()
-            .withConfig("dbms.connector.bolt.enabled", "true")
-            .withConfig("dbms.connector.bolt.listen_address", ":8888")
-            .withConfig("dbms.logs.query.enabled", "true")
-            .withConfig("dbms.track_query_cpu_time", "true")
-            .newServer()
     private val log = LogHelper.logger
+    private val embeddedDatabaseServer: ServerControls
     val graphDb: GraphDatabaseService
     private val boltUri: URI
 
     init {
+
+        log.debug("Initializing embedded-server with pre-defined settings")
+        embeddedDatabaseServer = TestServerBuilders
+                .newInProcessBuilder()
+                .withConfig("dbms.connector.bolt.enabled", "true")
+                .withConfig("dbms.connector.bolt.listen_address", ":8888")
+                .withConfig("dbms.logs.query.enabled", "true")
+                .withConfig("dbms.track_query_cpu_time", "true")
+                .newServer()
 
         graphDb = embeddedDatabaseServer.graph()
         boltUri = embeddedDatabaseServer.boltURI()
