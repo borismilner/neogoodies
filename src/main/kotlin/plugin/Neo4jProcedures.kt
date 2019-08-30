@@ -65,9 +65,9 @@ class GenerateValuesProcedure : PluginProcedure() {
     var log: Log? = null
 
     @Procedure(value = "generate.values", mode = Mode.READ)
-    fun generateNodes(@Name("howMany") howMany: Long,
-                      @Name("generatorName") generatorName: String,
-                      @Name("parameters") parameters: Any): Stream<ValueListResult> {
+    fun generateValues(@Name("howMany") howMany: Long,
+                       @Name("generatorName") generatorName: String,
+                       @Name("parameters") parameters: Any): Stream<ValueListResult> {
         log!!.info("Generating ${howMany.toInt()} values using generator $generatorName with properties $parameters")
 
         val graphGenerator = graphGenerator
@@ -84,10 +84,10 @@ class GenerateLinkedListProcedure : PluginProcedure() {
     var log: Log? = null
 
     @Procedure(value = "generate.linkedList", mode = Mode.WRITE)
-    fun generateNodes(@Name("howMany") howMany: Long,
-                      @Name("labels") labelsStringArray: Any,
-                      @Name("nodePropertiesString") nodePropertiesString: String,
-                      @Name("relationshipType") relationshipType: String): Stream<GraphResult> {
+    fun generateLinkedList(@Name("howMany") howMany: Long,
+                           @Name("labels") labelsStringArray: Any,
+                           @Name("nodePropertiesString") nodePropertiesString: String,
+                           @Name("relationshipType") relationshipType: String): Stream<GraphResult> {
         val labels = (labelsStringArray as ArrayList<String>).toTypedArray()
         log!!.info("Generating a linked list of $howMany nodes with labels ${labels.contentToString()} connected by $relationshipType")
         val graphGenerator = graphGenerator
@@ -103,13 +103,13 @@ class GenerateZipperProcedure : PluginProcedure() {
     var log: Log? = null
 
     @Procedure(value = "generate.zipper", mode = Mode.WRITE)
-    fun generateNodes(@Name("howMany") howMany: Long,
-                      @Name("sourceLabel") sourceLabelName: String,
-                      @Name("sourcePropertiesString") sourcePropertiesString: String,
-                      @Name("targetLabel") targetLabelName: String,
-                      @Name("targetPropertiesString") targetPropertiesString: String,
-                      @Name("relationshipType") relationshipType: String,
-                      @Name("relationshipProperties") relationshipProperties: String): Stream<GraphResult> {
+    fun generateZipper(@Name("howMany") howMany: Long,
+                       @Name("sourceLabel") sourceLabelName: String,
+                       @Name("sourcePropertiesString") sourcePropertiesString: String,
+                       @Name("targetLabel") targetLabelName: String,
+                       @Name("targetPropertiesString") targetPropertiesString: String,
+                       @Name("relationshipType") relationshipType: String,
+                       @Name("relationshipProperties") relationshipProperties: String): Stream<GraphResult> {
 
         log!!.info(String.format("Generating zipper structure of %d nodes in each side, source=%s, target=%s, relationship=%s, rel_properties:%s",
                 howMany.toInt(),
@@ -135,7 +135,7 @@ class GenerateFromYamlFileProcedure : PluginProcedure() {
     var log: Log? = null
 
     @Procedure(value = "generate.fromYamlFile", mode = Mode.WRITE)
-    fun generateNodes(@Name("yamlFilePath") yamlFilePath: String): Stream<ValueListResult> {
+    fun generateFromYamlFile(@Name("yamlFilePath") yamlFilePath: String): Stream<ValueListResult> {
         log!!.info("Generating a graph from a YAML template if file: $yamlFilePath")
         val graphGenerator = graphGenerator
         graphGenerator.generateFromYamlFile(yamlFilePath)

@@ -33,6 +33,7 @@ class PluginProcedureTests {
     private val nodesKey = "nodes"
     private val valuesKey = "values"
     private val relationshipsKey = "relationships"
+    private val graphElementKey = "graphElement"
 
     private val propertiesString: String
 
@@ -161,6 +162,20 @@ class PluginProcedureTests {
             assertThat(resultsList).hasSize(1)
             assertThat(resultsList[0]).isEqualTo("Done")
         }
+
+        // Make sure that the intended structure was indeed created
+
+        val expectedNumberOfNodes = 60
+        val expectedRelationshipTypes = arrayOf("FRIEND_OF", "OWNES", "IDENTIFIES", "LOOKS_LIKE")
+
+        var results = EmbeddedServerHelper.execute("""match (n) return count(n) as numOfNodes""")
+
+        val numberOfNodes = results.single()["numOfNodes"].asInt()
+        assertThat(numberOfNodes).isEqualTo(expectedNumberOfNodes)
+
+        results = EmbeddedServerHelper.execute("""match (n)-[r]-() return distinct type(r)""")
+        assertThat(setOf(results) == setOf(expectedRelationshipTypes))
+
     }
 
 }
