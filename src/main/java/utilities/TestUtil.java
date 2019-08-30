@@ -4,9 +4,6 @@ import com.google.common.io.Files;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Result;
 import org.neo4j.graphdb.Transaction;
-import org.neo4j.internal.kernel.api.exceptions.KernelException;
-import org.neo4j.kernel.impl.proc.Procedures;
-import org.neo4j.kernel.internal.GraphDatabaseAPI;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,25 +22,25 @@ import static org.assertj.core.api.Assertions.fail;
 /*Brutally robbed out of APOC source-code and adjusted to the existing one as much as possible*/
 
 public class TestUtil {
-    public static void testCall(GraphDatabaseService db, String call, Consumer<Map<String, Object>> consumer) {
-        testCall(db, call, null, consumer);
-    }
+//    public static void testCall(GraphDatabaseService db, String call, Consumer<Map<String, Object>> consumer) {
+//        testCall(db, call, null, consumer);
+//    }
 
-    public static void testCall(GraphDatabaseService db, String call, Map<String, Object> params, Consumer<Map<String, Object>> consumer) {
-        testResult(db, call, params, (res) -> {
-            try {
-                assertThat(res.hasNext()).isTrue();
-//                assertTrue("Should have an element", res.hasNext());
-                Map<String, Object> row = res.next();
-                consumer.accept(row);
-                assertThat(res.hasNext()).isFalse();
-//                assertFalse("Should not have a second element", res.hasNext());
-            } catch (Throwable t) {
-                printFullStackTrace(t);
-                throw t;
-            }
-        });
-    }
+//    public static void testCall(GraphDatabaseService db, String call, Map<String, Object> params, Consumer<Map<String, Object>> consumer) {
+//        testResult(db, call, params, (res) -> {
+//            try {
+//                assertThat(res.hasNext()).isTrue();
+////                assertTrue("Should have an element", res.hasNext());
+//                Map<String, Object> row = res.next();
+//                consumer.accept(row);
+//                assertThat(res.hasNext()).isFalse();
+////                assertFalse("Should not have a second element", res.hasNext());
+//            } catch (Throwable t) {
+//                printFullStackTrace(t);
+//                throw t;
+//            }
+//        });
+//    }
 
     public static void printFullStackTrace(Throwable e) {
         String padding = "";
@@ -111,15 +108,6 @@ public class TestUtil {
             Map<String, Object> p = (params == null) ? Collections.emptyMap() : params;
             resultConsumer.accept(db.execute(call, p));
             tx.success();
-        }
-    }
-
-    public static void registerProcedure(GraphDatabaseService db, Class<?>... procedures) throws KernelException {
-        Procedures proceduresService = ((GraphDatabaseAPI) db).getDependencyResolver().resolveDependency(Procedures.class);
-        for (Class<?> procedure : procedures) {
-            proceduresService.registerProcedure(procedure, true);
-            proceduresService.registerFunction(procedure, true);
-            proceduresService.registerAggregationFunction(procedure, true);
         }
     }
 
