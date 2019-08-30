@@ -42,7 +42,7 @@ class PluginProcedureTests {
 //        ) { row -> println(row.toString()) }
 
         TestUtil.testCall(
-                EmbeddedServerHelper.graphDb, "return 3"
+                EmbeddedServerHelper.graphDb, "call generate.nodes(5, [\"Officer\", \"Gentleman\"],\"\")"
         ) { row -> println(row.toString()) }
     }
 }

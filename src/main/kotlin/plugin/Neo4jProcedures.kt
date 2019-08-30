@@ -41,7 +41,7 @@ class GenerateNodesProcedure : PluginProcedure() {
     fun generateNodes(@Name("howMany") howMany: Long,
                       @Name("labels") labelsStringArray: Any,
                       @Name("propertiesYamlString") propertiesYamlString: String): Stream<NodeListResult> {
-        val labels = labelsStringArray as Array<String>
+        val labels = (labelsStringArray as ArrayList<String>).toTypedArray()
         log!!.info(String.format("Generating %d nodes with labels %s and properties %s",
                 howMany.toInt(),
                 labels.contentToString(),
