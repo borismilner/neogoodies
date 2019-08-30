@@ -24,10 +24,6 @@ class GraphGenerator(val database: GraphDatabaseService,
 
     private val nodePattern = Pattern.compile("(.*?)<(\\d+)>") // e.g. Person<3>
 
-    internal fun beginTransaction(): Transaction {
-        return database.beginTx()
-    }
-
     companion object {
         fun labelsFromStrings(labelNames: Array<String>): Array<Label> {
             val nodeLabels = ArrayList<Label>()
