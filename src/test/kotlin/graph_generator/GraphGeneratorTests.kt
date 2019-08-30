@@ -93,7 +93,7 @@ class GraphGeneratorTests {
 
     @Test
     fun testGenerateLinkedList() {
-        val people = graphGenerator.generateNodes(GraphGenerator.labelsFromStrings(arrayOf("Person")), String.format("{'%s':'%s'}", fullNamePropertyName, FakeGenerator.FULLNAME), howManyNodesToCreate.toLong())
+        val people = graphGenerator.generateNodes(GraphGenerator.labelsFromStrings(arrayOf("Person")), "{'$fullNamePropertyName':'${FakeGenerator.FULLNAME}'}", howManyNodesToCreate.toLong())
         val (nodes, relationships) = graphGenerator.generateLinkedList(people, friendOfRelationship)
         assertThat<Node>(nodes).hasSize(howManyNodesToCreate)
         assertThat<Relationship>(relationships).hasSize(howManyNodesToCreate - 1)

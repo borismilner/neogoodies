@@ -42,10 +42,7 @@ class GenerateNodesProcedure : PluginProcedure() {
                       @Name("labels") labelsStringArray: Any,
                       @Name("propertiesYamlString") propertiesYamlString: String): Stream<NodeListResult> {
         val labels = (labelsStringArray as ArrayList<String>).toTypedArray()
-        log!!.info(String.format("Generating %d nodes with labels %s and properties %s",
-                howMany.toInt(),
-                labels.contentToString(),
-                propertiesYamlString))
+        log!!.info("Generating ${howMany.toInt()} nodes with labels ${labels.contentToString()} and properties $propertiesYamlString")
 
         return Stream.of<NodeListResult>(
                 NodeListResult(
@@ -111,12 +108,7 @@ class GenerateZipperProcedure : PluginProcedure() {
                        @Name("relationshipType") relationshipType: String,
                        @Name("relationshipProperties") relationshipProperties: String): Stream<GraphResult> {
 
-        log!!.info(String.format("Generating zipper structure of %d nodes in each side, source=%s, target=%s, relationship=%s, rel_properties:%s",
-                howMany.toInt(),
-                sourceLabelName,
-                targetLabelName,
-                relationshipType,
-                relationshipProperties))
+        log!!.info("Generating zipper structure of ${howMany.toInt()} nodes in each side, source=$sourceLabelName, target=$targetLabelName, relationship=$relationshipType, rel_properties:$relationshipProperties")
 
         val graphGenerator = graphGenerator
         val sourceLabel = Label.label(sourceLabelName)
