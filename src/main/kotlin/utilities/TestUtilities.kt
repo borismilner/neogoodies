@@ -6,6 +6,7 @@ import org.neo4j.internal.kernel.api.exceptions.KernelException
 import org.neo4j.kernel.impl.proc.Procedures
 import org.neo4j.kernel.internal.GraphDatabaseAPI
 import utilities.TestUtil.testResult
+import java.net.Socket
 import java.util.function.Consumer
 
 object TestUtilities {
@@ -54,7 +55,12 @@ object TestUtilities {
         }
     }
 
-    fun testCall(db: GraphDatabaseService, call: String, consumer: Consumer<Map<String, Any>>) {
-        testCall(db, call, null, consumer)
+    fun isServerListening(host: String, port: Int): Boolean {
+        try {
+            Socket(host, port).use { return true }
+        } catch (e: Exception) {
+            return false
+        }
+
     }
 }

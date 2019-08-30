@@ -7,6 +7,7 @@ import org.neo4j.graphdb.Node
 import plugin.*
 import tools.GraphGenerator
 import utilities.EmbeddedServerHelper
+import utilities.TestUtilities.isServerListening
 import utilities.TestUtilities.registerProcedure
 import utilities.TestUtilities.testCall
 import utilities.ValueFaker
@@ -69,6 +70,11 @@ class PluginProcedureTests {
     @AfterEach
     fun tearDown() {
         EmbeddedServerHelper.clearGraph()
+    }
+
+    @Test
+    fun testEmbeddedServerIsListening() {
+        assertThat(isServerListening(host = "localhost", port = 8888)).isTrue()
     }
 
     @Test
