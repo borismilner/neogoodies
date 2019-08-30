@@ -36,7 +36,7 @@ public class TestUtil {
 //                assertTrue("Should have an element", res.hasNext());
                 Map<String, Object> row = res.next();
                 consumer.accept(row);
-                assertThat(res.hasNext()).isTrue();
+                assertThat(res.hasNext()).isFalse();
 //                assertFalse("Should not have a second element", res.hasNext());
             } catch (Throwable t) {
                 printFullStackTrace(t);
