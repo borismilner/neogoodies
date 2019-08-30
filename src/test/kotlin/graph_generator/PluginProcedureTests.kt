@@ -33,7 +33,6 @@ class PluginProcedureTests {
     private val nodesKey = "nodes"
     private val valuesKey = "values"
     private val relationshipsKey = "relationships"
-    private val graphElementKey = "graphElement"
 
     private val propertiesString: String
 
