@@ -1,16 +1,12 @@
 package utilities;
 
 import com.google.common.io.Files;
-import org.hamcrest.Matcher;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Result;
 import org.neo4j.graphdb.Transaction;
-import org.neo4j.graphdb.factory.GraphDatabaseBuilder;
-import org.neo4j.graphdb.factory.GraphDatabaseSettings;
 import org.neo4j.internal.kernel.api.exceptions.KernelException;
 import org.neo4j.kernel.impl.proc.Procedures;
 import org.neo4j.kernel.internal.GraphDatabaseAPI;
-import org.neo4j.test.TestGraphDatabaseFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +18,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
@@ -162,17 +157,6 @@ public class TestUtil {
         }
     }
 
-    public static <T> T assertDuration(Matcher<? super Long> matcher, Supplier<T> function) {
-        long start = System.currentTimeMillis();
-        T result = null;
-        try {
-            result = function.get();
-        } finally {
-            assertThat("duration " + matcher, System.currentTimeMillis() - start, matcher);
-            return result;
-        }
-    }
-
     public static void assumeTravis() {
         assertThat(isTravis()).isFalse(); // TODO: difference between assert and assume?
 //        assumeFalse("we're running on travis, so skipping", isTravis());
@@ -180,13 +164,6 @@ public class TestUtil {
 
     public static boolean isTravis() {
         return "true".equals(System.getenv("TRAVIS"));
-    }
-
-    public static GraphDatabaseBuilder apocGraphDatabaseBuilder() {
-        return new TestGraphDatabaseFactory()
-                .newImpermanentDatabaseBuilder()
-                .setConfig("dbms.backup.enabled", "false")
-                .setConfig(GraphDatabaseSettings.procedure_unrestricted, "apoc.*");
     }
 
     public static boolean serverListening(String host, int port) {
