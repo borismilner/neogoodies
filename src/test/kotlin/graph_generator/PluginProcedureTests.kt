@@ -176,7 +176,7 @@ class PluginProcedureTests {
                 }
         )
 
-        // Make sure that the intended structure was indeed created
+        // Making sure that the intended structure was indeed created
 
         val expectedNumberOfNodes = 60
         val expectedRelationshipTypes = arrayOf("FRIEND_OF", "OWNES", "IDENTIFIES", "LOOKS_LIKE")
