@@ -23,8 +23,8 @@ object TestUtilities {
         }
     }
 
-    private fun printFullStackTrace(e: Throwable?) {
-        var e = e
+    private fun printFullStackTrace(throwable: Throwable?) {
+        var e = throwable
         var padding = ""
         while (e != null) {
             if (e.cause == null) {
@@ -42,18 +42,22 @@ object TestUtilities {
     }
 
     fun testCall(graphDb: GraphDatabaseService, callQuery: String, parameters: Map<String, Any>?, resultsStreamConsumer: Consumer<Map<String, Any>>) {
-        testResult(db = graphDb, call = callQuery, params = parameters, resultConsumer = Consumer { res ->
-            try {
-                assertThat(res.hasNext()).isTrue()
-                val row = res.next()
-                resultsStreamConsumer.accept(row)
-                assertThat(res.hasNext()).isFalse()
-            } catch (t: Throwable) {
-                printFullStackTrace(t)
-                throw t
-            }
+        testResult(
+                db = graphDb,
+                call = callQuery,
+                params = parameters,
+                resultConsumer = Consumer { result ->
+                    try {
+                        assertThat(result.hasNext()).isTrue()
+                        val row = result.next()
+                        resultsStreamConsumer.accept(row)
+                        assertThat(result.hasNext()).isFalse()
+                    } catch (throwable: Throwable) {
+                        printFullStackTrace(throwable)
+                        throw throwable
+                    }
 
-        })
+                })
     }
 
     fun isServerListening(host: String, port: Int): Boolean {
