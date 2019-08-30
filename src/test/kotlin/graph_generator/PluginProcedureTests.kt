@@ -4,10 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.*
 import org.neo4j.graphdb.Label
 import org.neo4j.graphdb.Node
-import plugin.GenerateLinkedListProcedure
-import plugin.GenerateNodesProcedure
-import plugin.GenerateValuesProcedure
-import plugin.GenerateZipperProcedure
+import plugin.*
 import tools.GraphGenerator
 import utilities.EmbeddedServerHelper
 import utilities.TestUtil
@@ -58,6 +55,7 @@ class PluginProcedureTests {
         registerProcedure(embeddedServer, GenerateValuesProcedure::class.java)
         registerProcedure(embeddedServer, GenerateLinkedListProcedure::class.java)
         registerProcedure(embeddedServer, GenerateZipperProcedure::class.java)
+        registerProcedure(embeddedServer, GenerateFromYamlFileProcedure::class.java)
     }
 
     @BeforeEach
@@ -147,6 +145,21 @@ class PluginProcedureTests {
             assertThat(result.keys).contains(relationshipsKey)
             assertThat(result[nodesKey] as ArrayList<*>).hasSize(howManyToCreate * 2)
             assertThat(result[relationshipsKey] as ArrayList<*>).hasSize(howManyToCreate)
+        }
+    }
+
+    @Test
+    fun testGenerateFromYamlFileProcedure() {
+        TestUtil.testCall(
+                EmbeddedServerHelper.graphDb, "CALL generate.fromYamlFile({yamlFilePath})",
+                mapOf(
+                        Pair(first = "yamlFilePath", second = "graph_samples/sample_graph.yaml")
+                )
+        ) { result ->
+            assertThat(result.keys).contains(valuesKey)
+            val resultsList = result[valuesKey] as ArrayList<String>
+            assertThat(resultsList).hasSize(1)
+            assertThat(resultsList[0]).isEqualTo("Done")
         }
     }
 
