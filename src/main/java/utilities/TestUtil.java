@@ -22,6 +22,7 @@ import java.util.function.Consumer;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
+/*Brutally robbed out of APOC source-code and adjusted to the existing one as much as possible*/
 
 public class TestUtil {
     public static void testCall(GraphDatabaseService db, String call, Consumer<Map<String, Object>> consumer) {
