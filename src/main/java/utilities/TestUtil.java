@@ -24,13 +24,10 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import static org.junit.Assert.*;
-import static org.junit.Assume.assumeFalse;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
-/**
- * @author mh
- * @since 26.02.16
- */
+
 public class TestUtil {
     public static void testCall(GraphDatabaseService db, String call, Consumer<Map<String, Object>> consumer) {
         testCall(db, call, null, consumer);
@@ -39,12 +36,13 @@ public class TestUtil {
     public static void testCall(GraphDatabaseService db, String call, Map<String, Object> params, Consumer<Map<String, Object>> consumer) {
         testResult(db, call, params, (res) -> {
             try {
-                assertTrue("Should have an element", res.hasNext());
+                assertThat(res.hasNext()).isTrue();
+//                assertTrue("Should have an element", res.hasNext());
                 Map<String, Object> row = res.next();
                 consumer.accept(row);
-                assertFalse("Should not have a second element", res.hasNext());
-            }
-            catch (Throwable t) {
+                assertThat(res.hasNext()).isTrue();
+//                assertFalse("Should not have a second element", res.hasNext());
+            } catch (Throwable t) {
                 printFullStackTrace(t);
                 throw t;
             }
@@ -69,18 +67,20 @@ public class TestUtil {
     }
 
     public static void testCallEmpty(GraphDatabaseService db, String call, Map<String, Object> params) {
-        testResult(db, call, params, (res) -> assertFalse("Expected no results", res.hasNext()));
+        testResult(db, call, params, (res) -> assertThat(res.hasNext()).isFalse() /*assertFalse("Expected no results", res.hasNext())*/);
     }
 
     public static void testCallCount(GraphDatabaseService db, String call, Map<String, Object> params, final int count) {
         testResult(db, call, params, (res) -> {
             int left = count;
             while (left > 0) {
-                assertTrue("Expected " + count + " results, but got only " + (count - left), res.hasNext());
+                assertThat(res.hasNext()).isTrue();
+//                assertTrue("Expected " + count + " results, but got only " + (count - left), res.hasNext());
                 res.next();
                 left--;
             }
-            assertFalse("Expected " + count + " results, but there are more ", res.hasNext());
+            assertThat(res.hasNext()).isFalse();
+//            assertFalse("Expected " + count + " results, but there are more ", res.hasNext());
         });
     }
 
@@ -93,8 +93,7 @@ public class TestUtil {
                 r.close();
             });
             fail("Didn't fail with " + t.getSimpleName());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Throwable inner = e;
             boolean found = false;
             do {
@@ -102,7 +101,8 @@ public class TestUtil {
                 inner = inner.getCause();
             }
             while (inner != null && inner.getCause() != inner);
-            assertTrue("Didn't fail with " + t.getSimpleName() + " but " + e.getClass().getSimpleName() + " " + e.getMessage(), found);
+            assertThat(found).isTrue();
+//            assertTrue("Didn't fail with " + t.getSimpleName() + " but " + e.getClass().getSimpleName() + " " + e.getMessage(), found);
         }
     }
 
@@ -153,12 +153,10 @@ public class TestUtil {
     public static void ignoreException(Runnable runnable, Class<? extends Throwable>... causes) {
         try {
             runnable.run();
-        }
-        catch (Throwable x) {
+        } catch (Throwable x) {
             if (TestUtil.hasCauses(x, causes)) {
                 System.err.println("Ignoring Exception " + x + ": " + x.getMessage() + " due to causes " + Arrays.toString(causes));
-            }
-            else {
+            } else {
                 throw x;
             }
         }
@@ -169,15 +167,15 @@ public class TestUtil {
         T result = null;
         try {
             result = function.get();
-        }
-        finally {
+        } finally {
             assertThat("duration " + matcher, System.currentTimeMillis() - start, matcher);
             return result;
         }
     }
 
     public static void assumeTravis() {
-        assumeFalse("we're running on travis, so skipping", isTravis());
+        assertThat(isTravis()).isFalse(); // TODO: difference between assert and assume?
+//        assumeFalse("we're running on travis, so skipping", isTravis());
     }
 
     public static boolean isTravis() {
@@ -194,8 +192,7 @@ public class TestUtil {
     public static boolean serverListening(String host, int port) {
         try (Socket s = new Socket(host, port)) {
             return true;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -211,8 +208,7 @@ public class TestUtil {
     public static String readFileToString(File file, Charset charset) {
         try {
             return Files.toString(file, charset);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
