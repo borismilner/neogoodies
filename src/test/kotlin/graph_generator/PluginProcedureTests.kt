@@ -52,11 +52,13 @@ class PluginProcedureTests {
     fun beforeAll() {
         val embeddedServer = EmbeddedServerHelper.graphDb
         graphGenerator = GraphGenerator(embeddedServer, YamlParser(), ValueFaker())
-        registerProcedure(embeddedServer, GenerateNodesProcedure::class.java)
-        registerProcedure(embeddedServer, GenerateValuesProcedure::class.java)
-        registerProcedure(embeddedServer, GenerateLinkedListProcedure::class.java)
-        registerProcedure(embeddedServer, GenerateZipperProcedure::class.java)
-        registerProcedure(embeddedServer, GenerateFromYamlFileProcedure::class.java)
+        registerProcedure(
+                embeddedServer,
+                GenerateNodesProcedure::class.java,
+                GenerateValuesProcedure::class.java,
+                GenerateLinkedListProcedure::class.java,
+                GenerateZipperProcedure::class.java,
+                GenerateFromYamlFileProcedure::class.java)
     }
 
     @BeforeEach
@@ -118,7 +120,8 @@ class PluginProcedureTests {
     fun testGenerateLinkedListProcedure() {
 
         testCall(
-                db = EmbeddedServerHelper.graphDb, call = "CALL generate.linkedList({howMany},{labels},{nodePropertiesString},{relationshipType})",
+                db = EmbeddedServerHelper.graphDb,
+                call = "CALL generate.linkedList({howMany},{labels},{nodePropertiesString},{relationshipType})",
                 params = mapOf(
                         Pair(first = "howMany", second = howManyToCreate),
                         Pair(first = "labels", second = labelsForEachNode),
@@ -160,7 +163,8 @@ class PluginProcedureTests {
     @Test
     fun testGenerateFromYamlFileProcedure() {
         testCall(
-                db = EmbeddedServerHelper.graphDb, call = "CALL generate.fromYamlFile({yamlFilePath})",
+                db = EmbeddedServerHelper.graphDb,
+                call = "CALL generate.fromYamlFile({yamlFilePath})",
                 params = mapOf(
                         Pair(first = "yamlFilePath", second = "graph_samples/sample_graph.yaml")
                 ),
