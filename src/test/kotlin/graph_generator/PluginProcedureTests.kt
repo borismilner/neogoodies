@@ -74,14 +74,14 @@ class PluginProcedureTests {
     @Test
     fun testGenerateNodesProcedure() {
         testCall(
-                db = EmbeddedServerHelper.graphDb,
-                call = "CALL generate.nodes({howMany},{labels},{propertiesYamlString})",
-                params = mapOf(
+                graphDb = EmbeddedServerHelper.graphDb,
+                callQuery = "CALL generate.nodes({howMany},{labels},{propertiesYamlString})",
+                parameters = mapOf(
                         Pair(first = "howMany", second = howManyToCreate),
                         Pair(first = "labels", second = labelsForEachNode),
                         Pair(first = "propertiesYamlString", second = propertiesString)
                 ),
-                consumer = Consumer { result ->
+                resultsStreamConsumer = Consumer { result ->
                     val resultNodes = result[nodesKey] as ArrayList<Node>
                     assertThat(resultNodes.size).isEqualTo(howManyToCreate)
                     for (node: Node in resultNodes) {
@@ -100,14 +100,14 @@ class PluginProcedureTests {
     fun testGenerateValuesProcedure() {
         for ((_, generatorName) in propertiesForEachNode) {
             testCall(
-                    db = EmbeddedServerHelper.graphDb,
-                    call = "CALL generate.values({howMany},{generatorName},{parameters})",
-                    params = mapOf(
+                    graphDb = EmbeddedServerHelper.graphDb,
+                    callQuery = "CALL generate.values({howMany},{generatorName},{parameters})",
+                    parameters = mapOf(
                             Pair(first = "howMany", second = howManyToCreate),
                             Pair(first = "generatorName", second = generatorName),
                             Pair(first = "parameters", second = arrayListOf(""))
                     ),
-                    consumer = Consumer { result ->
+                    resultsStreamConsumer = Consumer { result ->
                         assertThat(result.keys).contains(valuesKey)
                         assertThat(result[valuesKey] as ArrayList<*>).hasSize(howManyToCreate)
 
@@ -120,15 +120,15 @@ class PluginProcedureTests {
     fun testGenerateLinkedListProcedure() {
 
         testCall(
-                db = EmbeddedServerHelper.graphDb,
-                call = "CALL generate.linkedList({howMany},{labels},{nodePropertiesString},{relationshipType})",
-                params = mapOf(
+                graphDb = EmbeddedServerHelper.graphDb,
+                callQuery = "CALL generate.linkedList({howMany},{labels},{nodePropertiesString},{relationshipType})",
+                parameters = mapOf(
                         Pair(first = "howMany", second = howManyToCreate),
                         Pair(first = "labels", second = labelsForEachNode),
                         Pair(first = "nodePropertiesString", second = propertiesString),
                         Pair(first = "relationshipType", second = relationshipType)
                 ),
-                consumer = Consumer { result ->
+                resultsStreamConsumer = Consumer { result ->
                     assertThat(result.keys).contains(nodesKey)
                     assertThat(result.keys).contains(relationshipsKey)
                     assertThat(result[nodesKey] as ArrayList<*>).hasSize(howManyToCreate)
@@ -140,9 +140,9 @@ class PluginProcedureTests {
     @Test
     fun testGenerateZipperProcedure() {
         testCall(
-                db = EmbeddedServerHelper.graphDb,
-                call = "CALL generate.zipper({howMany},{sourceLabel},{sourcePropertiesString},{targetLabel},{targetPropertiesString},{relationshipType},{relationshipProperties})",
-                params = mapOf(
+                graphDb = EmbeddedServerHelper.graphDb,
+                callQuery = "CALL generate.zipper({howMany},{sourceLabel},{sourcePropertiesString},{targetLabel},{targetPropertiesString},{relationshipType},{relationshipProperties})",
+                parameters = mapOf(
                         Pair(first = "howMany", second = howManyToCreate),
                         Pair(first = "sourceLabel", second = labelsForEachNode[0]),
                         Pair(first = "sourcePropertiesString", second = propertiesString),
@@ -151,7 +151,7 @@ class PluginProcedureTests {
                         Pair(first = "relationshipType", second = relationshipType),
                         Pair(first = "relationshipProperties", second = propertiesString)
                 ),
-                consumer = Consumer { result ->
+                resultsStreamConsumer = Consumer { result ->
                     assertThat(result.keys).contains(nodesKey)
                     assertThat(result.keys).contains(relationshipsKey)
                     assertThat(result[nodesKey] as ArrayList<*>).hasSize(howManyToCreate * 2)
@@ -163,12 +163,12 @@ class PluginProcedureTests {
     @Test
     fun testGenerateFromYamlFileProcedure() {
         testCall(
-                db = EmbeddedServerHelper.graphDb,
-                call = "CALL generate.fromYamlFile({yamlFilePath})",
-                params = mapOf(
+                graphDb = EmbeddedServerHelper.graphDb,
+                callQuery = "CALL generate.fromYamlFile({yamlFilePath})",
+                parameters = mapOf(
                         Pair(first = "yamlFilePath", second = "graph_samples/sample_graph.yaml")
                 ),
-                consumer = Consumer { result ->
+                resultsStreamConsumer = Consumer { result ->
                     assertThat(result.keys).contains(valuesKey)
                     val resultsList = result[valuesKey] as ArrayList<String>
                     assertThat(resultsList).hasSize(1)

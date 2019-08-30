@@ -22,7 +22,7 @@ object TestUtilities {
         }
     }
 
-    fun printFullStackTrace(e: Throwable?) {
+    private fun printFullStackTrace(e: Throwable?) {
         var e = e
         var padding = ""
         while (e != null) {
@@ -40,12 +40,12 @@ object TestUtilities {
         }
     }
 
-    fun testCall(db: GraphDatabaseService, call: String, params: Map<String, Any>?, consumer: Consumer<Map<String, Any>>) {
-        testResult(db, call, params) { res ->
+    fun testCall(graphDb: GraphDatabaseService, callQuery: String, parameters: Map<String, Any>?, resultsStreamConsumer: Consumer<Map<String, Any>>) {
+        testResult(graphDb, callQuery, parameters) { res ->
             try {
                 assertThat(res.hasNext()).isTrue()
                 val row = res.next()
-                consumer.accept(row)
+                resultsStreamConsumer.accept(row)
                 assertThat(res.hasNext()).isFalse()
             } catch (t: Throwable) {
                 printFullStackTrace(t)

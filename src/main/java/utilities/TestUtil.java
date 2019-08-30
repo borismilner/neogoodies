@@ -7,7 +7,6 @@ import org.neo4j.graphdb.Transaction;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.Socket;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -22,42 +21,6 @@ import static org.assertj.core.api.Assertions.fail;
 /*Brutally robbed out of APOC source-code and adjusted to the existing one as much as possible*/
 
 public class TestUtil {
-//    public static void testCall(GraphDatabaseService db, String call, Consumer<Map<String, Object>> consumer) {
-//        testCall(db, call, null, consumer);
-//    }
-
-//    public static void testCall(GraphDatabaseService db, String call, Map<String, Object> params, Consumer<Map<String, Object>> consumer) {
-//        testResult(db, call, params, (res) -> {
-//            try {
-//                assertThat(res.hasNext()).isTrue();
-////                assertTrue("Should have an element", res.hasNext());
-//                Map<String, Object> row = res.next();
-//                consumer.accept(row);
-//                assertThat(res.hasNext()).isFalse();
-////                assertFalse("Should not have a second element", res.hasNext());
-//            } catch (Throwable t) {
-//                printFullStackTrace(t);
-//                throw t;
-//            }
-//        });
-//    }
-
-    public static void printFullStackTrace(Throwable e) {
-        String padding = "";
-        while (e != null) {
-            if (e.getCause() == null) {
-                System.err.println(padding + e.getMessage());
-                for (StackTraceElement element : e.getStackTrace()) {
-                    if (element.getClassName().matches("^(org.junit|org.apache.maven|sun.reflect|apoc.util.TestUtil|scala.collection|java.lang.reflect|org.neo4j.cypher.internal|org.neo4j.kernel.impl.proc|sun.net|java.net).*")) {
-                        continue;
-                    }
-                    System.err.println(padding + element.toString());
-                }
-            }
-            e = e.getCause();
-            padding += "    ";
-        }
-    }
 
     public static void testCallEmpty(GraphDatabaseService db, String call, Map<String, Object> params) {
         testResult(db, call, params, (res) -> assertThat(res.hasNext()).isFalse() /*assertFalse("Expected no results", res.hasNext())*/);
@@ -143,23 +106,6 @@ public class TestUtil {
             } else {
                 throw x;
             }
-        }
-    }
-
-    public static void assumeTravis() {
-        assertThat(isTravis()).isFalse(); // TODO: difference between assert and assume?
-//        assumeFalse("we're running on travis, so skipping", isTravis());
-    }
-
-    public static boolean isTravis() {
-        return "true".equals(System.getenv("TRAVIS"));
-    }
-
-    public static boolean serverListening(String host, int port) {
-        try (Socket s = new Socket(host, port)) {
-            return true;
-        } catch (Exception e) {
-            return false;
         }
     }
 
