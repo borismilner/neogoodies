@@ -22,7 +22,6 @@ class GraphGenerator(val database: GraphDatabaseService,
     private var mapComponents: MutableMap<String, List<Node>> = HashMap()
 
     private val requiredNodePattern = """(.*?)<(\d+)>""".toRegex()  // e.g. Person<3>
-//    private val nodePattern = Pattern.compile("(.*?)<(\\d+)>")
 
     companion object {
         fun labelsFromStrings(labelNames: Array<String>): Array<Label> {
@@ -45,11 +44,9 @@ class GraphGenerator(val database: GraphDatabaseService,
     }
 
     private fun propertiesFromYamlString(propertiesString: String): List<Property> {
+
         return if (
-                propertiesString == "''" ||
-                propertiesString == "'{}'" ||
-                propertiesString == "" ||
-                propertiesString == "{}"
+                propertiesString in arrayOf("''", "'{}'", "", "{}")
         ) {
             ArrayList()
         } else parser.parseProperties(propertiesString)
@@ -152,8 +149,12 @@ class GraphGenerator(val database: GraphDatabaseService,
         val matchResult = requiredNodePattern.find(specificNode) ?: throw InputValidationException("Could not parse: $specificNode")
         val key = matchResult.groupValues[1]
         val index = matchResult.groupValues[2].toInt()
+        if (!mapComponents.containsKey(key)) throw InputValidationException("Could not find key: $key")
+        if (mapComponents[key] !is List<Node>) throw InputValidationException("Value at key $key not a list of nodes")
+        if ((mapComponents[key] as List<Node>).size <= index + 1) throw InputValidationException("The list in key $key is too short")
         return mapComponents[key]!![index]
     }
+
 
     fun generateFromYamlFile(filePath: String) {
         val log = LogHelper.logger
