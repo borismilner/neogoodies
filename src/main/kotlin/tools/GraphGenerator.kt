@@ -21,7 +21,7 @@ class GraphGenerator(val database: GraphDatabaseService,
 
     private var mapComponents: MutableMap<String, List<Node>> = HashMap()
 
-    private val requiredNodePattern = """(.*?)<(\d+)>""".toRegex()  // e.g. Person<3>
+    private val requiredNodeRegex = """(.*?)<(\d+)>""".toRegex()  // e.g. Person<3>
 
     companion object {
         fun labelsFromStrings(labelNames: Array<String>): Array<Label> {
@@ -30,7 +30,7 @@ class GraphGenerator(val database: GraphDatabaseService,
                 val newLabel = Label.label(labelName)
                 nodeLabels.add(newLabel)
             }
-            return Array(size = nodeLabels.size, init = { i -> nodeLabels[i] })
+            return nodeLabels.toTypedArray()
         }
     }
 
@@ -144,7 +144,7 @@ class GraphGenerator(val database: GraphDatabaseService,
     }
 
     private fun parseSpecificNode(specificNode: String): Node {
-        val matchResult = requiredNodePattern.find(specificNode) ?: throw InputValidationException("Could not parse: $specificNode")
+        val matchResult = requiredNodeRegex.find(specificNode) ?: throw InputValidationException("Could not parse: $specificNode")
         val key = matchResult.groupValues[1]
         val index = matchResult.groupValues[2].toInt()
         if (!mapComponents.containsKey(key)) throw InputValidationException("Could not find key: $key")
