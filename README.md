@@ -5,7 +5,7 @@
 ### <u>Samples for testing plugin calls</u>
 
 ```
-CALL generate.nodes(5, ["Officer", "Gentleman"],"")
+CALL generate.nodes(5, ["Officer", "Gentleman"], "{'name': 'FIRSTNAME', 'phone': 'PHONE_NUMBER'}")
 ```
 ![alt text](images/generate_nodes_plugin_call.png "generate.nodes function")
 ```
