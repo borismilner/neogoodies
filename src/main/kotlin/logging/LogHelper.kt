@@ -23,6 +23,7 @@ object LogHelper {
             System.setProperties(systemProperties)
         }
         logger = LoggerFactory.getLogger(loggerName)
+        logger.trace("Logger $loggerName was set.")
     }
 
 }
