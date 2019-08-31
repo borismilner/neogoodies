@@ -206,7 +206,7 @@ class GraphGenerator(val database: GraphDatabaseService,
                         relationships.forEach(Consumer { relationship -> addRelationshipProperties(relationship, propertiesFromYamlString(relationProperties)) })
                     }
                 }
-                else -> throw IllegalStateException("Unexpected value: ${connectionMethod}")
+                else -> throw IllegalStateException("Unexpected value: $connectionMethod")
             }
         }
 
