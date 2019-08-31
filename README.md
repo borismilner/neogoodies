@@ -29,4 +29,5 @@ CALL generate.fromYamlFile("c:/temp/sample_graph.yaml")
 ```
 Check out graph-template sample [here](graph_samples/sample_graph.yaml)  
 
-![alt text](images/generate_yaml_plugin_call.png "generate.fromYamlFile function")
+![alt text](images/generate_yaml_plugin_call.png "generate.fromYamlFile function")  
+![alt text](images/generated_by_yaml_plugin.png "generate.fromYamlFile function")
