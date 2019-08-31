@@ -12,7 +12,6 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.util.*
-import java.util.regex.Pattern
 import kotlin.collections.ArrayList
 
 class GraphGenerator(val database: GraphDatabaseService,
@@ -22,7 +21,8 @@ class GraphGenerator(val database: GraphDatabaseService,
 
     private var mapComponents: MutableMap<String, List<Node>> = HashMap()
 
-    private val nodePattern = Pattern.compile("(.*?)<(\\d+)>") // e.g. Person<3>
+    private val requiredNodePattern = """(.*?)<(\d+)>""".toRegex()  // e.g. Person<3>
+//    private val nodePattern = Pattern.compile("(.*?)<(\\d+)>")
 
     companion object {
         fun labelsFromStrings(labelNames: Array<String>): Array<Label> {
@@ -149,13 +149,9 @@ class GraphGenerator(val database: GraphDatabaseService,
     }
 
     private fun parseSpecificNode(specificNode: String): Node {
-        val matcher = nodePattern.matcher(specificNode)
-        val foundMatch = matcher.find()
-        if (!foundMatch) {
-            throw InputValidationException("Could not parse: $specificNode")
-        }
-        val key = matcher.group(1)
-        val index = Integer.parseInt(matcher.group(2))
+        val matchResult = requiredNodePattern.find(specificNode) ?: throw InputValidationException("Could not parse: $specificNode")
+        val key = matchResult.groupValues[1]
+        val index = matchResult.groupValues[2].toInt()
         return mapComponents[key]!![index]
     }
 
