@@ -7,8 +7,9 @@ CALL generate.nodes(5, ["Officer", "Gentleman"], "{'name': 'FIRSTNAME', 'phone':
 ```
 ![alt text](images/generate_nodes_plugin_call.png "generate.nodes function")
 ```
-CALL generate.linkedList(10, ["Person"], "{}", "Likes")
+CALL generate.linkedList(5, ["Person"], "{'name': 'FIRSTNAME', 'phone': 'PHONE_NUMBER'}", "LIKES")
 ```
+![alt text](images/generate_linkedlist_plugin_call.png "generate.linkedList function")
 ```
 CALL generate.values(10, "FULLNAME",[])
 ```
