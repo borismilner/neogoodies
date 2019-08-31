@@ -2,8 +2,6 @@
 
 > Useful tools for working with Neo4J
 ---
-### <u>Samples for testing plugin calls</u>
-
 ```
 CALL generate.nodes(5, ["Officer", "Gentleman"], "{'name': 'FIRSTNAME', 'phone': 'PHONE_NUMBER'}")
 ```
