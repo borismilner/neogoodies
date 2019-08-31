@@ -19,12 +19,10 @@ object LogHelper {
     }
 
     fun setCustomLogger(loggerName: String, systemProperties: Properties?) {
-
         if (systemProperties != null) {
             System.setProperties(systemProperties)
         }
         logger = LoggerFactory.getLogger(loggerName)
-
     }
 
 }
