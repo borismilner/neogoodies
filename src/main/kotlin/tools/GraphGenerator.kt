@@ -18,6 +18,7 @@ class GraphGenerator(val database: GraphDatabaseService,
                      private val parser: YamlParser,
                      private val valueFaker: ValueFaker) {
 
+    private val log = LogHelper.logger
 
     private var mapComponents: MutableMap<String, List<Node>> = HashMap()
 
@@ -155,7 +156,6 @@ class GraphGenerator(val database: GraphDatabaseService,
 
 
     fun generateFromYamlFile(filePath: String) {
-        val log = LogHelper.logger
         val required: GraphYamlTemplate
         mapComponents = HashMap()
         try {
@@ -171,19 +171,14 @@ class GraphGenerator(val database: GraphDatabaseService,
             log.info("Comments: ${required.comments}")
         }
 
-        for ((mainLabel,
-                howMany,
-                properties,
-                additionalLabels) in required.nodes!!) {
+        for (node in required.nodes!!) {
+            log.info("Generating ${node.howMany} nodes with primary label of: ${node.mainLabel}")
 
-            log.info("Generating node with primary label of: $mainLabel")
-            additionalLabels!!.add(mainLabel!!)
-            val nodes = generateNodes(
-                    labelsFromStrings(additionalLabels.toTypedArray()),
-                    mapToYamlString(properties),
-                    howMany.toLong()
-            )
-            mapComponents[mainLabel] = nodes
+            val generatedNodes = generateNodes(
+                    labels = labelsFromStrings((node.additionalLabels!! + node.mainLabel!!).toTypedArray()),
+                    propertiesString = mapToYamlString(node.properties),
+                    howMany = node.howMany.toLong())
+            mapComponents[node.mainLabel!!] = generatedNodes
         }
 
         for (edgeDetails in required.relationships!!) {
