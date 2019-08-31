@@ -1,6 +1,7 @@
 # <u>Neo-Goodies</u>
 
 > Useful tools for working with Neo4J  
+>    
 > Currently the library consists of function allowing:  
 >* Creation of different graph structures
 >* Working with the embedded Neo4J server (mainly for unit-testing)
