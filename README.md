@@ -21,4 +21,5 @@ CALL generate.zipper(3,"SourceNode", "{'name': 'FIRSTNAME', 'phone': 'PHONE_NUMB
 ```
 CALL generate.fromYamlFile("c:/temp/sample_graph.yaml")
 ```
+Check out graph-template sample [here](graph_samples/sample_graph.yaml)
 ![alt text](images/generate_yaml_plugin_call.png "generate.fromYamlFile function")
