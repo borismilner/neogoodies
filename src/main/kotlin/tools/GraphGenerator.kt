@@ -12,6 +12,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.util.*
+import java.util.function.Consumer
 import kotlin.collections.ArrayList
 
 class GraphGenerator(val database: GraphDatabaseService,
@@ -200,13 +201,9 @@ class GraphGenerator(val database: GraphDatabaseService,
                     val chains = edgeDetails.nodes as ArrayList<ArrayList<String>>
                     val relationProperties = edgeDetails.properties as String
                     for (chain in chains) {
-
                         val nodesToLink = chain.map { nodeString -> parseSpecificNode(nodeString) }
-
                         val (_, relationships) = generateLinkedList(nodesToLink, relationshipName)
-                        for (relationship in relationships) {
-                            addRelationshipProperties(relationship, propertiesFromYamlString(relationProperties))
-                        }
+                        relationships.forEach(Consumer { relationship -> addRelationshipProperties(relationship, propertiesFromYamlString(relationProperties)) })
                     }
                 }
                 else -> throw IllegalStateException("Unexpected value: ${connectionMethod}")
