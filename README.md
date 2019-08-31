@@ -1,6 +1,9 @@
 # <u>Neo-Goodies</u>
 
-> Useful tools for working with Neo4J
+> Useful tools for working with Neo4J  
+> Currently the library consists of function allowing:  
+>* Creation of different graph structures
+>* Working with the embedded Neo4J server (mainly for unit-testing)
 ---
 ```
 CALL generate.nodes(5, ["Officer", "Gentleman"], "{'name': 'FIRSTNAME', 'phone': 'PHONE_NUMBER'}")
