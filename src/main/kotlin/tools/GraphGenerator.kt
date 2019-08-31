@@ -183,14 +183,15 @@ class GraphGenerator(val database: GraphDatabaseService,
 
         for (edgeDetails in required.relationships!!) {
 
-            when (val connectionMethod = edgeDetails.connectionMethod) {
+            when (val connectionMethod = edgeDetails.connectionMethod!!) {
 
                 "ZipNodes" -> {
-                    val sourceNodes = mapComponents[edgeDetails.source] as List<Node>
-                    val targetNodes = mapComponents[edgeDetails.target] as List<Node>
-                    val relationshipName = edgeDetails.relationshipType as String
-                    val properties = edgeDetails.properties as String
-                    generateRelationshipsZipper(sourceNodes, targetNodes, relationshipName, properties)
+                    generateRelationshipsZipper(
+                            fromNodes = mapComponents[edgeDetails.source] as List<Node>,
+                            toNodes = mapComponents[edgeDetails.target] as List<Node>,
+                            relationshipType = edgeDetails.relationshipType as String,
+                            relationshipProperties = edgeDetails.properties as String
+                    )
                 }
 
                 "Link" -> {
@@ -200,10 +201,7 @@ class GraphGenerator(val database: GraphDatabaseService,
                     val relationProperties = edgeDetails.properties as String
                     for (chain in chains) {
 
-                        val nodesToLink = ArrayList<Node>()
-                        for (specificNode in chain) {
-                            nodesToLink.add(parseSpecificNode(specificNode))
-                        }
+                        val nodesToLink = chain.map { nodeString -> parseSpecificNode(nodeString) }
 
                         val (_, relationships) = generateLinkedList(nodesToLink, relationshipName)
                         for (relationship in relationships) {
@@ -211,7 +209,7 @@ class GraphGenerator(val database: GraphDatabaseService,
                         }
                     }
                 }
-                else -> throw IllegalStateException("Unexpected value: ${connectionMethod as String}")
+                else -> throw IllegalStateException("Unexpected value: ${connectionMethod}")
             }
         }
 
