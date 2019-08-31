@@ -17,7 +17,8 @@ CALL generate.values(10, "COUNTRY",[])
 ```
 CALL generate.zipper(3,"SourceNode", "{'name': 'FIRSTNAME', 'phone': 'PHONE_NUMBER'}", "TargetNode", "{'name': 'FIRSTNAME', 'country': 'COUNTRY'}", "CONTACTS", "{'email':'EMAIL_ADDRESS'}")
 ```
-![alt text](images/generate_zip_plugin_call.png "generate.values function")
+![alt text](images/generate_zip_plugin_call.png "generate.zipper function")
 ```
-CALL generate.fromYamlFile("c:/temp/sample.graph.yaml")
+CALL generate.fromYamlFile("c:/temp/sample_graph.yaml")
 ```
+![alt text](images/generate_yaml_plugin_call.png "generate.fromYamlFile function")
