@@ -11,8 +11,9 @@ CALL generate.linkedList(5, ["Person"], "{'name': 'FIRSTNAME', 'phone': 'PHONE_N
 ```
 ![alt text](images/generate_linkedlist_plugin_call.png "generate.linkedList function")
 ```
-CALL generate.values(10, "FULLNAME",[])
+CALL generate.values(10, "COUNTRY",[])
 ```
+![alt text](images/generate_values_plugin_call.png "generate.values function")
 ```
 CALL generate.zipper(10,"SourceNode", "{}", "TargetNode", "{}", "Defines", "{}")
 ```
