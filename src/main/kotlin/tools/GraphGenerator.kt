@@ -45,9 +45,7 @@ class GraphGenerator(val database: GraphDatabaseService,
 
     private fun propertiesFromYamlString(propertiesString: String): List<Property> {
 
-        return if (
-                propertiesString in arrayOf("''", "'{}'", "", "{}")
-        ) {
+        return if (propertiesString in arrayOf("''", "'{}'", "", "{}")) {
             ArrayList()
         } else parser.parseProperties(propertiesString)
     }
