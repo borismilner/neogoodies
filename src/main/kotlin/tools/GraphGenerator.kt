@@ -206,21 +206,16 @@ class GraphGenerator(val database: GraphDatabaseService,
                         relationships.forEach(Consumer { relationship -> addRelationshipProperties(relationship, propertiesFromYamlString(relationProperties)) })
                     }
                 }
+
                 else -> throw IllegalStateException("Unexpected value: $connectionMethod")
             }
         }
 
         database.beginTx().use { transaction ->
             for ((specificNode, properties) in required.customProperties!!) {
-
-
                 val propertiesString = mapToYamlString(properties)
                 val node = parseSpecificNode(specificNode!!)
-
-                for (property in propertiesFromYamlString(propertiesString)) {
-                    node.setProperty(property.key, valueFaker.getValue(property))
-                }
-
+                propertiesFromYamlString(propertiesString).forEach(Consumer { property -> node.setProperty(property.key, valueFaker.getValue(property)) })
             }
             transaction.success()
         }
