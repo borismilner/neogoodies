@@ -41,8 +41,8 @@ class GenerateNodesProcedure : PluginProcedure() {
     fun generateNodes(@Name("howMany") howMany: Long,
                       @Name("labels") labelsStringArray: Any,
                       @Name("propertiesYamlString") propertiesYamlString: String): Stream<NodeListResult> {
-        val labels = (labelsStringArray as ArrayList<String>).toTypedArray()
-        log!!.info("Generating ${howMany.toInt()} nodes with labels ${labels.contentToString()} and properties $propertiesYamlString")
+        val labels = (labelsStringArray as Iterable<*>).filterIsInstance<String>()
+        log!!.info("Generating ${howMany.toInt()} nodes with labels ${labels.joinToString()} and properties $propertiesYamlString")
 
         return Stream.of<NodeListResult>(
                 NodeListResult(
@@ -85,8 +85,8 @@ class GenerateLinkedListProcedure : PluginProcedure() {
                            @Name("labels") labelsStringArray: Any,
                            @Name("nodePropertiesString") nodePropertiesString: String,
                            @Name("relationshipType") relationshipType: String): Stream<GraphResult> {
-        val labels = (labelsStringArray as ArrayList<String>).toTypedArray()
-        log!!.info("Generating a linked list of $howMany nodes with labels ${labels.contentToString()} connected by $relationshipType")
+        val labels = (labelsStringArray as Iterable<*>).filterIsInstance<String>()
+        log!!.info("Generating a linked list of $howMany nodes with labels ${labels.joinToString()} connected by $relationshipType")
         val graphGenerator = graphGenerator
         val nodesForLinkedList = graphGenerator.generateNodes(GraphGenerator.labelsFromStrings(labels), nodePropertiesString, howMany)
         val graphResult = graphGenerator.generateLinkedList(nodesForLinkedList, relationshipType)

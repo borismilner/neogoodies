@@ -45,7 +45,7 @@ class GraphGeneratorTests {
 
     @Test
     fun testGenerateNodes() {
-        val expectedLabelsForEachNode = arrayOf("Mario", "Luigi")
+        val expectedLabelsForEachNode = listOf("Mario", "Luigi")
         val nodes = graphGenerator.generateNodes(
                 GraphGenerator.labelsFromStrings(expectedLabelsForEachNode),
                 "{'$fullNamePropertyName':'${FakeGenerator.FULLNAME}'}",
@@ -64,8 +64,8 @@ class GraphGeneratorTests {
 
     @Test
     fun testGenerateZippedNodes() {
-        val people = graphGenerator.generateNodes(GraphGenerator.labelsFromStrings(arrayOf(personLabelString)), "{'$fullNamePropertyName':'${FakeGenerator.FULLNAME}'}", howManyNodesToCreate.toLong())
-        val identifiers = graphGenerator.generateNodes(GraphGenerator.labelsFromStrings(arrayOf(identifierPropertyName)), "{'$identifierPropertyName':'${FakeGenerator.CREDIT_CARD_NUMBER}'}", howManyNodesToCreate.toLong())
+        val people = graphGenerator.generateNodes(GraphGenerator.labelsFromStrings(listOf(personLabelString)), "{'$fullNamePropertyName':'${FakeGenerator.FULLNAME}'}", howManyNodesToCreate.toLong())
+        val identifiers = graphGenerator.generateNodes(GraphGenerator.labelsFromStrings(listOf(identifierPropertyName)), "{'$identifierPropertyName':'${FakeGenerator.CREDIT_CARD_NUMBER}'}", howManyNodesToCreate.toLong())
         val createdRelationships = graphGenerator.generateRelationshipsZipper(identifiers, people, identifiesRelationship, "{'strength': '${FakeGenerator.RANDOM_NUMBER}'}")
         assertThat<Node>(people).hasSize(howManyNodesToCreate)
         assertThat<Node>(identifiers).hasSize(howManyNodesToCreate)
@@ -83,8 +83,8 @@ class GraphGeneratorTests {
 
     @Test
     fun testGenerateRelationshipsFromAllToAll() {
-        val people = graphGenerator.generateNodes(GraphGenerator.labelsFromStrings(arrayOf("Person")), "{'$fullNamePropertyName':'${FakeGenerator.FULLNAME}'}", howManyNodesToCreate.toLong())
-        val identifiers = graphGenerator.generateNodes(GraphGenerator.labelsFromStrings(arrayOf(identifierPropertyName)), "{'$identifierPropertyName':'${FakeGenerator.CREDIT_CARD_NUMBER}'}", howManyNodesToCreate.toLong())
+        val people = graphGenerator.generateNodes(GraphGenerator.labelsFromStrings(listOf("Person")), "{'$fullNamePropertyName':'${FakeGenerator.FULLNAME}'}", howManyNodesToCreate.toLong())
+        val identifiers = graphGenerator.generateNodes(GraphGenerator.labelsFromStrings(listOf(identifierPropertyName)), "{'$identifierPropertyName':'${FakeGenerator.CREDIT_CARD_NUMBER}'}", howManyNodesToCreate.toLong())
         val createdRelationships = graphGenerator.generateRelationshipsFromAllToAll(identifiers, people, identifiesRelationship, "{'strength': '${FakeGenerator.RANDOM_NUMBER}'}")
         assertThat<Node>(people).hasSize(howManyNodesToCreate)
         assertThat<Node>(identifiers).hasSize(howManyNodesToCreate)
@@ -93,7 +93,7 @@ class GraphGeneratorTests {
 
     @Test
     fun testGenerateLinkedList() {
-        val people = graphGenerator.generateNodes(GraphGenerator.labelsFromStrings(arrayOf("Person")), "{'$fullNamePropertyName':'${FakeGenerator.FULLNAME}'}", howManyNodesToCreate.toLong())
+        val people = graphGenerator.generateNodes(GraphGenerator.labelsFromStrings(listOf("Person")), "{'$fullNamePropertyName':'${FakeGenerator.FULLNAME}'}", howManyNodesToCreate.toLong())
         val (nodes, relationships) = graphGenerator.generateLinkedList(people, friendOfRelationship)
         assertThat<Node>(nodes).hasSize(howManyNodesToCreate)
         assertThat<Relationship>(relationships).hasSize(howManyNodesToCreate - 1)

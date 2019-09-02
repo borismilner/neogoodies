@@ -26,7 +26,7 @@ class GraphGenerator(val database: GraphDatabaseService,
     private val requiredNodeRegex = """(.*?)<(\d+)>""".toRegex()  // e.g. Person<3>
 
     companion object {
-        fun labelsFromStrings(labelNames: Array<String>): Array<Label> {
+        fun labelsFromStrings(labelNames: Iterable<String>): Array<Label> {
             val nodeLabels = ArrayList<Label>()
             for (labelName in labelNames) {
                 val newLabel = Label.label(labelName)
@@ -176,7 +176,7 @@ class GraphGenerator(val database: GraphDatabaseService,
             log.info("Generating ${node.howMany} nodes with primary label of: ${node.mainLabel}")
 
             val generatedNodes = generateNodes(
-                    labels = labelsFromStrings((node.additionalLabels!! + node.mainLabel!!).toTypedArray()),
+                    labels = labelsFromStrings((node.additionalLabels!! + node.mainLabel!!)),
                     propertiesString = mapToYamlString(node.properties),
                     howMany = node.howMany.toLong())
             mapComponents[node.mainLabel!!] = generatedNodes
