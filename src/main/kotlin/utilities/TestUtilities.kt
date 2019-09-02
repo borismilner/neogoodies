@@ -1,6 +1,7 @@
 package utilities
 
 import org.assertj.core.api.Assertions.assertThat
+import org.neo4j.graphdb.DependencyResolver
 import org.neo4j.graphdb.GraphDatabaseService
 import org.neo4j.graphdb.Result
 import org.neo4j.internal.kernel.api.exceptions.KernelException
@@ -13,7 +14,10 @@ object TestUtilities {
 
     @Throws(KernelException::class)
     fun registerProcedure(db: GraphDatabaseService, vararg procedures: Class<*>) {
-        val proceduresService = (db as GraphDatabaseAPI).dependencyResolver.resolveDependency(Procedures::class.java)
+        val proceduresService = (db as GraphDatabaseAPI).dependencyResolver.resolveDependency(
+                Procedures::class.java,
+                DependencyResolver.SelectionStrategy.FIRST
+        )
         for (procedure in procedures) {
             proceduresService.run {
                 registerProcedure(procedure, true)
