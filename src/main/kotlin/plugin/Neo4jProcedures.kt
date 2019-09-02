@@ -70,7 +70,7 @@ class GenerateValuesProcedure : PluginProcedure() {
         val graphGenerator = graphGenerator
         return Stream.of(ValueListResult(graphGenerator.generateValues(
                 generatorName,
-                parameters as List<Any>, // TODO: Check and assign empty list when an empty string
+                (parameters as List<*>).filterIsInstance<Any>(),
                 howMany)))
     }
 }
