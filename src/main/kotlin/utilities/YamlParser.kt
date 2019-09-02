@@ -21,9 +21,10 @@ class YamlParser {
         return properties
     }
 
+
     private fun fromMap(propertyKey: String, map: Any): Property {
 
-        val prop = map as LinkedHashMap<String, Any>
+        @Suppress("UNCHECKED_CAST") val prop = map as LinkedHashMap<String, Any>
 
         val key = prop.keys.iterator().next()
 
